@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_dnit_config" name="DNIT" parent="account.menu_finance_configuration"
+        sequence="25" />
+
+    <menuitem id="menu_dnit_report" name="DNIT" parent="account.menu_finance_reports"
+        sequence="5" />
+
+</odoo>

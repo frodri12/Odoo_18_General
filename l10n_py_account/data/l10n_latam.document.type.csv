@@ -1,0 +1,16 @@
+id,sequence,code,name,l10n_py_letter,report_name,internal_type,doc_code_prefix,country_id/id,purchase_aliquots
+dc_a_f,10,1,INVOICES,A,INVOICE,invoice,FA,base.py,not_zero
+dc_a_nd,20,2,DEBIT MEMOS,A,DEBIT NOTE,debit_note,ND,base.py,not_zero
+dc_a_nc,30,3,CREDIT NOTES,A,CREDIT NOTE,credit_note,NC,base.py,not_zero
+dc_a_r,40,4,RECEIPT,A,RECEIPT,invoice,RE,base.py,not_zero
+dc_a_nvc,50,5,CASH SALES NOTES,A,,invoice,NVC,base.py,not_zero
+dc_aduana,140,14,CUSTOMS DOCUMENT,,,,,base.py,zero
+dc_e_f,170,19,EXPORT INVOICES,E,INVOICE,invoice,FE,base.py,not_zero
+dc_e_nd,180,20,DEBIT NOTES FOR FOREIGN OPERATIONS,E,DEBIT NOTE,debit_note,ND-E,base.py,not_zero
+dc_e_nc,190,21,CREDIT NOTES FOR FOREIGN OPERATIONS,E,CREDIT NOTE,credit_note,NC-E,base.py,not_zero
+dc_a_rf,320,50,RECEIPT OF INVOICE UNDER THE CREDIT INVOICE SYSTEM,A,,,,base.py,not_zero
+dc_a_t,560,81,TICKET INVOICE,A,INVOICE TICKET,invoice,TF,base.py,not_zero
+dc_oc_c,630,88,ELECTRONIC MAILING,,,,,base.py,zero
+dc_r_r,660,91,MAILING,R,,,,base.py,zero
+dc_t_nc_a,990,112,CREDIT NOTE TICKET,A,CREDIT NOTE TICKET,credit_note,TN,base.py,not_zero
+dc_a_autof,40,2000,SELF INVOICES,C,SELF INVOICE,invoice,AFA,base.py,not_zero

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- PROD -->
+        <record id="ir_config_l10n_py_edi_url_recibe_prod" model="ir.config_parameter">
+            <field name="key">l10n_py_edi.url.recibe.prod</field>
+            <field name="value">http://global.avatar.com.py/pyrite</field>
+        </record>
+
+        <record id="ir_config_l10n_py_edi_url_recibe_lote_prod" model="ir.config_parameter">
+            <field name="key">l10n_py_edi.url.recibe_lote.prod</field>
+            <field name="value">http://global.avatar.com.py/pyrite</field>
+        </record>
+
+        <record id="ir_config_l10n_py_edi_url_evento_prod" model="ir.config_parameter">
+            <field name="key">l10n_py_edi.url.evento.prod</field>
+            <field name="value">http://global.avatar.com.py/pyrite</field>
+        </record>
+
+        <record id="ir_config_l10n_py_edi_url_consulta_lote_prod" model="ir.config_parameter">
+            <field name="key">l10n_py_edi.url.consulta_lote.prod</field>
+            <field name="value">http://global.avatar.com.py/pyrite</field>
+        </record>
+
+        <record id="ir_config_l10n_py_edi_url_consulta_ruc_prod" model="ir.config_parameter">
+            <field name="key">l10n_py_edi.url.consulta_ruc.prod</field>
+            <field name="value">http://global.avatar.com.py/pyrite</field>
+        </record>
+
+        <record id="ir_config_l10n_py_edi_url_consulta_prod" model="ir.config_parameter">
+            <field name="key">l10n_py_edi.url.consulta.prod</field>
+            <field name="value">http://global.avatar.com.py/pyrite</field>
+        </record>
+
+        <record id="ir_config_l10n_py_edi_url_kude_prod" model="ir.config_parameter">
+            <field name="key">l10n_py_edi.url.kude.prod</field>
+            <field name="value">http://global.avatar.com.py/pyrite</field>
+        </record>
+
+        
+        <!-- TEST -->
+        <record id="ir_config_l10n_py_edi_url_recibe_test" model="ir.config_parameter">
+            <field name="key">l10n_py_edi.url.recibe.test</field>
+            <field name="value">https://3df.com.ar/pyrite</field>
+        </record>
+
+        <record id="ir_config_l10n_py_edi_url_recibe_lote_test" model="ir.config_parameter">
+            <field name="key">l10n_py_edi.url.recibe_lote.test</field>
+            <field name="value">https://3df.com.ar/pyrite</field>
+        </record>
+
+        <record id="ir_config_l10n_py_edi_url_evento_test" model="ir.config_parameter">
+            <field name="key">l10n_py_edi.url.evento.test</field>
+            <field name="value">https://3df.com.ar/pyrite</field>
+        </record>
+
+        <record id="ir_config_l10n_py_edi_url_consulta_lote_test" model="ir.config_parameter">
+            <field name="key">l10n_py_edi.url.consulta_lote.test</field>
+            <field name="value">https://3df.com.ar/pyrite</field>
+        </record>
+
+        <record id="ir_config_l10n_py_edi_url_consulta_ruc_test" model="ir.config_parameter">
+            <field name="key">l10n_py_edi.url.consulta_ruc.test</field>
+            <field name="value">https://3df.com.ar/pyrite</field>
+        </record>
+
+        <record id="ir_config_l10n_py_edi_url_consulta_test" model="ir.config_parameter">
+            <field name="key">l10n_py_edi.url.consulta.test</field>
+            <field name="value">https://3df.com.ar/pyrite</field>
+        </record>
+
+        <record id="ir_config_l10n_py_edi_url_kude_test" model="ir.config_parameter">
+            <field name="key">l10n_py_edi.url.kude.test</field>
+            <field name="value">https://3df.com.ar/pyrite/kude.php</field>
+        </record>
+
+    </data>
+</odoo>

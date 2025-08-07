@@ -1,0 +1,429 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_py_account
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e-20250418\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-12 10:57+0000\n"
+"PO-Revision-Date: 2025-05-12 10:57+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_py_account
+#: model:l10n_latam.identification.type,name:l10n_py_account.it_ci
+msgid "CI"
+msgstr "CI"
+
+#. module: l10n_py_account
+#: model:l10n_latam.identification.type,description:l10n_py_account.it_dc
+msgid "Diplomatic Card Tax Exemption"
+msgstr "Exención de impuestos para tarjetas diplomáticas"
+
+#. module: l10n_py_account
+#: model:l10n_latam.identification.type,description:l10n_py_account.it_xx
+#: model:l10n_latam.identification.type,name:l10n_py_account.it_xx
+msgid "Other"
+msgstr "Otro"
+
+#. module: l10n_py_account
+#: model:l10n_latam.identification.type,description:l10n_py_account.it_ci
+msgid "Paraguayan ID Card"
+msgstr "Cédula de identidad paraguaya"
+
+#. module: l10n_py_account
+#: model:l10n_latam.identification.type,name:l10n_py_account.it_ruc
+msgid "RUC"
+msgstr "RUC"
+
+#. module: l10n_py_account
+#: model:l10n_latam.identification.type,description:l10n_py_account.it_cr
+#: model:l10n_latam.identification.type,name:l10n_py_account.it_cr
+msgid "Residence Card"
+msgstr "Tarjeta de Residencia"
+
+#. module: l10n_py_account
+#: model:l10n_latam.identification.type,description:l10n_py_account.it_ruc
+msgid "Single Taxpayer Registry"
+msgstr "Registro Único de Contribuyentes"
+
+#. module: l10n_py_account
+#: model:l10n_latam.identification.type,name:l10n_py_account.it_dc
+msgid "Diplomatic Card"
+msgstr "Tarjeta Diplomática"
+
+#. module: l10n_py_account
+#: model:l10n_latam.identification.type,description:l10n_py_account.it_nn
+#: model:l10n_latam.identification.type,name:l10n_py_account.it_nn
+msgid "Unnamed"
+msgstr "Sin nombre"
+
+#. module: l10n_py_account
+#: model:l10n_latam.document.type,name:l10n_py_account.dc_a_nvc
+msgid "CASH SALES NOTES"
+msgstr "NOTAS DE VENTA EN EFECTIVO"
+
+#. module: l10n_py_account
+#: model:l10n_latam.document.type,report_name:l10n_py_account.dc_a_nc
+#: model:l10n_latam.document.type,report_name:l10n_py_account.dc_e_nc
+msgid "CREDIT NOTE"
+msgstr "NOTA DE CRÉDITO"
+
+#. module: l10n_py_account
+#: model:l10n_latam.document.type,name:l10n_py_account.dc_t_nc_a
+#: model:l10n_latam.document.type,report_name:l10n_py_account.dc_t_nc_a
+msgid "CREDIT NOTE TICKET"
+msgstr "TICKET DE NOTA DE CRÉDITO"
+
+#. module: l10n_py_account
+#: model:l10n_latam.document.type,name:l10n_py_account.dc_a_nc
+msgid "CREDIT NOTES"
+msgstr "NOTAS DE CRÉDITO"
+
+#. module: l10n_py_account
+#: model:l10n_latam.document.type,name:l10n_py_account.dc_e_nc
+msgid "CREDIT NOTES FOR FOREIGN OPERATIONS"
+msgstr "NOTAS DE CRÉDITO PARA OPERACIONES EN EL EXTRANJERO"
+
+#. module: l10n_py_account
+#: model:l10n_latam.document.type,name:l10n_py_account.dc_aduana
+msgid "CUSTOMS DOCUMENT"
+msgstr "DOCUMENTO ADUANERO"
+
+#. module: l10n_py_account
+#: model:l10n_latam.document.type,name:l10n_py_account.dc_a_nd
+msgid "DEBIT MEMOS"
+msgstr "NOTAS DE DÉBITO"
+
+#. module: l10n_py_account
+#: model:l10n_latam.document.type,report_name:l10n_py_account.dc_a_nd
+#: model:l10n_latam.document.type,report_name:l10n_py_account.dc_e_nd
+msgid "DEBIT NOTE"
+msgstr "NOTA DE DÉBITO"
+
+#. module: l10n_py_account
+#: model:l10n_latam.document.type,name:l10n_py_account.dc_e_nd
+msgid "DEBIT NOTES FOR FOREIGN OPERATIONS"
+msgstr "NOTAS DE DÉBITO POR OPERACIONES EN EL EXTRANJERO"
+
+#. module: l10n_py_account
+#: model:l10n_latam.document.type,name:l10n_py_account.dc_oc_c
+msgid "ELECTRONIC MAILING"
+msgstr "CORREO ELECTRÓNICO"
+
+#. module: l10n_py_account
+#: model:l10n_latam.document.type,name:l10n_py_account.dc_e_f
+msgid "EXPORT INVOICES"
+msgstr "FACTURAS DE EXPORTACIÓN"
+
+#. module: l10n_py_account
+#: model:l10n_latam.document.type,report_name:l10n_py_account.dc_a_f
+#: model:l10n_latam.document.type,report_name:l10n_py_account.dc_e_f
+msgid "INVOICE"
+msgstr "FACTURA"
+
+#. module: l10n_py_account
+#: model:l10n_latam.document.type,report_name:l10n_py_account.dc_a_t
+msgid "INVOICE TICKET"
+msgstr "TICKET DE FACTURA"
+
+#. module: l10n_py_account
+#: model:l10n_latam.document.type,name:l10n_py_account.dc_a_f
+msgid "INVOICES"
+msgstr "FACTURAS"
+
+#. module: l10n_py_account
+#: model:l10n_latam.document.type,name:l10n_py_account.dc_r_r
+msgid "MAILING"
+msgstr "MAILING"
+
+#. module: l10n_py_account
+#: model:l10n_latam.document.type,name:l10n_py_account.dc_a_r
+#: model:l10n_latam.document.type,report_name:l10n_py_account.dc_a_r
+msgid "RECEIPT"
+msgstr "RECIBO"
+
+#. module: l10n_py_account
+#: model:l10n_latam.document.type,name:l10n_py_account.dc_a_rf
+msgid "RECEIPT OF INVOICE UNDER THE CREDIT INVOICE SYSTEM"
+msgstr "RECIBO DE FACTURA BAJO EL SISTEMA DE FACTURA DE CRÉDITO"
+
+#. module: l10n_py_account
+#: model:l10n_latam.document.type,report_name:l10n_py_account.dc_a_autof
+msgid "SELF INVOICE"
+msgstr "AUTOFACTURA"
+
+#. module: l10n_py_account
+#: model:l10n_latam.document.type,name:l10n_py_account.dc_a_autof
+msgid "SELF INVOICES"
+msgstr "AUTOFACTURAS"
+
+#. module: l10n_py_account
+#: model:l10n_latam.document.type,name:l10n_py_account.dc_a_t
+msgid "TICKET INVOICE"
+msgstr "TICKET FACTURA"
+
+#. module: l10n_py_account
+#: model:ir.model.fields,field_description:l10n_py_account.field_l10n_latam_identification_type__l10n_py_dnit_code
+msgid "DNIT Code"
+msgstr "Código DNIT"
+
+#. module: l10n_py_account
+#. odoo-python
+#: code:addons/l10n_py_account/models/account_journal.py:0
+msgid "Pre-printed Invoice"
+msgstr "Factura preimpresa"
+
+#. module: l10n_py_account
+#. odoo-python
+#: code:addons/l10n_py_account/models/account_journal.py:0
+msgid "Pre-printed Self Invoice"
+msgstr "Autofactura preimpresa"	
+
+#. module: l10n_py_account
+#. odoo-python
+#: code:addons/l10n_py_account/models/account_journal.py:0
+msgid "Online Invoice"
+msgstr "Factura en línea"
+
+#. module: l10n_py_account
+#. odoo-python
+#: code:addons/l10n_py_account/models/account_journal.py:0
+msgid "Online Self Invoice"
+msgstr "Autofactura en línea"
+
+#. module: l10n_py_account
+#. odoo-python
+#: code:addons/l10n_py_account/models/account_journal.py:0
+msgid "Electronic Fiscal Bond - Online Invoice"
+msgstr "Bono Fiscal Electrónico - Factura en Línea"
+
+#. module: l10n_py_account
+#. odoo-python
+#: code:addons/l10n_py_account/models/account_journal.py:0
+msgid "Export Voucher - Billing Plus"
+msgstr "Comprobante de exportación - Billing Plus"
+
+#. module: l10n_py_account
+#. odoo-python
+#: code:addons/l10n_py_account/models/account_journal.py:0
+msgid "Export Voucher - Online Invoice"
+msgstr "Comprobante de Exportación - Factura en Línea"
+
+#. module: l10n_py_account
+#. odoo-python
+#: code:addons/l10n_py_account/models/account_journal.py:0
+msgid "Product Coding - Online Voucher"
+msgstr "Codificación de productos - Cupón en línea"
+
+#. module: l10n_py_account
+#: model:ir.model,name:l10n_py_account.model_l10n_py_dnit_responsibility_type
+#: model:ir.model.fields,field_description:l10n_py_account.field_account_bank_statement_line__l10n_py_dnit_responsibility_type_id
+#: model:ir.model.fields,field_description:l10n_py_account.field_account_move__l10n_py_dnit_responsibility_type_id
+#: model:ir.model.fields,field_description:l10n_py_account.field_res_company__l10n_py_dnit_responsibility_type_id
+#: model:ir.model.fields,field_description:l10n_py_account.field_res_partner__l10n_py_dnit_responsibility_type_id
+#: model:ir.model.fields,field_description:l10n_py_account.field_res_users__l10n_py_dnit_responsibility_type_id
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.view_dnit_responsibility_type_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.view_dnit_responsibility_type_tree
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.view_res_partner_filter
+msgid "Responsibility Type"
+msgstr "Tipo de responsabilidad"
+
+#. module: l10n_py_account
+#: model:ir.model.constraint,message:l10n_py_account.constraint_l10n_py_dnit_responsibility_type_name
+msgid "Name must be unique!"
+msgstr "¡El nombre debe ser único!"
+
+#. module: l10n_py_account
+#: model:ir.model.constraint,message:l10n_py_account.constraint_l10n_py_dnit_responsibility_type_code
+msgid "Code must be unique!"
+msgstr "¡El código debe ser único!"
+
+#. module: l10n_py_account
+#: model:ir.model.fields,field_description:l10n_py_account.field_res_company__l10n_py_company_requires_vat
+msgid "Company Requires Vat?"
+msgstr "¿La empresa requiere IVA?"
+
+#. module: l10n_py_account
+#: model:ir.model.fields,field_description:l10n_py_account.field_res_company__l10n_py_dnit_start_date
+msgid "Activities Start"
+msgstr "Inicio de actividades"
+
+#. module: l10n_py_account
+#. odoo-python
+#: code:addons/l10n_py_account/models/res_company.py:0
+msgid ""
+"Could not change the Responsibility of this company because there are already accounting entries."
+msgstr ""
+"No se pudo modificar la responsabilidad de esta empresa porque ya existen asientos contables."
+
+#. module: l10n_py_account
+#: model:ir.model.fields,field_description:l10n_py_account.field_res_company__l10n_py_house
+#: model:ir.model.fields,field_description:l10n_py_account.field_res_partner__l10n_py_house
+#: model:ir.model.fields,field_description:l10n_py_account.field_res_users__l10n_py_house
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.base_view_partner_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.view_company_form
+msgid "House"
+msgstr "Casa"
+
+#. module: l10n_py_account
+#: model:ir.model.fields,field_description:l10n_py_account.field_res_company__l10n_py_establecimiento
+msgid "Establishment"
+msgstr "Establecimiento"
+
+#. module: l10n_py_account
+#: model:ir.actions.act_window,name:l10n_py_account.action_l10n_py_economic_activity
+#: model:ir.model.fields,field_description:l10n_py_account.field_res_company__l10n_aipy_economic_activity_ids
+msgid "Economic Activities"
+msgstr "Actividades Económicas"
+
+#. module: l10n_py_account
+#: model:ir.model.fields,field_description:l10n_py_account.field_l10n_py_district__state_id
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.base_view_partner_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.view_company_form
+msgid "State"
+msgstr "Estado"
+
+#. module: l10n_py_account
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.base_view_partner_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.view_company_form
+msgid "Street 2..."
+msgstr "Calle 2..."
+
+#. module: l10n_py_account
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.base_view_partner_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.view_company_form
+msgid "Department"
+msgstr "Departamento"
+
+#. module: l10n_py_account
+#: model:ir.model.fields,field_description:l10n_py_account.field_l10n_py_city__district_id
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.base_view_partner_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.view_company_form
+msgid "District"
+msgstr "Distrito"
+
+#. module: l10n_py_account
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.base_view_partner_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.view_company_form
+msgid "City"
+msgstr "Ciudad"
+
+#. module: l10n_py_account
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.base_view_partner_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.view_company_form
+msgid "ZIP"
+msgstr "Cod. Postal"
+
+#. module: l10n_py_account
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.base_view_partner_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.view_company_form
+msgid "Street..."
+msgstr "Calle..."
+
+#. module: l10n_py_account
+#: model:ir.model.fields,field_description:l10n_py_account.field_l10n_py_economic_activity__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: l10n_py_account
+#: model:ir.model,name:l10n_py_account.model_res_country
+#: model:ir.model.fields,field_description:l10n_py_account.field_l10n_py_city__country_id
+#: model:ir.model.fields,field_description:l10n_py_account.field_l10n_py_district__country_id
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.base_view_partner_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.view_company_form
+msgid "Country"
+msgstr "País"
+
+#. module: l10n_py_account
+#: model:ir.model,name:l10n_py_account.model_res_company
+msgid "Companies"
+msgstr "Empresas"
+
+#. module: l10n_py_account
+#: model:ir.model,name:l10n_py_account.model_l10n_py_economic_activity
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.l10n_py_economic_activity_view_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.l10n_py_economic_activity_view_tree
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.view_company_form
+msgid "Economic Activity"
+msgstr "Actividad Económica"
+
+#. module: l10n_py_account
+#: model:ir.model.fields,help:l10n_py_account.field_res_company__l10n_aipy_economic_activity_ids
+msgid "Economic activities associated with the country"
+msgstr "Actividades económicas asociadas al país"
+
+#. module: l10n_py_account
+#: model:ir.model.fields,help:l10n_py_account.field_l10n_py_economic_activity__company_id
+msgid "Company associated with the economic activity"
+msgstr "Empresa asociada a la actividad económica"
+
+#. module: l10n_py_account
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.report_invoice_document
+msgid "Address:"
+msgstr "Dirección"
+
+#. module: l10n_py_account
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.report_invoice_document
+msgid "<span>Code</span>"
+msgstr "<span>Cod.</span>"
+
+#. module: l10n_py_account
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.report_invoice_document
+msgid "<span>Exempt</span>"
+msgstr "<span>Exento</span>"
+
+#. module: l10n_py_account
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.report_invoice_document
+msgid "<span>Taxed 10%</span>"
+msgstr "<span>Gravado 10%</span>"
+
+#. module: l10n_py_account
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.report_invoice_document
+msgid "<span>Taxed 5%</span>"
+msgstr "<span>Gravado 5%</span>"
+
+#. module: l10n_py_account
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.report_invoice_document
+msgid "<strong>SUBTOTAL</strong>"
+msgstr "<strong>SUBTOTAL</strong>"
+
+#. module: l10n_py_account
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.report_invoice_document
+msgid "<strong>SUBTOTAL IN GUARANIES</strong>"
+msgstr "<strong>SUBTOTAL EN GUARANIES</strong>"
+
+#. module: l10n_py_account
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.kude_subtotal_taxes
+msgid "<strong>TOTAL OPERATION:</strong>"
+msgstr "<strong>TOTAL DE LA OPERACION:</strong>"
+
+#. module: l10n_py_account
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.kude_subtotal_taxes
+msgid "<span>Total to pay: </span>"
+msgstr "<span>Total a pagar: </span>"
+
+#. module: l10n_py_account
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.kude_subtotal_taxes
+msgid "<strong>VAT SETTLEMENT in Guaranies:</strong>"
+msgstr "<strong>LIQUIDACION IVA en Guaranies:</strong>"
+
+#. module: l10n_py_account
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.kude_subtotal_taxes
+msgid "<strong>VAT SETTLEMENT:</strong>"
+msgstr "<strong>LIQUIDACION IVA:</strong>"
+
+#. module: l10n_py_account
+#: model_terms:ir.ui.view,arch_db:l10n_py_account.kude_subtotal_taxes
+msgid "<strong>TOTAL:</strong>"
+msgstr "<strong>TOTAL:</strong>"
+
+#. module: l10n_py_account
+#: model:account.journal,name:l10n_py_account.purchase_journal_selfinvoice
+msgid "Self Invoice Journal"
+msgstr "Diario de autofacturación"

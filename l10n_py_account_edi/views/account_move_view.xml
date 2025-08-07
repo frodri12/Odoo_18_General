@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_move_form_inherit" model="ir.ui.view">
+        <field name="name">account.move.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="arch" type="xml">
+
+            <xpath expr="//page[3]" position="after">
+                <page name="DNIT">
+                    <group>
+                        <group>
+                            <field name="l10n_py_dnit_ws_response_codres" />
+                        </group>
+                        <group>
+                            <field name="l10n_py_dnit_ws_response_msgres" />
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="l10n_py_dnit_ws_response_estres" />
+                            <field name="l10n_py_dnit_ws_response_fecproc" />
+                            <field name="l10n_py_dnit_ws_random_code" />
+                        </group>
+                        <group>
+                            <field name="l10n_py_dnit_ws_response_cdc" />
+                            <field name="l10n_py_dnit_ws_response_protaut" />
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="l10n_py_dnit_ws_request_json" />
+                        </group>
+                        <group>
+                            <field name="l10n_py_dnit_ws_response_json" />
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+
+            <!-- [contains(@class, 'oe_highlight')] -->
+            <!--
+            <xpath expr="//button[@name='action_print_pdf']" position="replace">
+                <button name="action_print_pdf" type="object" class="oe_highlight"
+                   invisible="state != 'posted' or is_being_sent or invoice_pdf_report_id or move_type == 'entry' or l10n_py_dnit_show_print_button == True"
+                   string="Print"/>
+                <button name="action_mostrar_factura" type="object" class="oe_highlight"
+                   invisible="state != 'posted' or is_being_sent or invoice_pdf_report_id or move_type == 'entry' or l10n_py_dnit_show_print_button == False"
+                   string="Print"/>
+            </xpath>
+            -->
+            <!--
+            <xpath expr="//button[@name='action_print_pdf']" position="replace">
+                <button name="action_print_pdf" type="object" 
+                         invisible="state != 'posted' or (not is_being_sent and not invoice_pdf_report_id) or journal_id.l10n_py_dnit_pos_system in ('RLI_RLM','AURLI_RLM')"
+                         string="Print A"/>
+            </xpath>
+            -->
+
+            
+
+        </field>
+    </record>
+</odoo>

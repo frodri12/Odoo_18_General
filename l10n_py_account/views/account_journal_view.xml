@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_account_journal_form" model="ir.ui.view">
+        <field name="model">account.journal</field>
+        <field name="name">account.journal.form</field>
+        <field name="inherit_id" ref="l10n_latam_invoice_document.view_account_journal_form" />
+        <field name="arch" type="xml">
+            <field name="l10n_latam_use_documents" position="after">
+                <field name="l10n_py_is_pos"
+                    invisible="country_code != 'PY' or not l10n_latam_use_documents or type not in ['sale', 'purchase']" />
+                <field name="company_partner" invisible="1" />
+                <field name="l10n_py_dnit_pos_system" invisible="not l10n_py_is_pos"
+                    required="l10n_py_is_pos" />
+                <field name="l10n_py_dnit_pos_number" invisible="not l10n_py_is_pos"
+                    required="l10n_py_is_pos" />
+                <field name="l10n_py_dnit_pos_partner_id" invisible="not l10n_py_is_pos"
+                    required="l10n_py_is_pos" />
+            </field>
+
+            <xpath expr="//page[@name='advanced_settings']" position="after">
+                <page name="dnit" string="DNIT" invisible="l10n_py_dnit_pos_system not in ('II_IM','RLI_RLM','AUII_IM', 'AURLI_RLM','BFERCEL','FEERCEL','CPERCEL')">
+                    <group>
+                        <group string="Producción">
+                            <field name="l10n_py_dnit_timbrado" />
+                            <field name="l10n_py_dnit_timbrado_start_date" />
+                            <field name="l10n_py_dnit_timbrado_end_date" />
+                        </group>
+                        <group string="Pruebas">
+                            <field name="l10n_py_dnit_timbrado_test" />
+                            <field name="l10n_py_dnit_timbrado_start_date_test" />
+                            <field name="l10n_py_dnit_timbrado_end_date_test" />
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

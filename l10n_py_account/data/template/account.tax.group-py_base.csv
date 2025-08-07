@@ -1,0 +1,4 @@
+id,name,l10n_py_vat_dnit_code,country_id,sequence,name@es
+tax_group_iva_10,VAT 10%,5,base.py,10,IVA 10%
+tax_group_iva_5,VAT 5%,4,base.py,5,IVA 5%
+tax_group_exenton,EXEMPT,3,base.py,0,EXENTOS

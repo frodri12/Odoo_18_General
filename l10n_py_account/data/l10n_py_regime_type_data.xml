@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="regimetype_0" model="l10n_py.regime.type">
+        <field name="code">0</field>
+        <field name="name">Sin Asignar</field>
+    </record>
+    <record id="regimetype_1" model="l10n_py.regime.type">
+        <field name="code">1</field>
+        <field name="name">Regimen de Turismo</field>
+    </record>
+    <record id="regimetype_2" model="l10n_py.regime.type">
+        <field name="code">2</field>
+        <field name="name">Importador</field>
+    </record>
+    <record id="regimetype_3" model="l10n_py.regime.type">
+        <field name="code">3</field>
+        <field name="name">Exportador</field>
+    </record>
+    <record id="regimetype_4" model="l10n_py.regime.type">
+        <field name="code">4</field>
+        <field name="name">Maquila</field>
+    </record>
+    <record id="regimetype_5" model="l10n_py.regime.type">
+        <field name="code">5</field>
+        <field name="name">Ley N° 60/90</field>
+    </record>
+    <record id="regimetype_6" model="l10n_py.regime.type">
+        <field name="code">6</field>
+        <field name="name">Regimen del Pequeño Productor</field>
+    </record>
+    <record id="regimetype_7" model="l10n_py.regime.type">
+        <field name="code">7</field>
+        <field name="name">Regimen del Mediano Productor</field>
+    </record>
+    <record id="regimetype_8" model="l10n_py.regime.type">
+        <field name="code">8</field>
+        <field name="name">Regimen Contable</field>
+    </record>
+</odoo>

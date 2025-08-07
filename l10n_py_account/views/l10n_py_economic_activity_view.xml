@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="l10n_py_economic_activity_view_form" model="ir.ui.view">
+        <field name="name">l10n_py.economic.activity.form</field>
+        <field name="model">l10n_py.economic.activity</field>
+        <field name="arch" type="xml">
+            <form string="Economic Activity">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code" />
+                            <field name="name" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="l10n_py_economic_activity_view_tree" model="ir.ui.view">
+        <field name="name">l10n_py.economic.activity.tree</field>
+        <field name="model">l10n_py.economic.activity</field>
+        <field name="arch" type="xml">
+            <list string="Economic Activity">
+                <field name="code" />
+                <field name="name" />
+            </list>
+        </field>
+    </record>
+
+    <record id="action_l10n_py_economic_activity" model="ir.actions.act_window">
+        <field name="name">Economic Activities</field>
+        <field name="res_model">l10n_py.economic.activity</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>
