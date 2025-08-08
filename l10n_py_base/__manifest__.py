@@ -25,6 +25,7 @@ Long description of module's purpose
     'data': [
         # 'security/ir.model.access.csv',
         'data/res.country.csv',
+        'data/res_country_state_data.xml',
 
         'views/views.xml',
         'views/templates.xml',
