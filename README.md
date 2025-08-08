@@ -1,1 +1,1 @@
-# Odoo_18_General
+# Paraguay Localization

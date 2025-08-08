@@ -1,0 +1,45 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_py_base
+# 
+# Translators:
+# Fernando Rodriguez, 2025
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-08 12:11+0000\n"
+"PO-Revision-Date: 2025-08-08 12:11+0000\n"
+"Last-Translator: Fernando Rodriguez, 2025\n"
+"Language-Team: Spanish (Latin America)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: es_PY\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#. module: l10n_py_base
+#: model:ir.model,name:l10n_py_base.model_res_country
+msgid "Country"
+msgstr "País"
+
+#. module: l10n_py_base
+#: model:ir.model.fields,help:l10n_py_base.field_res_country__l10n_py_numeric_code
+msgid "Three-digit country codes"
+msgstr "Códigos de país de tres letras"
+
+#. module: l10n_py_base
+#: model:ir.model.fields,help:l10n_py_base.field_res_country__l10n_py_alpha_code
+msgid "Three-letter country codes"
+msgstr "Códigos de país de tres dígitos"
+
+#. module: l10n_py_base
+#: model:ir.model.fields,field_description:l10n_py_base.field_res_country__l10n_py_alpha_code
+msgid "Code Alpha 3"
+msgstr "Código Alpha 3"
+
+#. module: l10n_py_base
+#: model:ir.model.fields,field_description:l10n_py_base.field_res_country__l10n_py_numeric_code
+msgid "Code Numeric"
+msgstr "Código Numérico"

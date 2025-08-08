@@ -1,0 +1,39 @@
+# -*- coding: utf-8 -*-
+{
+    'name': "Paraguay Localization Base",
+
+    'summary': "Paraguay Localization Base",
+
+    'description': """
+Long description of module's purpose
+    """,
+
+    'author': "Avatar Informatica SRL",
+    'website': "https://www.avatar.com.py",
+
+    # Categories can be used to filter modules in modules listing
+    # Check https://github.com/odoo/odoo/blob/15.0/odoo/addons/base/data/ir_module_category_data.xml
+    # for the full list
+    # Accounting/Localization/Account Charts
+    'category': 'Uncategorized',
+    'version': '0.1',
+
+    # any module necessary for this one to work correctly
+    'depends': ['base','contacts'],
+
+    # always loaded
+    'data': [
+        # 'security/ir.model.access.csv',
+        'data/res.country.csv',
+
+        'views/views.xml',
+        'views/templates.xml',
+        'views/res_country_views.xml',
+    ],
+    # only loaded in demonstration mode
+    'demo': [
+        'demo/demo.xml',
+    ],
+    'license': 'LGPL-3',
+}
+
