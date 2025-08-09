@@ -19,22 +19,26 @@ Long description of module's purpose
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','contacts'],
+    'depends': ['base','contacts','account'],
 
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
         'data/res.country.csv',
         'data/res_country_state_data.xml',
+        'data/uom_data.xml',
 
         'views/views.xml',
         'views/templates.xml',
         'views/res_country_views.xml',
+        'views/uom_uom_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
         'demo/demo.xml',
     ],
     'license': 'LGPL-3',
+    'pre_init_hook': '_pre_change_values',
+    'post_init_hook': '_post_change_values',
 }
 

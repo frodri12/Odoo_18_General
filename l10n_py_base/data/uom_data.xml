@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+	<!-- UOM Categories -->
+	<record id="product_uom_categ_packages" model="uom.category">
+		<field name="name">Packages</field>
+	</record>
+	<record id="product_uom_categ_electrical" model="uom.category">
+		<field name="name">Electrical</field>
+	</record>
+	<record id="product_uom_categ_nuclear" model="uom.category">
+		<field name="name">Others</field>
+	</record>
+	<record id="product_uom_categ_others" model="uom.category">
+		<field name="name">Others</field>
+	</record>
+	
+	<!-- UOM.UOM -->
+	<!-- Units -->
+	<record id="uom.product_uom_unit" model="uom.uom">
+		<field name="l10n_py_code">77</field>
+		<field name="l10n_py_ref">UNI</field>
+		<field name="l10n_py_description">Unidad</field>
+	</record>
+	<record id="uom.product_uom_dozen" model="uom.uom">
+		<field name="l10n_py_code">113</field>
+		<field name="l10n_py_ref">DOC</field>
+		<field name="l10n_py_description">Docena</field>
+	</record>
+	
+	<!-- WORKING TIME -->
+	<record id="uom.product_uom_hour" model="uom.uom">
+		<field name="l10n_py_code">100</field>
+		<field name="l10n_py_ref">Hs</field>
+		<field name="l10n_py_description">Hora</field>
+	</record>
+	<record id="uom.product_uom_day" model="uom.uom">
+		<field name="l10n_py_code">102</field>
+		<field name="l10n_py_ref">Di</field>
+		<field name="l10n_py_description">Día</field>
+	</record>
+	<record id="product_uom_year" model="uom.uom">
+		<field name="category_id" ref="uom.uom_categ_wtime"/>
+		<field name="name">Año</field>
+		<field name="factor_inv" eval="365"/>
+		<field name="uom_type">bigger</field>
+		<field name="l10n_py_code">97</field>
+		<field name="l10n_py_ref">AA</field>
+		<field name="l10n_py_description">Año</field>
+	</record>
+	<record id="product_uom_month" model="uom.uom">
+		<field name="category_id" ref="uom.uom_categ_wtime"/>
+		<field name="name">Mes</field>
+		<field name="factor_inv" eval="30"/>
+		<field name="uom_type">bigger</field>
+		<field name="l10n_py_code">98</field>
+		<field name="l10n_py_ref">ME</field>
+		<field name="l10n_py_description">Mes</field>
+	</record>
+	<record id="product_uom_minut" model="uom.uom">
+		<field name="category_id" ref="uom.uom_categ_wtime"/>
+		<field name="name">Minuto</field>
+		<field name="factor" eval="480"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">101</field>
+		<field name="l10n_py_ref">Mi</field>
+		<field name="l10n_py_description">Minuto</field>
+	</record>
+	<record id="product_uom_second" model="uom.uom">
+		<field name="category_id" ref="uom.uom_categ_wtime"/>
+		<field name="name">Segundo</field>
+		<field name="factor" eval="28800"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">666</field>
+		<field name="l10n_py_ref">Se</field>
+		<field name="l10n_py_description">Segundo</field>
+	</record>
+	
+	<!-- LENGTH -->
+	<record id="uom.product_uom_meter" model="uom.uom">
+		<field name="l10n_py_code">87</field>
+		<field name="l10n_py_ref">m</field>
+		<field name="l10n_py_description">Metros</field>
+	</record>
+	<record id="uom.product_uom_millimeter" model="uom.uom">
+		<field name="l10n_py_code">95</field>
+		<field name="l10n_py_ref">MM</field>
+		<field name="l10n_py_description">Milímetros</field>
+	</record>
+	<record id="uom.product_uom_km" model="uom.uom">
+		<field name="l10n_py_code">625</field>
+		<field name="l10n_py_ref">Km</field>
+		<field name="l10n_py_description">Kilómetros</field>
+	</record>
+	<record id="uom.product_uom_cm" model="uom.uom">
+		<field name="l10n_py_code">91</field>
+		<field name="l10n_py_ref">CM</field>
+		<field name="l10n_py_description">Centimetros</field>
+	</record>
+	<record id="product_uom_lineal_meter" model="uom.uom">
+		<field name="category_id" ref="uom.uom_categ_length"/>
+		<field name="name">Metro lineal</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">660</field>
+		<field name="l10n_py_ref">ml</field>
+		<field name="l10n_py_description">Metro lineal</field>
+	</record>
+	
+	<!-- SURFACE -->
+	<record id="uom.uom_square_meter" model="uom.uom">
+		<field name="l10n_py_code">109</field>
+		<field name="l10n_py_ref">M2</field>
+		<field name="l10n_py_description">Metros cuadrados</field>
+	</record>
+	<record id="uom_square_centimeter" model="uom.uom">
+		<field name="category_id" ref="uom.uom_categ_surface"/>
+		<field name="name">Centimetros cuadrados</field>
+		<field name="factor" eval="10000"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">92</field>
+		<field name="l10n_py_ref">CM2</field>
+		<field name="l10n_py_description">Centimetros cuadrados</field>
+	</record>
+	<record id="uom_square_millimeter" model="uom.uom">
+		<field name="category_id" ref="uom.uom_categ_surface"/>
+		<field name="name">Milímetros cuadrados</field>
+		<field name="factor" eval="1000000"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">96</field>
+		<field name="l10n_py_ref">MM2</field>
+		<field name="l10n_py_description">Milímetros cuadrados</field>
+	</record>
+	<record id="uom_square_hectare" model="uom.uom">
+		<field name="category_id" ref="uom.uom_categ_surface"/>
+		<field name="name">Hectáreas</field>
+		<field name="factor_inv" eval="10000"/>
+		<field name="uom_type">bigger</field>
+		<field name="l10n_py_code">869</field>
+		<field name="l10n_py_ref">ha</field>
+		<field name="l10n_py_description">Hectáreas</field>
+	</record>
+	
+	<!-- VOLUME -->
+	<record id="uom.product_uom_cubic_meter" model="uom.uom">
+		<field name="l10n_py_code">110</field>
+		<field name="l10n_py_ref">M3</field>
+		<field name="l10n_py_description">Metros cúbicos</field>
+	</record>
+	<record id="uom.product_uom_litre" model="uom.uom">
+		<field name="l10n_py_code">89</field>
+		<field name="l10n_py_ref">LT</field>
+		<field name="l10n_py_description">Litros</field>
+	</record>
+	<record id="product_uom_cubic_centimeter" model="uom.uom">
+		<field name="category_id" ref="uom.product_uom_categ_vol"/>
+		<field name="name">Centimetros cubicos</field>
+		<field name="factor" eval="1000"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">93</field>
+		<field name="l10n_py_ref">CM3</field>
+		<field name="l10n_py_description">Centimetros cubicos</field>
+	</record>
+	<record id="product_uom_milliliter" model="uom.uom">
+		<field name="category_id" ref="uom.product_uom_categ_vol"/>
+		<field name="name">Mililitros</field>
+		<field name="factor" eval="1000"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">88</field>
+		<field name="l10n_py_ref">ML</field>
+		<field name="l10n_py_description">Mililitros</field>
+	</record>
+	
+	<!-- WEIGHT -->
+	<record id="uom.product_uom_gram" model="uom.uom">
+		<field name="l10n_py_code">86</field>
+		<field name="l10n_py_ref">g</field>
+		<field name="l10n_py_description">Gramos</field>
+	</record>
+	<record id="uom.product_uom_ton" model="uom.uom">
+		<field name="l10n_py_code">99</field>
+		<field name="l10n_py_ref">TN</field>
+		<field name="l10n_py_description">Tonelada</field>
+	</record>
+	<record id="uom.product_uom_kgm" model="uom.uom">
+		<field name="l10n_py_code">83</field>
+		<field name="l10n_py_ref">kg</field>
+		<field name="l10n_py_description">Kilogramos</field>
+	</record>
+	<record id="product_uom_milligram" model="uom.uom">
+		<field name="category_id" ref="uom.product_uom_categ_kgm"/>
+		<field name="name">Miligramos</field>
+		<field name="factor" eval="1000000"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">90</field>
+		<field name="l10n_py_ref">MG</field>
+		<field name="l10n_py_description">Miligramos</field>
+	</record>
+	<record id="product_uom_kilogram_gross" model="uom.uom">
+		<field name="category_id" ref="uom.product_uom_categ_kgm"/>
+		<field name="name">Kilogramo Bruto</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">116</field>
+		<field name="l10n_py_ref">E4</field>
+		<field name="l10n_py_description">Kilogramo Bruto</field>
+	</record>
+	
+	
+	<!--Americanization of units of measure-->
+	<!-- WEIGHT -->
+	
+	<!-- LENGTH -->
+	<record id="uom.product_uom_foot" model="uom.uom">
+		<field name="l10n_py_code">122</field>
+		<field name="l10n_py_ref">FOT</field>
+		<field name="l10n_py_description">Pies</field>
+	</record>
+	<record id="uom.product_uom_yard" model="uom.uom">
+		<field name="l10n_py_code">103</field>
+		<field name="l10n_py_ref">Ya</field>
+		<field name="l10n_py_description">Yardas</field>
+	</record>
+	<record id="uom.product_uom_inch" model="uom.uom">
+		<field name="l10n_py_code">94</field>
+		<field name="l10n_py_ref">PUL</field>
+		<field name="l10n_py_description">Pulgadas</field>
+	</record>
+	
+	<!-- SURFACE -->
+	<record id="uom.uom_square_foot" model="uom.uom">
+		<field name="l10n_py_code">123</field>
+		<field name="l10n_py_ref">FTK</field>
+		<field name="l10n_py_description">Pies Cuadradas</field>
+	</record>
+	
+	<!-- VOLUME -->
+	<record id="uom.product_uom_gal" model="uom.uom">
+		<field name="l10n_py_code">114</field>
+		<field name="l10n_py_ref">GLL</field>
+		<field name="l10n_py_description">Galones (US) (3,7843 LT)</field>
+	</record>
+	
+	<!--    -->
+	<record id="product_uom_weight_pass" model="uom.uom">
+		<field name="category_id" ref="uom.product_uom_categ_kgm"/>
+		<field name="name">Peso Base</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">140</field>
+		<field name="l10n_py_ref">BW</field>
+		<field name="l10n_py_description">Peso Base</field>
+	</record>
+	
+	<!--   -->
+	<record id="product_uom_paquete" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_packages"/>
+		<field name="name">Paquete</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">reference</field>
+		<field name="l10n_py_code">133</field>
+		<field name="l10n_py_ref">PK</field>
+		<field name="l10n_py_description">Paquete</field>
+	</record>
+	<record id="product_uom_fardos" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_packages"/>
+		<field name="name">Fardos</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">137</field>
+		<field name="l10n_py_ref">BL</field>
+		<field name="l10n_py_description">Fardos</field>
+	</record>
+	<record id="product_uom_bultos" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_packages"/>
+		<field name="name">Bulto</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">138</field>
+		<field name="l10n_py_ref">AB</field>
+		<field name="l10n_py_description">Bulto</field>
+	</record>
+	<record id="product_uom_cesta" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_packages"/>
+		<field name="name">Cesta</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">139</field>
+		<field name="l10n_py_ref">BK</field>
+		<field name="l10n_py_description">Cesta</field>
+	</record>
+	<record id="product_uom_caja" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_packages"/>
+		<field name="name">Caja</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">131</field>
+		<field name="l10n_py_ref">BX</field>
+		<field name="l10n_py_description">Caja</field>
+	</record>
+	<record id="product_uom_juego" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_packages"/>
+		<field name="name">Juego</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">132</field>
+		<field name="l10n_py_ref">SET</field>
+		<field name="l10n_py_description">Juego</field>
+	</record>
+	<record id="product_uom_bolsa" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_packages"/>
+		<field name="name">Bolsa</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">134</field>
+		<field name="l10n_py_ref">BG</field>
+		<field name="l10n_py_description">Bolsa</field>
+	</record>
+	<record id="product_uom_pote" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_packages"/>
+		<field name="name">Pote</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">136</field>
+		<field name="l10n_py_ref">JR</field>
+		<field name="l10n_py_description">Pote</field>
+	</record>
+	<record id="product_uom_mazos" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_packages"/>
+		<field name="name">Mazos</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">129</field>
+		<field name="l10n_py_ref">U(JGO)</field>
+		<field name="l10n_py_description">Mazos</field>
+	</record>
+	<record id="product_uom_tambores" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_packages"/>
+		<field name="name">Tambores</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">130</field>
+		<field name="l10n_py_ref">DR</field>
+		<field name="l10n_py_description">Tambores</field>
+	</record>
+	<record id="product_uom_remesas" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_packages"/>
+		<field name="name">Resmas</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">126</field>
+		<field name="l10n_py_ref">RM</field>
+		<field name="l10n_py_description">Resmas</field>
+	</record>
+	<record id="product_uom_rollos" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_packages"/>
+		<field name="name">Rollos</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">127</field>
+		<field name="l10n_py_ref">RO</field>
+		<field name="l10n_py_description">Rollos</field>
+	</record>
+	<record id="product_uom_piezas" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_packages"/>
+		<field name="name">Piezas</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">124</field>
+		<field name="l10n_py_ref">PCE</field>
+		<field name="l10n_py_description">Piezas</field>
+	</record>
+	<record id="product_uom_millar" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_packages"/>
+		<field name="name">Millar</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">120</field>
+		<field name="l10n_py_ref">MIL</field>
+		<field name="l10n_py_description">Millar</field>
+	</record>
+	<record id="product_uom_kits" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_packages"/>
+		<field name="name">Kits</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">117</field>
+		<field name="l10n_py_ref">KT</field>
+		<field name="l10n_py_description">Kits</field>
+	</record>
+	<record id="product_uom_gruesas" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_packages"/>
+		<field name="name">Gruesas</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">115</field>
+		<field name="l10n_py_ref">GRO</field>
+		<field name="l10n_py_description">Gruesas</field>
+	</record>
+	<record id="product_uom_bovinas" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_packages"/>
+		<field name="name">Bovinas</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">111</field>
+		<field name="l10n_py_ref">4A</field>
+		<field name="l10n_py_description">Bovinas</field>
+	</record>
+	<record id="product_uom_racion" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_packages"/>
+		<field name="name">Ración</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">569</field>
+		<field name="l10n_py_ref">ración</field>
+		<field name="l10n_py_description">Ración</field>
+	</record>
+	
+	<!--   -->
+	<record id="product_uom_kilowatt" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_electrical"/>
+		<field name="name">1000 Kilowatt Hora </field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">reference</field>
+		<field name="l10n_py_code">128</field>
+		<field name="l10n_py_ref">kWh </field>
+		<field name="l10n_py_description">1000 Kilowatt Hora </field>
+	</record>
+	
+	<!--   -->
+	<record id="product_uom_curie" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_nuclear"/>
+		<field name="name">Curie </field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">reference</field>
+		<field name="l10n_py_code">112</field>
+		<field name="l10n_py_ref">Ci </field>
+		<field name="l10n_py_description">Curie </field>
+	</record>
+	<record id="product_uom_milicurie" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_nuclear"/>
+		<field name="name">Milicurie </field>
+		<field name="factor" eval="1000"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">119</field>
+		<field name="l10n_py_ref">MCU </field>
+		<field name="l10n_py_description">Milicurie </field>
+	</record>
+	<record id="product_uom_microcurie" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_nuclear"/>
+		<field name="name">Microcurie </field>
+		<field name="factor" eval="1000000"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">118</field>
+		<field name="l10n_py_ref">M5 </field>
+		<field name="l10n_py_description">Microcurie </field>
+	</record>
+	
+	<!-- -->
+	<record id="product_uom_par" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_others"/>
+		<field name="name">Par</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">reference</field>
+		<field name="l10n_py_code">121</field>
+		<field name="l10n_py_ref">PAR</field>
+		<field name="l10n_py_description">Par</field>
+	</record>
+	<record id="product_uom_costo_por_mil" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_others"/>
+		<field name="name">Costo por Mil</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">2366</field>
+		<field name="l10n_py_ref">CPM</field>
+		<field name="l10n_py_description">Costo por Mil</field>
+	</record>
+	<record id="product_uom_determinacion" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_others"/>
+		<field name="name">Determinación</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">104</field>
+		<field name="l10n_py_ref">DET</field>
+		<field name="l10n_py_description">Determinación</field>
+	</record>
+	<record id="product_uom_por_milaje" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_others"/>
+		<field name="name">Por Milaje</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">891</field>
+		<field name="l10n_py_ref">pm</field>
+		<field name="l10n_py_description">Por Milaje</field>
+	</record>
+	<record id="product_uom_unidad_internacional" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_others"/>
+		<field name="name">Unidad Internacional</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">2329</field>
+		<field name="l10n_py_ref">UI</field>
+		<field name="l10n_py_description">Unidad Internacional</field>
+	</record>
+	<record id="product_uom_unidad_medida_global" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_others"/>
+		<field name="name">Unidad Medida Global</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">885</field>
+		<field name="l10n_py_ref">GL</field>
+		<field name="l10n_py_description">Unidad Medida Global</field>
+	</record>
+	<record id="product_uom_quilate" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_others"/>
+		<field name="name">Quilate</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">125</field>
+		<field name="l10n_py_ref">KLT</field>
+		<field name="l10n_py_description">Quilate</field>
+	</record>
+	<record id="product_uom_kgm_per_sqaue_metter" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_others"/>
+		<field name="name">Kilogramos s/ metro cuadrado</field>
+		<field name="factor" eval="1"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">79</field>
+		<field name="l10n_py_ref">kg/m²</field>
+		<field name="l10n_py_description">Kilogramos s/ metro cuadrado</field>
+	</record>
+	<record id="product_uom_docena_par" model="uom.uom">
+		<field name="category_id" ref="product_uom_categ_others"/>
+		<field name="name">Docena Par</field>
+		<field name="factor" eval="12"/>
+		<field name="uom_type">smaller</field>
+		<field name="l10n_py_code">135</field>
+		<field name="l10n_py_ref">DPC</field>
+		<field name="l10n_py_description">Docena Par</field>
+	</record>
+</odoo>

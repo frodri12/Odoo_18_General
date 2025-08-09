@@ -43,3 +43,49 @@ msgstr "Código Alpha 3"
 #: model:ir.model.fields,field_description:l10n_py_base.field_res_country__l10n_py_numeric_code
 msgid "Code Numeric"
 msgstr "Código Numérico"
+
+#. module: l10n_py_base
+#: model:ir.model,name:l10n_py_base.model_uom_uom
+msgid "Product Unit of Measure"
+msgstr "Unidad de medida del producto"
+
+#. module: l10n_py_base
+#: model:ir.model.fields,field_description:l10n_py_base.field_uom_uom__l10n_py_code
+msgid "Internal Code"
+msgstr "Código interno"
+
+#. module: l10n_py_base
+#: model:ir.model.fields,field_description:l10n_py_base.field_uom_uom__l10n_py_ref
+msgid "Internal Reference"
+msgstr "Referencia interna"
+
+#. module: l10n_py_base
+#: model:ir.model.fields,field_description:l10n_py_base.field_uom_uom__l10n_py_description
+msgid "Description"
+msgstr "Descripción"
+
+#. module: l10n_py_base
+#: model:ir.model.fields,help:l10n_py_base.field_uom_uom__l10n_py_code
+msgid "Paraguay: This code will be used on electronic invoice."
+msgstr "Paraguay: Este código es usado en facturación electrónica"
+
+#. module: l10n_py_base
+#: model:ir.model.fields,help:l10n_py_base.field_uom_uom__l10n_py_ref
+msgid "Paraguay: This name will be used on electronic invoice."
+msgstr "Paraguay: Esta referencia es usada en facturación electrónica"
+
+#. module: l10n_py_base
+#: model:uom.category,name:l10n_py_base.product_uom_categ_nuclear
+#: model:uom.category,name:l10n_py_base.product_uom_categ_others
+msgid "Others"
+msgstr "Otros"
+
+#. module: l10n_py_base
+#: model:uom.category,name:l10n_py_base.product_uom_categ_packages
+msgid "Packages"
+msgstr "Paquetes"
+
+#. module: l10n_py_base
+#: model:uom.category,name:l10n_py_base.product_uom_categ_electrical
+msgid "Electrical"
+msgstr "Eléctrica"
