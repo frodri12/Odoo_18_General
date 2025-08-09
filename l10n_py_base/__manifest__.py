@@ -28,12 +28,14 @@ Long description of module's purpose
         'data/res.country.csv',
         'data/res_country_state_data.xml',
         'data/l10n_py_state_district_data.xml',
+        'data/l10n_py_district_city_data.xml',
         'data/uom_data.xml',
 
         'views/views.xml',
         'views/templates.xml',
         'views/res_country_views.xml',
         'views/l10n_py_state_district_views.xml',
+        'views/l10n_py_district_city_views.xml',
         'views/uom_uom_views.xml',
     ],
     # only loaded in demonstration mode

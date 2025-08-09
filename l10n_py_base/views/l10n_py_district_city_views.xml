@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_l10n_py_district_city_tree" model="ir.ui.view">
+            <field name="name">l10n_py_district_city.list</field>
+            <field name="model">l10n_py_district_city</field>
+            <field name="arch" type="xml">
+                <list string="District" create="0" delete="0">
+                    <field name="name" readonly="is_editable_for_group == False"/>
+                    <field name="code" readonly="is_editable_for_group == False"/>
+                    <field name="district_id" options="{'no_create': True, 'no_open': True}"
+                        readonly="is_editable_for_group == False"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_l10n_py_district_city_form" model="ir.ui.view">
+            <field name="name">l10n_py_district_city.form</field>
+            <field name="model">l10n_py_district_city</field>
+            <field name="arch" type="xml">
+                <form create="0" delete="0">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box"></div>
+                        <group name="main_group">
+                            <group name="district_details">
+                                <field name="code" readonly="is_editable_for_group == False"/>
+                                <field name="name" readonly="is_editable_for_group == False"/>
+                                <field name="district_id" options='{"no_open": True, "no_create": True}'
+                                    readonly="is_editable_for_group == False"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_l10n_py_district_city_search" model="ir.ui.view">
+            <field name="name">l10n_py_district_city.search</field>
+            <field name="model">l10n_py_district_city</field>
+            <field name="arch" type="xml">
+                <search string="Cities">
+                    <field name="name" filter_domain="['|', ('name', 'ilike', self), ('code', 'ilike', self)]"/>
+                    <group string="Group By">
+                        <filter name="groupby_city" string="District" context="{'group_by': 'district_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_l10n_py_district_city" model="ir.actions.act_window">
+            <field name="name">Cities</field>
+            <field name="res_model">l10n_py_district_city</field>
+            <field name="view_id" ref="view_l10n_py_district_city_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a City
+                </p><p>
+                    City are part of your contacts' addresses.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_l10n_py_district_city_partner" 
+            action="action_l10n_py_district_city"
+            parent="contacts.menu_localisation"
+            sequence="110"/>
+
+    </data>
+</odoo>

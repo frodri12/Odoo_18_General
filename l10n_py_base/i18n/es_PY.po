@@ -147,3 +147,34 @@ msgstr "Los distritos son parte de la dirección de un contacto"
 #: model:ir.model.constraint,message:l10n_py_base.constraint_l10n_py_state_district_code_uniq
 msgid "The code of the district must be unique!"
 msgstr "El código del distrito debe ser único"
+
+#. module: l10n_py_base
+#: model:ir.actions.act_window,name:l10n_py_base.action_l10n_py_district_city
+#: model:ir.ui.menu,name:l10n_py_base.menu_l10n_py_district_city_partner
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.view_l10n_py_district_city_search
+msgid "Cities"
+msgstr "Ciudades"
+
+#. module: l10n_py_base
+#: model_terms:ir.actions.act_window,help:l10n_py_base.action_l10n_py_district_city
+msgid "City are part of your contacts' addresses."
+msgstr "Las ciudades son parte de las dirección de los contactos"
+
+#. module: l10n_py_base
+#: model_terms:ir.actions.act_window,help:l10n_py_base.action_l10n_py_district_city
+msgid "Create a City"
+msgstr "Crear una ciudad"
+
+#. module: l10n_py_base
+#: model:ir.model.fields,field_description:l10n_py_base.field_l10n_py_district_city__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: l10n_py_base
+#: model:ir.model.fields,field_description:l10n_py_base.field_l10n_py_district_city__district_id
+#: model:ir.model.fields,field_description:l10n_py_base.field_l10n_py_state_district__name
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.view_l10n_py_district_city_search
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.view_l10n_py_district_city_tree
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.view_l10n_py_state_district_tree
+msgid "District"
+msgstr "Distrito"
