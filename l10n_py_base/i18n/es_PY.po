@@ -89,3 +89,61 @@ msgstr "Paquetes"
 #: model:uom.category,name:l10n_py_base.product_uom_categ_electrical
 msgid "Electrical"
 msgstr "Eléctrica"
+
+#. module: l10n_py_base
+#: model:ir.model.fields,field_description:l10n_py_base.field_l10n_py_state_district__code
+msgid "Code"
+msgstr "Código"
+
+#. module: l10n_py_base
+#: model:ir.model.fields,field_description:l10n_py_base.field_l10n_py_state_district__name
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.view_l10n_py_state_district_tree
+msgid "District"
+msgstr "Distrito"
+
+#. module: l10n_py_base
+#: model:ir.model.fields,field_description:l10n_py_base.field_l10n_py_state_district__state_id
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.view_l10n_py_state_district_search
+msgid "Department"
+msgstr "Departamento"
+
+#. module: l10n_py_base
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.view_l10n_py_state_district_search
+msgid "Disrtricts"
+msgstr "Distritos"
+
+#. module: l10n_py_base
+#: model:ir.actions.act_window,name:l10n_py_base.action_l10n_py_state_district
+#: model:ir.ui.menu,name:l10n_py_base.menu_l10n_py_state_district_partner
+msgid "Districts"
+msgstr "Distritos"
+
+#. module: l10n_py_base
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.view_l10n_py_state_district_search
+msgid "Group By"
+msgstr "Agrupado por"
+
+#. module: l10n_py_base
+#: model:ir.model,name:l10n_py_base.model_l10n_py_state_district
+msgid "Paraguay - Districts"
+msgstr "Paraguay - Distritos"
+
+#. module: l10n_py_base
+#: model_terms:ir.actions.act_window,help:l10n_py_base.action_l10n_py_state_district
+msgid "Create a District"
+msgstr "Crear un Distrito"
+
+#. module: l10n_py_base
+#: model:ir.model.fields,field_description:l10n_py_base.field_l10n_py_state_district__display_name
+msgid "Display Name"
+msgstr "Nombre a mostar"
+
+#. module: l10n_py_base
+#: model_terms:ir.actions.act_window,help:l10n_py_base.action_l10n_py_state_district
+msgid "District are part of your contacts' addresses."
+msgstr "Los distritos son parte de la dirección de un contacto"
+
+#. module: l10n_py_base
+#: model:ir.model.constraint,message:l10n_py_base.constraint_l10n_py_state_district_code_uniq
+msgid "The code of the district must be unique!"
+msgstr "El código del distrito debe ser único"

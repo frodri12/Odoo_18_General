@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_l10n_py_state_district_tree" model="ir.ui.view">
+            <field name="name">l10n_py_state_district.list</field>
+            <field name="model">l10n_py_state_district</field>
+            <field name="arch" type="xml">
+                <list string="District" create="0" delete="0">
+                    <field name="name" readonly="is_editable_for_group == False"/>
+                    <field name="code" readonly="is_editable_for_group == False"/>
+                    <field name="state_id" options="{'no_create': True, 'no_open': True}"
+                        readonly="is_editable_for_group == False"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_l10n_py_state_district_form" model="ir.ui.view">
+            <field name="name">l10n_py_state_district.form</field>
+            <field name="model">l10n_py_state_district</field>
+            <field name="arch" type="xml">
+                <form create="0" delete="0">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box"></div>
+                        <group name="main_group">
+                            <group name="district_details">
+                                <field name="code" readonly="is_editable_for_group == False"/>
+                                <field name="name" readonly="is_editable_for_group == False"/>
+                                <field name="state_id" options='{"no_open": True, "no_create": True}'
+                                    readonly="is_editable_for_group == False"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_l10n_py_state_district_search" model="ir.ui.view">
+            <field name="name">l10n_py_state_district.search</field>
+            <field name="model">l10n_py_state_district</field>
+            <field name="arch" type="xml">
+                <search string="Disrtricts">
+                    <field name="name" filter_domain="['|', ('name', 'ilike', self), ('code', 'ilike', self)]"/>
+                    <group string="Group By">
+                        <filter name="groupby_state" string="Department" context="{'group_by': 'state_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_l10n_py_state_district" model="ir.actions.act_window">
+            <field name="name">Districts</field>
+            <field name="res_model">l10n_py_state_district</field>
+            <field name="view_id" ref="view_l10n_py_state_district_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a District
+                </p><p>
+                    District are part of your contacts' addresses.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_l10n_py_state_district_partner" 
+            action="action_l10n_py_state_district"
+            parent="contacts.menu_localisation"
+            sequence="100"/>
+
+    </data>
+</odoo>

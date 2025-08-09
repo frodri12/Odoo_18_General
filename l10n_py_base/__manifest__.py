@@ -23,14 +23,17 @@ Long description of module's purpose
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
+        
         'data/res.country.csv',
         'data/res_country_state_data.xml',
+        'data/l10n_py_state_district_data.xml',
         'data/uom_data.xml',
 
         'views/views.xml',
         'views/templates.xml',
         'views/res_country_views.xml',
+        'views/l10n_py_state_district_views.xml',
         'views/uom_uom_views.xml',
     ],
     # only loaded in demonstration mode

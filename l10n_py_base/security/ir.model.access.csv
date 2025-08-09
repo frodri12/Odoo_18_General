@@ -1,2 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_l10n_py_base_l10n_py_base,l10n_py_base.l10n_py_base,model_l10n_py_base_l10n_py_base,base.group_user,1,1,1,1
+l10n_py_base.access_l10n_py_state_district,access_l10n_py_state_district,l10n_py_base.model_l10n_py_state_district,base.group_user,1,1,1,1
