@@ -36,6 +36,7 @@ Long description of module's purpose
         'views/res_country_views.xml',
         'views/l10n_py_state_district_views.xml',
         'views/l10n_py_district_city_views.xml',
+        'views/res_partner_views.xml',
         'views/uom_uom_views.xml',
     ],
     # only loaded in demonstration mode

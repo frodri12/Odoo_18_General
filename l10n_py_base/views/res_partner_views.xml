@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="base_view_partner_form" model="ir.ui.view">
+        <field name="name">res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+
+            <!-- ADDRESS -->
+            <xpath expr="//div[hasclass('o_address_format')]" position="replace" mode="inner">
+                <div style="width:100%;">
+                    <field name="street" placeholder="Street..." class="o_address_street" style="width:70%;display:inline-block;" />
+                    <field name="l10n_py_house" placeholder="House" class="o_address_zip" style="width:25%;float:right;display:inline-block;text-align:right;" />
+                </div>
+                <field name="street2" placeholder="Street 2..." class="o_address_street" />
+                <div invisible="country_code == 'PY'">
+                    <field name="city" placeholder="City" class="o_address_city" />
+                    <field name="state_id" class="o_address_state" placeholder="State" options="{&quot;no_open&quot;: True}" />
+                    <field name="zip" placeholder="ZIP" class="o_address_zip" />
+                </div>
+                <div invisible="country_code != 'PY'">
+                    <field name="l10n_py_city_id" placeholder="City"  options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                    <div style="width:100%;">
+                        <field name="l10n_py_district_id" placeholder="District" class="o_address_street" style="width:50%;display:inline-block;" options="{&quot;no_open&quot;: True}" />
+                        <field name="state_id" class="o_address_city" placeholder="Department" style="width:45%;float:right;display:inline-block;" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                    </div>
+                </div>
+                <field name="country_id" placeholder="Country" class="o_address_country" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

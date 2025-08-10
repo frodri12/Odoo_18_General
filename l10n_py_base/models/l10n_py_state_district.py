@@ -9,10 +9,11 @@ class PyStateDistrict(models.Model):
     _order = 'name'
     _rec_names_search = ['name', 'code']
 
-    name = fields.Char(string="District", required=True)
-    code = fields.Integer(string="Code", required=True)
-
     state_id = fields.Many2one(comodel_name="res.country.state",string="Department", required=True)
+    name = fields.Char(string="District Name", required=True)
+    code = fields.Integer(string="District Code", required=True)
+
+    city_ids = fields.One2many(comodel_name='l10n_py_district_city', inverse_name='district_id', string='Cities')
     country_id = fields.Many2one(comodel_name="res.country",string="Country")
 
     _sql_constraints = [

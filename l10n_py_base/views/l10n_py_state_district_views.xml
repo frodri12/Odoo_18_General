@@ -30,6 +30,14 @@
                                     readonly="is_editable_for_group == False"/>
                             </group>
                         </group>
+                        <label for="city_ids"/>
+                        <field name="city_ids">
+                            <list editable="bottom">
+                                <field name="name"/>
+                                <field name="code"/>
+                            </list>
+                        </field>
+
                     </sheet>
                 </form>
             </field>
