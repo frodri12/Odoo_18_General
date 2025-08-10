@@ -6,7 +6,7 @@ from odoo.osv import expression
 class PyDistrictCity(models.Model):
 
     _name = "l10n_py_district_city"
-    _description = "l10n_py_district_city"
+    _description = "Paraguay - Cities"
 
     district_id = fields.Many2one(comodel_name="l10n_py_state_district", string="District", required=True)
     name = fields.Char(string="City Name", required=True)
