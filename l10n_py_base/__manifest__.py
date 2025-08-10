@@ -19,7 +19,13 @@ Long description of module's purpose
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','contacts','account'],
+    'depends': [
+        'base',
+        'contacts',
+        'account',
+        'l10n_latam_base',
+        'l10n_latam_invoice_document',
+    ],
 
     # always loaded
     'data': [
@@ -30,6 +36,7 @@ Long description of module's purpose
         'data/l10n_py_state_district_data.xml',
         'data/l10n_py_district_city_data.xml',
         'data/uom_data.xml',
+        'data/l10n_latam_identification_type_data.xml',
 
         'views/views.xml',
         'views/templates.xml',
@@ -37,7 +44,9 @@ Long description of module's purpose
         'views/l10n_py_state_district_views.xml',
         'views/l10n_py_district_city_views.xml',
         'views/res_partner_views.xml',
+        'views/res_company_views.xml',
         'views/uom_uom_views.xml',
+        'views/res_config_settings_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

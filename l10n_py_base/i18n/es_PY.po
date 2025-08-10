@@ -70,6 +70,7 @@ msgstr "Ciudades"
 
 #. module: l10n_py_base
 #: model_terms:ir.ui.view,arch_db:l10n_py_base.base_view_partner_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.view_company_form
 msgid "City"
 msgstr "Ciudad"
 
@@ -113,6 +114,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_py_base.field_l10n_py_district_city__country_id
 #: model:ir.model.fields,field_description:l10n_py_base.field_l10n_py_state_district__country_id
 #: model_terms:ir.ui.view,arch_db:l10n_py_base.base_view_partner_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.view_company_form
 msgid "Country"
 msgstr "País"
 
@@ -146,6 +148,7 @@ msgstr ""
 #. module: l10n_py_base
 #: model:ir.model.fields,field_description:l10n_py_base.field_l10n_py_state_district__state_id
 #: model_terms:ir.ui.view,arch_db:l10n_py_base.base_view_partner_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.view_company_form
 #: model_terms:ir.ui.view,arch_db:l10n_py_base.view_l10n_py_state_district_search
 msgid "Department"
 msgstr "Departamento"
@@ -173,9 +176,11 @@ msgstr "Distritos"
 
 #. module: l10n_py_base
 #: model:ir.model.fields,field_description:l10n_py_base.field_l10n_py_district_city__district_id
+#: model:ir.model.fields,field_description:l10n_py_base.field_res_company__l10n_py_district_id
 #: model:ir.model.fields,field_description:l10n_py_base.field_res_partner__l10n_py_district_id
 #: model:ir.model.fields,field_description:l10n_py_base.field_res_users__l10n_py_district_id
 #: model_terms:ir.ui.view,arch_db:l10n_py_base.base_view_partner_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.view_company_form
 #: model_terms:ir.ui.view,arch_db:l10n_py_base.view_l10n_py_district_city_search
 #: model_terms:ir.ui.view,arch_db:l10n_py_base.view_l10n_py_district_city_tree
 #: model_terms:ir.ui.view,arch_db:l10n_py_base.view_l10n_py_state_district_tree
@@ -235,9 +240,11 @@ msgid "Hectáreas"
 msgstr ""
 
 #. module: l10n_py_base
+#: model:ir.model.fields,field_description:l10n_py_base.field_res_company__l10n_py_house
 #: model:ir.model.fields,field_description:l10n_py_base.field_res_partner__l10n_py_house
 #: model:ir.model.fields,field_description:l10n_py_base.field_res_users__l10n_py_house
 #: model_terms:ir.ui.view,arch_db:l10n_py_base.base_view_partner_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.view_company_form
 msgid "House"
 msgstr "Casa"
 
@@ -352,6 +359,7 @@ msgid "Others"
 msgstr ""
 
 #. module: l10n_py_base
+#: model:ir.model.fields,field_description:l10n_py_base.field_res_company__l10n_py_city_id
 #: model:ir.model.fields,field_description:l10n_py_base.field_res_partner__l10n_py_city_id
 #: model:ir.model.fields,field_description:l10n_py_base.field_res_users__l10n_py_city_id
 msgid "PY City"
@@ -439,16 +447,19 @@ msgstr ""
 
 #. module: l10n_py_base
 #: model_terms:ir.ui.view,arch_db:l10n_py_base.base_view_partner_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.view_company_form
 msgid "State"
 msgstr "Departamento"
 
 #. module: l10n_py_base
 #: model_terms:ir.ui.view,arch_db:l10n_py_base.base_view_partner_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.view_company_form
 msgid "Street 2..."
 msgstr "Calle 2..."
 
 #. module: l10n_py_base
 #: model_terms:ir.ui.view,arch_db:l10n_py_base.base_view_partner_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.view_company_form
 msgid "Street..."
 msgstr "Calle..."
 
@@ -489,6 +500,7 @@ msgstr ""
 
 #. module: l10n_py_base
 #: model_terms:ir.ui.view,arch_db:l10n_py_base.base_view_partner_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.view_company_form
 msgid "ZIP"
 msgstr "Cod.Postal"
 
@@ -496,3 +508,92 @@ msgstr "Cod.Postal"
 #: model:ir.model,name:l10n_py_base.model_l10n_py_district_city
 msgid "Paraguay - Cities"
 msgstr "Paraguay - Ciudades"
+
+#. module: l10n_py_base
+#: model:ir.model,name:l10n_py_base.model_res_company
+msgid "Companies"
+msgstr "Compañias"
+
+#. module: l10n_py_base
+#: model:l10n_latam.identification.type,name:l10n_py_base.py_ci
+msgid "CI"
+msgstr "CI"
+
+#. module: l10n_py_base
+#: model:ir.model.fields,field_description:l10n_py_base.field_l10n_latam_identification_type__l10n_py_dnit_document_type
+msgid "DNIT Document Type"
+msgstr "Código del Tipo de documento"
+
+#. module: l10n_py_base
+#: model:l10n_latam.identification.type,name:l10n_py_base.py_dc
+msgid "Diplomatic Card"
+msgstr "Tarjeta diplomática"
+
+#. module: l10n_py_base
+#: model:l10n_latam.identification.type,description:l10n_py_base.py_dc
+msgid "Diplomatic Card Tax Exemption"
+msgstr "Tarjeta Diplomática de exoneración fiscal"
+
+#. module: l10n_py_base
+#: model:l10n_latam.identification.type,name:l10n_py_base.py_fid
+msgid "Foreign ID"
+msgstr "Cédula extranjera"
+
+#. module: l10n_py_base
+#: model:ir.model,name:l10n_py_base.model_l10n_latam_identification_type
+msgid "Identification Types"
+msgstr "Tipos de identificación"
+
+#. module: l10n_py_base
+#: model:l10n_latam.identification.type,description:l10n_py_base.py_xx
+#: model:l10n_latam.identification.type,name:l10n_py_base.py_xx
+msgid "Other"
+msgstr "Otro"
+
+#. module: l10n_py_base
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.res_config_settings_view_form
+msgid "Paraguay Localization"
+msgstr "Localización paraguaya"
+
+#. module: l10n_py_base
+#: model:l10n_latam.identification.type,description:l10n_py_base.py_ci
+msgid "Paraguayan ID Card"
+msgstr "Cédula paraguaya"
+
+#. module: l10n_py_base
+#: model:l10n_latam.identification.type,name:l10n_py_base.py_pass
+msgid "Passport"
+msgstr "Pasaporte"
+
+#. module: l10n_py_base
+#: model:l10n_latam.identification.type,name:l10n_py_base.py_ruc
+msgid "RUC"
+msgstr "RUC"
+
+#. module: l10n_py_base
+#: model:l10n_latam.identification.type,description:l10n_py_base.py_cr
+#: model:l10n_latam.identification.type,name:l10n_py_base.py_cr
+msgid "Residence Card"
+msgstr "Carnet de residencia"
+
+#. module: l10n_py_base
+#. odoo-python
+#: code:addons/l10n_py_base/models/res_patner.py:0
+msgid "The RUC format is incorrect."
+msgstr "El formato del RUC es incorrecto."
+
+#. module: l10n_py_base
+#. odoo-python
+#: code:addons/l10n_py_base/models/res_patner.py:0
+msgid ""
+"The RUC verification digit is invalid.\n"
+"\tA possible value could be %s"
+msgstr ""
+"El dígito verificador del RUC es inválido.\n"
+"\tUn posible valor puede ser %s"
+
+#. module: l10n_py_base
+#: model:l10n_latam.identification.type,description:l10n_py_base.py_nn
+#: model:l10n_latam.identification.type,name:l10n_py_base.py_nn
+msgid "Unnamed"
+msgstr "Innominado"
