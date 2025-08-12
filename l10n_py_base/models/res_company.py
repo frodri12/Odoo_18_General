@@ -18,6 +18,13 @@ class PyResCompany(models.Model):
         comodel_name="l10n_py_district_city", string="PY City", 
         compute='_compute_address', inverse='_inverse_compute_city')
 
+    l10n_py_regime_type = fields.Selection([
+            ('0','Sin Asignar'),('1','Regimen de Turismo'),('2','Importador'),
+            ('3','Exportador'),('4','Maquila'),('5','Ley N° 60/90'),
+            ('6','Regimen del Pequeño Productor'),('7','Regimen del Mediano Productor'),
+            ('8','Regimen Contable'),
+        ], string="Regime Type", default='0')
+
     def _inverse_compute_house(self):
         for company in self:
             company.partner_id.l10n_py_house = company.l10n_py_house

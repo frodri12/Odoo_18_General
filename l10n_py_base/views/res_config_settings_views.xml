@@ -8,7 +8,15 @@
         <field name="arch" type="xml">
             <xpath expr="//app[@name='account']/block" position="after">
                 <div id="paraguay_localization_section">
-                    <block title="Paraguay Localization" id="paraguay_localization" invisible="country_code != 'PY'"></block>
+                    <block title="Paraguay Localization" id="paraguay_localization"
+                        invisible="country_code != 'PY'">
+                        <setting id="regime_type" company_dependent="1"
+                            string="Regime Type"
+                            help="texto descriptivo a mostrar"
+                            title="Texto descriptivo">
+                            <field name="l10n_py_regime_type" class="o_light_label mt16" />
+                        </setting>
+                    </block>
                 </div>
             </xpath>
         </field>

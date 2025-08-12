@@ -47,6 +47,8 @@ Long description of module's purpose
         'views/res_company_views.xml',
         'views/uom_uom_views.xml',
         'views/res_config_settings_views.xml',
+        
+        'views/menuitem.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
