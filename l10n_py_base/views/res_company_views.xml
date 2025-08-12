@@ -35,6 +35,11 @@
                     <field name="l10n_py_economic_activity_ids" />
                 </page>
             </xpath>
+
+            <!-- ESTABLECIMIENTO -->
+            <field name="currency_id" position="after">
+                <field name="l10n_py_organization_number" invisible="country_code != 'PY'" />
+            </field>
         </field>
     </record>
 

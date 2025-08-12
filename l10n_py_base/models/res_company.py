@@ -29,6 +29,8 @@ class PyResCompany(models.Model):
         comodel_name="l10n_py_economic_activity", inverse_name="company_id",
         string="Economic activity")
 
+    l10n_py_organization_number = fields.Integer(string="Organizartion Number", default=1)
+
     def _inverse_compute_house(self):
         for company in self:
             company.partner_id.l10n_py_house = company.l10n_py_house
