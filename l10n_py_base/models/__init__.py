@@ -9,5 +9,6 @@ from . import res_patner
 from . import res_company
 
 from . import l10n_latam_identification_type
+from . import l10n_py_economic_activity
 
 from . import res_config_settings

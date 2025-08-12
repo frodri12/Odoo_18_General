@@ -595,3 +595,50 @@ msgstr ""
 #: model:l10n_latam.identification.type,name:l10n_py_base.py_nn
 msgid "Unnamed"
 msgstr ""
+
+#. module: l10n_py_base
+#: model:ir.model.fields,field_description:l10n_py_base.field_l10n_py_economic_activity__code
+msgid "Code of economic activity"
+msgstr ""
+
+#. module: l10n_py_base
+#: model:ir.model.fields,field_description:l10n_py_base.field_l10n_py_economic_activity__company_id
+msgid "Company"
+msgstr ""
+
+#. module: l10n_py_base
+#: model:ir.actions.act_window,name:l10n_py_base.action_l10n_py_economic_activity
+msgid "Economic Activities"
+msgstr ""
+
+#. module: l10n_py_base
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.l10n_py_economic_activity_view_form
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.l10n_py_economic_activity_view_tree
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.view_company_form
+msgid "Economic Activity"
+msgstr ""
+
+#. module: l10n_py_base
+#: model:ir.model,name:l10n_py_base.model_l10n_py_economic_activity
+#: model:ir.model.fields,field_description:l10n_py_base.field_res_company__l10n_py_economic_activity_ids
+msgid "Economic activity"
+msgstr ""
+
+#. module: l10n_py_base
+#: model:ir.model.fields,field_description:l10n_py_base.field_l10n_py_economic_activity__name
+msgid "Name of economic activity"
+msgstr ""
+
+#. module: l10n_py_base
+#: model:ir.ui.menu,name:l10n_py_base.menu_py_localization_config
+#: model:ir.ui.menu,name:l10n_py_base.menu_py_localization_report
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.res_config_settings_view_form
+msgid "Paraguay Localization"
+msgstr ""
+
+#. module: l10n_py_base
+#: model:ir.model.fields,field_description:l10n_py_base.field_res_company__l10n_py_regime_type
+#: model:ir.model.fields,field_description:l10n_py_base.field_res_config_settings__l10n_py_regime_type
+#: model_terms:ir.ui.view,arch_db:l10n_py_base.res_config_settings_view_form
+msgid "Regime Type"
+msgstr ""

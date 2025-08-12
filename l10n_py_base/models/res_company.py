@@ -25,6 +25,10 @@ class PyResCompany(models.Model):
             ('8','Regimen Contable'),
         ], string="Regime Type", default='0')
 
+    l10n_py_economic_activity_ids = fields.One2many(
+        comodel_name="l10n_py_economic_activity", inverse_name="company_id",
+        string="Economic activity")
+
     def _inverse_compute_house(self):
         for company in self:
             company.partner_id.l10n_py_house = company.l10n_py_house
