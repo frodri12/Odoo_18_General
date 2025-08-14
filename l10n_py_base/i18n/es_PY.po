@@ -646,3 +646,7 @@ msgstr "Localización para Paraguay"
 msgid "Regime Type"
 msgstr "Tipo de regimen"
 
+#. module: l10n_py_base
+#: model:ir.model.fields,field_description:l10n_py_base.field_res_company__l10n_py_organization_number
+msgid "Organizartion Number"
+msgstr "Número de establecimiento"

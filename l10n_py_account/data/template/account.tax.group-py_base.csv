@@ -1,0 +1,6 @@
+id,name,country_id,l10n_py_tax_type,
+tax_group_10,TAX 10%,base.py,tax_10,
+tax_group_5,TAX 5%,base.py,tax_5,
+tax_group_exempt,TAX EXEMPT,base.py,tax_0,
+tax_group_perception,Perception,base.py,perception,
+tax_group_retention,Retention,base.py,retention,

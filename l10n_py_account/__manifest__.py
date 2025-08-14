@@ -14,6 +14,7 @@ Long description of module's purpose
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/15.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
+    'countries': ['py'],
     'category': 'Accounting/Localizations/Account Charts',
     'version': '0.1',
 
@@ -25,10 +26,14 @@ Long description of module's purpose
         # 'security/ir.model.access.csv',
         'views/views.xml',
         'views/templates.xml',
+        
+        'views/account_tax_group_views.xml',
+        'views/account_tax_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
         'demo/demo.xml',
     ],
+    'license': 'LGPL-3',
 }
 
