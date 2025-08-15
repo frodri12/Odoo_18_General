@@ -24,6 +24,8 @@ Long description of module's purpose
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
+        'data/l10n_latam.document.type.csv',
+
         'views/views.xml',
         'views/templates.xml',
         
