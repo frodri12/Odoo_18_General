@@ -19,7 +19,13 @@ Long description of module's purpose
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','l10n_py_base'],
+    'depends': [
+        'base',
+        'account',
+        'l10n_latam_base',
+        'l10n_latam_check',
+        'l10n_latam_invoice_document',
+        'l10n_py_base'],
 
     # always loaded
     'data': [
@@ -31,6 +37,7 @@ Long description of module's purpose
         
         'views/account_tax_group_views.xml',
         'views/account_tax_views.xml',
+        'views/account_journal_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

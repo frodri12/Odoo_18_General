@@ -24,6 +24,7 @@ Long description of module's purpose
         'contacts',
         'account',
         'l10n_latam_base',
+        'l10n_latam_check',
         'l10n_latam_invoice_document',
     ],
 

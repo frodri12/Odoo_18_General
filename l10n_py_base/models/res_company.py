@@ -70,3 +70,7 @@ class PyResCompany(models.Model):
             else:
                 #self.write({'city': False})
                 self.city = None
+
+    def _localization_use_documents(self):
+        self.ensure_one()
+        return self.account_fiscal_country_id.code == "PY" or super()._localization_use_documents()
