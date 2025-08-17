@@ -41,3 +41,15 @@ class PyAccountChartTemplate(models.AbstractModel):
             },
         }
 
+    @template('py_base', 'account.journal')
+    def _get_py_account_journal(self):
+        return {
+            'sale': {
+                "l10n_py_poe_number": 1,
+                "l10n_py_poe_system": 'FAP',
+                "refund_sequence": True,
+                "debit_sequence": True,
+                "code": "001",
+            }
+        }
+

@@ -53,3 +53,31 @@ class PyAccountJournal(models.Model):
         for journal in self:
             journal.l10n_py_poe_system = journal.l10n_py_is_poe and journal.l10n_py_poe_system
 
+    ####            
+
+    @api.model
+    def _get_codes_per_journal_type(self, poe_system):
+        no_pos_docs = ['201','202','203','204','205','206','207','208','209','210','211',
+             '102','103','104','105','106','107','108']
+        usual_codes = ['109','110','111']
+        receipt_codes = ['4']
+        afa_codes = ['101']
+        codes = []
+        if (self.type == 'sale' and not self.l10n_py_is_poe) or (self.type == 'purchase' and poe_system in ['FAP', 'FAE']):
+            codes = no_pos_docs
+        elif self.type == 'purchase' and poe_system in ('AFP','AFE') :
+            # Autofactura
+            codes = afa_codes
+        elif self.type == 'purchase':
+            #_logger.warning("\n\ncode not in " + str(no_pos_docs + afa_codes) + "\n\n")
+            return [('code', 'not in', no_pos_docs + afa_codes)]
+        elif poe_system in ('FAP','FAE'):
+            # pre-printed invoice
+            codes = usual_codes + receipt_codes
+
+        #_logger.warning("\n\ncode in " + str(codes) + "\n\n")
+        return [('code', 'in', codes)]
+
+    def _get_journal_codes_domain(self):
+        self.ensure_one()
+        return self._get_codes_per_journal_type(self.l10n_py_poe_system)
