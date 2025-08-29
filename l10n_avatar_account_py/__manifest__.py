@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "l10n_py_account",
+    'name': "l10n_avatar_account_py",
 
-    'summary': "Short (1 phrase/line) summary of the module's purpose",
+    'summary': "Facturacion Electronica Paraguay",
 
     'description': """
-Long description of module's purpose
+El objetivo de este modulo es contar con todos los elementos base
+que se requieren para llevar acabo la facturación electrónica en Paraguay
     """,
 
     'author': "Avatar Informatica SRL",
@@ -14,9 +15,9 @@ Long description of module's purpose
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/15.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
-    'countries': ['py'],
     'category': 'Accounting/Localizations/Account Charts',
-    'version': '0.1',
+    'countries': ['py'],
+    'version': '0.5',
 
     # any module necessary for this one to work correctly
     'depends': [
@@ -25,19 +26,13 @@ Long description of module's purpose
         'l10n_latam_base',
         'l10n_latam_check',
         'l10n_latam_invoice_document',
-        'l10n_py_base'],
+    ],
 
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
-        'data/l10n_latam.document.type.csv',
-
         'views/views.xml',
         'views/templates.xml',
-        
-        'views/account_tax_group_views.xml',
-        'views/account_tax_views.xml',
-        'views/account_journal_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
