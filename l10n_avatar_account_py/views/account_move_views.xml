@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_move_form_inherit" model="ir.ui.view">
+        <field name="name">account.move.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//page[2]" position="after">
+                <page name="Datos SIFEN">
+                    <group>
+                        <group string="Inherentes a la operación">
+                            <field name="l10n_avatar_py_itipemi" readonly="state == 'posted'" />
+                            <field name="l10n_avatar_py_itiptra" readonly="state == 'posted'" />
+                            <field name="l10n_avatar_py_itimp" readonly="state == 'posted'" />
+                            <field name="l10n_avatar_py_itiope" readonly="state == 'posted'" />
+                            <field name="l10n_avatar_py_icondope" readonly="state == 'posted'" />
+                        </group>
+                        <group string="Datos del Timbrado">
+                            <field name="l10n_avatar_py_authorization_code"
+                                readonly="state == 'posted'" />
+                            <field name="l10n_avatar_py_authorization_startdate"
+                                readonly="state == 'posted'" />
+                            <field name="l10n_avatar_py_authorization_enddate"
+                                readonly="state == 'posted'" />
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Constancia de no ser contribuyente">
+                            <field name="l10n_avatar_py_taxpayer_number" />
+                            <field name="l10n_avatar_py_taxpayer_control" />
+                            <field name="l10n_avatar_py_taxpayer_startdate" />
+                            <field name="l10n_avatar_py_taxpayer_enddate" />
+                        </group>
+                    </group>
+                    <group string="Información de interés">
+                        <group>
+                            <field name="l10n_avatar_py_dinfoemi" readonly="state == 'posted'" />
+                        </group>
+                        <group>
+                            <field name="l10n_avatar_py_dinfofisc" readonly="state == 'posted'" />
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="l10n_avatar_py_dcodseg" />
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+
+            <xpath expr="//div[@name='currency_conversion_div']" position="replace">
+                <div name="inverse_currency_conversion_div"
+                    class="d-flex text-muted float-start"
+                    invisible="currency_id == company_currency_id" style="white-space: pre;">
+                    <span>1 </span>
+                    <field name="currency_id" readonly="1" options="{'no_open': True}" />
+                    <span> = </span>
+                    <field name="l10n_avatar_py_inverse_currency_rate" digits="[12,2]" readonly="1" />
+                    <span> </span>
+                    <field name="company_currency_id" readonly="1" options="{'no_open': True}" />
+                </div>
+            </xpath>
+
+            <xpath expr="//button[@name='preview_invoice']" position="attributes">
+                <!--
+                <attribute name="invisible">not (state not in ('draft', 'cancel') and ( move_type in
+                    ('in_invoice','in_refund') or (move_type == 'out_invoice' and
+                    journal_id.l10n_avatar_py_poe_system in ('AFP','AFE'))))</attribute>
+                -->
+                <attribute name="invisible">not ( state not in ('cancel','draft') and ( move_type in
+                    ('out_invoice','out_refund') or ( move_type in ('in_invoice') and
+                    l10n_latam_document_type_id.code in ('101') )))</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record model='l10n_latam.identification.type' id='py_ruc'>
+            <field name='name'>RUC</field>
+            <field name='description'>Single Taxpayer Registry</field>
+            <field name='country_id' ref='base.py' />
+            <field name='is_vat' eval='True' />
+            <field name='l10n_avatar_py_code'>99</field>
+            <field name='sequence'>10</field>
+        </record>
+
+        <record model='l10n_latam.identification.type' id='py_ci'>
+            <field name='name'>Cédula paraguaya</field>
+            <field name='description'>Cédula paraguaya</field>
+            <field name='country_id' ref='base.py' />
+            <field name='l10n_avatar_py_code'>1</field>
+            <field name='sequence'>20</field>
+        </record>
+
+        <record model='l10n_latam.identification.type' id='py_pass'>
+            <field name='name'>Pasaporte</field>
+            <field name='country_id' ref='base.py' />
+            <field name='l10n_avatar_py_code'>2</field>
+            <field name='sequence'>25</field>
+        </record>
+
+        <record model='l10n_latam.identification.type' id='py_fid'>
+            <field name='name'>Cédula extranjera</field>
+            <field name='country_id' ref='base.py' />
+            <field name='l10n_avatar_py_code'>3</field>
+            <field name='sequence'>28</field>
+        </record>
+
+
+        <record model='l10n_latam.identification.type' id='py_cr'>
+            <field name='name'>Carnet de residencia</field>
+            <field name='description'>Carnet de residencia</field>
+            <field name='country_id' ref='base.py' />
+            <field name='l10n_avatar_py_code'>4</field>
+            <field name='sequence'>30</field>
+        </record>
+
+        <record model='l10n_latam.identification.type' id='py_nn'>
+            <field name='name'>Unnamed</field>
+            <field name='description'>Unnamed</field>
+            <field name='country_id' ref='base.py' />
+            <field name='l10n_avatar_py_code'>5</field>
+            <field name='sequence'>40</field>
+        </record>
+
+        <record model='l10n_latam.identification.type' id='py_dc'>
+            <field name='name'>Diplomatic Card</field>
+            <field name='description'>Diplomatic Card Tax Exemption</field>
+            <field name='country_id' ref='base.py' />
+            <field name='l10n_avatar_py_code'>6</field>
+            <field name='sequence'>50</field>
+        </record>
+        <record model='l10n_latam.identification.type' id='py_xx'>
+            <field name='name'>Other</field>
+            <field name='description'>Other</field>
+            <field name='country_id' ref='base.py' />
+            <field name='l10n_avatar_py_code'>9</field>
+            <field name='sequence'>60</field>
+        </record>
+
+        <record model='l10n_latam.identification.type' id='l10n_latam_base.it_vat'>
+            <field name='l10n_avatar_py_code'>9</field>
+            <field name='is_vat' eval='False' />
+        </record>
+        <record model='l10n_latam.identification.type' id='l10n_latam_base.it_pass'>
+            <field name='l10n_avatar_py_code'>2</field>
+        </record>
+        <record model='l10n_latam.identification.type' id='l10n_latam_base.it_fid'>
+            <field name='l10n_avatar_py_code'>3</field>
+        </record>
+    </data>
+
+</odoo>

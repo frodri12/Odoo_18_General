@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_l10n_avatar_py_municipality_tree" model="ir.ui.view">
+        <field name="name">l10n_avatar_py_municipality.list</field>
+        <field name="model">l10n_avatar_py_municipality</field>
+        <field name="arch" type="xml">
+            <list string="Municipios" create="0" delete="0">
+                <field name="name" readonly="is_editable_for_group == False"/>
+                <field name="code" readonly="is_editable_for_group == False"/>
+                <field name="state_id" options="{'no_create': True, 'no_open': True}" readonly="is_editable_for_group == False"/>
+                <field name="country_id" options="{'no_create': True, 'no_open': True}" readonly="is_editable_for_group == False"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_l10n_avatar_py_municipality_form" model="ir.ui.view">
+        <field name="name">l10n_avatar_py_municipality.form</field>
+        <field name="model">l10n_avatar_py_municipality</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0">
+                <sheet>
+                    <div class="oe_button_box" name="button_box"></div>
+                    <group name="main_group">
+                        <group name="municipality_details">
+                            <field name="name" readonly="is_editable_for_group == False"/>
+                            <field name="code" readonly="is_editable_for_group == False"/>
+                            <field name="state_id" options="{'no_create': True, 'no_open': True}" readonly="is_editable_for_group == False"/>
+                            <field name="country_id" options="{'no_create': True, 'no_open': True}" readonly="is_editable_for_group == False"/>
+                        </group>
+                    </group>
+                     <label for="city_ids"/>
+                     <field name="city_ids">
+                        <list editable="bottom">
+                            <field name="name"/>
+                            <field name="code"/>
+                        </list>
+                     </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_l10n_avatar_py_municipality_search" model="ir.ui.view">
+        <field name="name">l10n_avatar_py_municipality.search</field>
+        <field name="model">l10n_avatar_py_municipality</field>
+        <field name="arch" type="xml">
+            <search string="Municipios">
+                <field name="name" filter_domain="['|', ('name', 'ilike', self), ('code', 'ilike', self)]"/>
+                <group string="Group By">
+                    <filter name="groupby_state" string="Departamentos" context="{'group_by': 'state_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_l10n_avatar_py_municipality" model="ir.actions.act_window">
+        <field name="name">Municipios</field>
+        <field name="view_id" ref="view_l10n_avatar_py_municipality_tree"/>
+        <field name="res_model">l10n_avatar_py_municipality</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Crear un municipio</p>
+            <p>Los municipios son  parte de la dirección de los contactos.</p>
+        </field>
+    </record>
+</odoo>

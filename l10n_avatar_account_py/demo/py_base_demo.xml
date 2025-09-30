@@ -1,0 +1,64 @@
+<odoo>
+  <data>
+    <record id="base.py_partner_demo_company" model="res.partner" forcecreate="1">
+      <field name="name">My PY Company</field>
+      <field name="l10n_latam_identification_type_id" ref="l10n_avatar_account_py.py_ruc" />
+      <field name="vat">1234567-9</field>
+      <field name="street">Calle Falsa</field>
+      <field name="external_number">1</field>
+      <field name="country_id" ref="base.py" />
+      <field name="state_id" ref="l10n_avatar_account_py.dpto_py1" />
+      <field name="municipality_id" ref="l10n_avatar_account_py.paraguay_mun_id_01" />
+      <field name="city_id" ref="l10n_avatar_account_py.res_city_py1" />
+      <field name="city">ASUNCION (DISTRITO)</field>
+      <field name="is_company" eval="True" />
+    </record>
+
+    <record id="base.py_demo_company" model="res.company" forcecreate="1">
+      <field name="currency_id" ref="base.PYG" />
+      <field name="partner_id" ref="base.py_partner_demo_company" />
+      <field name="name">My PY Company</field>
+    </record>
+
+    <function model="res.company" name="_onchange_country_id">
+      <value eval="[ref('base.py_demo_company')]" />
+    </function>
+
+    <function model="res.users" name="write">
+      <value eval="[ref('base.user_root'), ref('base.user_admin'), ref('base.user_demo')]" />
+      <value eval="{'company_ids': [(4, ref('base.py_demo_company'))]}" />
+    </function>
+
+    <function model="account.chart.template" name="try_loading">
+      <value eval="[]" />
+      <value>ar_ex</value>
+      <value model="res.company" eval="obj().env.ref('base.py_demo_company')" />
+      <value name="install_demo" eval="True" />
+    </function>
+
+    <!-- Products created before the company don't get the default tax set, by default, 
+    although the tests are expecting it... Hence we force it -->
+    <function model="product.template" name="_force_default_tax">
+      <value model="product.template" eval="obj().search([]).ids" />
+      <value model="res.company" eval="obj().env.ref('base.py_demo_company')" />
+    </function>
+
+    <record id="base.bank_account_ri" model="res.partner.bank" forcecreate="1">
+      <field name="acc_number">7982898111100056688080</field>
+      <field name="partner_id" ref="base.py_partner_demo_company" />
+      <field name="company_id" ref="base.py_demo_company" />
+    </record>
+
+    <record id="purchase_journal_selfinvoice" model="account.journal">
+      <field name="name">Self Invoice Journal</field>
+      <field name="company_id" ref="base.py_demo_company" />
+      <field name="type">purchase</field>
+      <field name="code">AUTO</field>
+      <field name="l10n_latam_use_documents" eval="True" />
+      <field name="l10n_avatar_py_poe_system">AFP</field>
+      <field name="l10n_avatar_py_branch">1</field>
+      <field name="l10n_avatar_py_dispatch_point">2</field>
+      <field name="l10n_avatar_py_address_id" ref="base.py_partner_demo_company"/>
+    </record>
+  </data>
+</odoo>

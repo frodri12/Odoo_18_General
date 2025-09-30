@@ -1,0 +1,149 @@
+id,code,name,account_type,reconcile
+py_acc_chart_11010202,1.1.01.02.02,"Cuenta transitoria",asset_current,True
+py_acc_chart_11010203,1.1.01.02.03,"Cheques de terceros",asset_current,False
+py_acc_chart_11010204,1.1.01.02.04,"Cheques de terceros rechazados",asset_current,False
+py_acc_chart_11010301,1.1.01.03.01,"Recaudaciones a depositar",asset_current,False
+py_acc_chart_11010401,1.1.01.04.01,"CDAs",asset_current,False
+py_acc_chart_11010402,1.1.01.04.02,"Fondo mutuo",asset_current,False
+py_acc_chart_11020101,1.1.02.01.01,"Inversiones financieras temporarias",asset_current,False
+py_acc_chart_11020201,1.1.02.02.01,"Inversiones inmobiliarias temporarias",asset_current,False
+py_acc_chart_11020301,1.1.02.03.01,"Inversiones inmobiliarias en entidades vinculadas",asset_current,False
+py_acc_chart_11020401,1.1.02.04.01,"Otras inversiones",asset_current,False
+py_acc_chart_11020501,1.1.02.05.01,"Interes, regalias y otros rendimientos",asset_current,False
+py_acc_chart_11030101,1.1.03.01.01,"Créditos por venta",asset_receivable,True
+py_acc_chart_11030102,1.1.03.01.02,"Créditos por venta (PoS)",asset_receivable,True
+py_acc_chart_11030103,1.1.03.01.03,"Créditos por venta en moneda extrangera",asset_receivable,True
+py_acc_chart_11030201,1.1.03.02.01,"Deudores por préstamos",asset_current,False
+py_acc_chart_11030301,1.1.03.03.01,"Anticipos y retenciones por Impuesto a la Renta",asset_current,False
+py_acc_chart_11030302,1.1.03.03.02,"Retenciones de IVA",asset_current,False
+py_acc_chart_11030303,1.1.03.03.03,"IVA 10% - Crédito fiscal",asset_current,False
+py_acc_chart_11030304,1.1.03.03.04,"IVA 5% - Crédito fiscal",asset_current,False
+py_acc_chart_11030305,1.1.03.03.05,"IVA Regímenes especiales – Crédito fiscal",asset_current,False
+py_acc_chart_11030306,1.1.03.03.06,"IVA Saldo técnico",asset_current,False
+py_acc_chart_11030307,1.1.03.03.07,"IVA Saldo de libre disponibilidad",asset_current,False
+py_acc_chart_11030401,1.1.03.04.01,"Anticipo a proveedores locales",asset_current,False
+py_acc_chart_11030402,1.1.03.04.02,"Anticipo a proveedores del exterior",asset_current,False
+py_acc_chart_11030501,1.1.03.05.01,"Deudores varios",asset_receivable,True
+py_acc_chart_11040101,1.1.04.01.01,"Mercaderías gravadas por el IVA 10%",asset_current,False
+py_acc_chart_11040102,1.1.04.01.02,"Mercaderías gravadas por el IVA 5%",asset_current,False
+py_acc_chart_11040103,1.1.04.01.03,"Mercaderías exentas de IVA",asset_current,False
+py_acc_chart_11040201,1.1.04.02.01,"Mercaderías regimen de turismo",asset_current,False
+py_acc_chart_11040202,1.1.04.02.02,"Mercaderias zona franca",asset_current,False
+py_acc_chart_11040203,1.1.04.02.03,"Mercaderias regimen de MAQUILA",asset_current,False
+py_acc_chart_11040204,1.1.04.02.04,"Mercaderias otros regimenes especiales",asset_current,False
+py_acc_chart_11040301,1.1.04.03.01,"Productos terminados gravados por el IVA 10%",asset_current,False
+py_acc_chart_11040302,1.1.04.03.02,"Productos terminados gravados por el IVA 5%",asset_current,False
+py_acc_chart_11040303,1.1.04.03.03,"Productos terminados exentos de IVA",asset_current,False
+py_acc_chart_11040401,1.1.04.04.01,"Productos en proceso",asset_current,False
+py_acc_chart_11040501,1.1.04.05.01,"Materias primas",asset_current,False
+py_acc_chart_11040601,1.1.04.06.01,"Materiales, suministros y repuestos",asset_current,False
+py_acc_chart_11040701,1.1.04.07.01,"Productos agrícolas",asset_current,False
+py_acc_chart_11040801,1.1.04.08.01,"Productos forestales",asset_current,False
+py_acc_chart_11040901,1.1.04.09.01,"Activos biológicos en producción",asset_current,False
+py_acc_chart_11041001,1.1.04.10.01,"Activos biológicos en desarrollo",asset_current,False
+py_acc_chart_11041101,1.1.04.11.01,"Importaciones en curso",asset_current,False
+py_acc_chart_11050101,1.1.05.01.01,"Alquileres pagados por adelantado",asset_prepayments,False
+py_acc_chart_11050201,1.1.05.02.01,"Seguros a devengar",asset_current,False
+py_acc_chart_12010101,1.2.01.01.01,"Deudores por venta a largo plazo",asset_non_current,False
+py_acc_chart_12010201,1.2.01.02.01,"Deudores por préstamos a largo plazo",asset_non_current,False
+py_acc_chart_12010301,1.2.01.03.01,"Anticipo a proveedores locales",asset_non_current,False
+py_acc_chart_12010302,1.2.01.03.02,"Anticipo a proveedores del exterior",asset_non_current,False
+py_acc_chart_12010401,1.2.01.04.01,"Créditos por impuestos diferidos",asset_non_current,False
+py_acc_chart_12020101,1.2.02.01.01,"Activos biológicos en producción a largo plazo",asset_fixed,False
+py_acc_chart_12020201,1.2.02.02.01,"Activos biológicos en desarrolloa largo plazo",asset_fixed,False
+py_acc_chart_12030101,1.2.03.01.01,"Inversiones financieras",asset_non_current,False
+py_acc_chart_12030201,1.2.03.02.01,"Inversiones en entidades vinculadas",asset_non_current,False
+py_acc_chart_12030301,1.2.03.03.01,"Inversiones inmobiliarias",asset_non_current,False
+py_acc_chart_12030401,1.2.03.04.01,"Otras inversiones",asset_non_current,False
+py_acc_chart_12030501,1.2.03.05.01,"Intereses, regalías y otros rendimientos de inversiones",asset_non_current,False
+py_acc_chart_12040101,1.2.04.01.01,"Inmuebles varios",asset_fixed,False
+py_acc_chart_12040201,1.2.04.02.01,"Rodados y transportes varios",asset_fixed,False
+py_acc_chart_12040301,1.2.04.03.01,"Muebles, útiles y enseres varios",asset_non_current,False
+py_acc_chart_12040401,1.2.04.04.01,"Maquinarias varias",asset_fixed,False
+py_acc_chart_12040501,1.2.04.05.01,"Equipos varios",asset_fixed,False
+py_acc_chart_12040601,1.2.04.06.01,"Herramientas varias",asset_fixed,False
+py_acc_chart_12040701,1.2.04.07.01,"Equipos de informática varios",asset_fixed,False
+py_acc_chart_12040801,1.2.04.08.01,"Instalaciones varias",asset_fixed,False
+py_acc_chart_12040901,1.2.04.09.01,"Bienes fuera de la operación",asset_fixed,False
+py_acc_chart_12049701,1.2.04.97.01,"Bienes incorporados al amparo de la ley 60/90",asset_fixed,False
+py_acc_chart_12049801,1.2.04.98.01,"Bienes en arrendamientos financieros",asset_fixed,False
+py_acc_chart_12050101,1.2.05.01.01,"Derechos fiduciarios",asset_non_current,False
+py_acc_chart_12060101,1.2.06.01.01,"Gastos de constitución",asset_non_current,False
+py_acc_chart_12060201,1.2.06.02.01,"Gastos de organización",asset_non_current,False
+py_acc_chart_12060301,1.2.06.03.01,"Gastos de desarrollo",asset_non_current,False
+py_acc_chart_12060401,1.2.06.04.01,"Gastos de proyectos de inversión",asset_non_current,False
+py_acc_chart_12070101,1.2.07.01.01,"Licencias, marcas y patentes",asset_non_current,False
+py_acc_chart_12070201,1.2.07.02.01,"Franquicias",asset_non_current,False
+py_acc_chart_21010101,2.1.01.01.01,"Proveedores locales a pagar",liability_payable,True
+py_acc_chart_21010102,2.1.01.01.02,"Cheques diferidos a pagar",liability_current,True
+py_acc_chart_21010103,2.1.01.01.03,"Cheques rechazados",liability_current,False
+py_acc_chart_21010201,2.1.01.02.01,"Proveedores del exterior a pagar",liability_current,False
+py_acc_chart_21010301,2.1.01.03.01,"Intereses a pagar a proveedores",liability_current,False
+py_acc_chart_21020101,2.1.02.01.01,"Impuesto a la renta a pagar",liability_payable,True
+py_acc_chart_21020102,2.1.02.01.02,"IVA 10% - Débito fiscal",liability_current,False
+py_acc_chart_21020103,2.1.02.01.03,"IVA 5%  Débito fiscal",liability_current,False
+py_acc_chart_21020104,2.1.02.01.04,"IVA Saldo a pagar",liability_payable,True
+py_acc_chart_21020105,2.1.02.01.05,"Retenciones de impuestos a ingresar",liability_current,False
+py_acc_chart_21020201,2.1.02.02.01,"Sueldos a pagar",liability_payable,True
+py_acc_chart_21020202,2.1.02.02.02,"Leyes sociales a pagar",liability_payable,True
+py_acc_chart_21020301,2.1.02.03.01,"Dividendos a pagar",liability_payable,True
+py_acc_chart_21020401,2.1.02.04.01,"Pasivos fiduciarios a pagar",liability_payable,True
+py_acc_chart_21030101,2.1.03.01.01,"Prestamos bancarios y otras entidades financieras",liability_current,True
+py_acc_chart_21030201,2.1.03.02.01,"Prestamos de dueño y/o socios",liability_current,True
+py_acc_chart_21030301,2.1.03.03.01,"Arrendamientos financieros",liability_current,True
+py_acc_chart_21030401,2.1.03.04.01,"otros prestamos a pagar",liability_current,True
+py_acc_chart_21030501,2.1.03.05.01,"Intereses a pagar",liability_current,True
+py_acc_chart_21040101,2.1.04.01.01,"Obligaciones por garantias otorgadas",liability_current,True
+py_acc_chart_21040201,2.1.04.02.01,"Obligaciones legales por litigios",liability_current,True
+py_acc_chart_21040301,2.1.04.03.01,"Provisión para beneficios a empleados",liability_current,True
+py_acc_chart_21050101,2.1.05.01.01,"Anticipos de clientes",liability_current,True
+py_acc_chart_21050201,2.1.05.02.01,"Subvenciones",liability_current,True
+py_acc_chart_21050301,2.1.05.03.01,"Derechos de fidelización de clientes",liability_current,True
+py_acc_chart_21050401,2.1.05.04.01,"Alquileres cobrados por adelantado",liability_current,True
+py_acc_chart_22010101,2.2.01.01.01,"Proveedores locales a largo plazo",liability_non_current,False
+py_acc_chart_22010201,2.2.01.02.01,"Proveedores del exterior a largo plazo",liability_non_current,False
+py_acc_chart_22010301,2.2.01.03.01,"intereses a pagar a proveedores a largo plazo",liability_non_current,False
+py_acc_chart_22020101,2.2.02.01.01,"Prestamos bancarios y otras entidades financieras",liability_non_current,False
+py_acc_chart_22020201,2.2.02.02.01,"Prestamos del dueño y/o socios",liability_non_current,False
+py_acc_chart_22020301,2.2.02.03.01,"Arrendamientos financieros",liability_non_current,False
+py_acc_chart_22020401,2.2.02.04.01,"Otros prestamos a pagar",liability_non_current,False
+py_acc_chart_22020501,2.2.02.05.01,"Intereses a pagar",liability_non_current,False
+py_acc_chart_22030101,2.2.03.01.01,"Pasivos por impuestos diferidos",liability_non_current,False
+py_acc_chart_22030201,2.2.03.02.01,"Pasvos fiduciarios",liability_non_current,False
+py_acc_chart_22040101,2.2.04.01.01,"Oblogaciones por garantias otorgadas",liability_non_current,False
+py_acc_chart_22040201,2.2.04.02.01,"Obligaciones legales por litigios pendientes",liability_non_current,False
+py_acc_chart_22040301,2.2.04.03.01,"Proviciones para beneficios a empleados",liability_non_current,False
+py_acc_chart_22050101,2.2.05.01.01,"Anticipos a clientes",liability_non_current,False
+py_acc_chart_22050201,2.2.05.02.01,"Subvenciones",liability_non_current,False
+py_acc_chart_22050301,2.2.05.03.01,"Derechos de fidelización de clientes",liability_non_current,False
+py_acc_chart_22050401,2.2.05.04.01,"Alquileres cobrados por adelantado",liability_non_current,False
+py_acc_chart_31010101,3.1.01.01.01,"Capital suscripto",equity,False
+py_acc_chart_31010102,3.1.01.01.02,"Ajustes de capital",equity,False
+py_acc_chart_31010103,3.1.01.01.03,"Aportes no capitalizados",equity,False
+py_acc_chart_32010101,3.2.01.01.01,"Reserva legal",equity,False
+py_acc_chart_32020101,3.2.02.01.01,"Reserva de revalúo",equity,False
+py_acc_chart_32030101,3.2.03.01.01,"Reserva de revalúo fiscal",equity,False
+py_acc_chart_32040101,3.2.04.01.01,"Reserva de revalúo técnico",equity,False
+py_acc_chart_32050101,3.2.05.01.01,"Reservas estatuitaria",equity,False
+py_acc_chart_32050102,3.2.05.01.02,"Reservas facultativas",equity,False
+py_acc_chart_32050103,3.2.05.01.03,"Reservas futuras inversiones",equity,False
+py_acc_chart_33010101,3.3.01.01.01,"Resultados acumulados",equity,False
+py_acc_chart_33990101,3.3.99.01.01,"Resultado del ejercicio",equity_unaffected,False
+py_acc_chart_33990102,3.3.99.01.02,"Resultados de ejercicios anteriores",equity,False
+py_acc_chart_33990102,3.3.99.01.02,"Ajuste de resultados de ejercicios anteriores",equity,False
+py_acc_chart_41010101,4.1.01.01.01,"Ventas de mercaderías genéricas gravadas por el IVA 10%",income,False
+py_acc_chart_41010102,4.1.01.01.02,"Ventas de mercaderías genéricas gravadas por el IVA 5%",income,False
+py_acc_chart_41010201,4.1.01.02.01,"Ventas de mercaderías genéricas exentas del IVA",income,False
+py_acc_chart_41090101,4.1.09.01.01,"Ventas de servicios genéricos gravados por el IVA",income,False
+py_acc_chart_41090102,4.1.09.01.02,"Ventas de servicios genéricos exentos del IVA",income,False
+py_acc_chart_42030101,4.2.03.01.01,"Ganancia por descuento en efectivo",income_other,False
+py_acc_chart_42050101,4.2.05.01.01,"Diferencias de cambio",income,False
+py_acc_chart_51010101,5.1.01.01.01,"Costo de mercaderías gravadas por el IVA 10%",expense_direct_cost,False
+py_acc_chart_51010102,5.1.01.01.02,"Costo de mercaderías gravadas por el IVA 5%",expense_direct_cost,False
+py_acc_chart_51010201,5.1.01.02.01,"Costo de mercaderías exentas de IVA",expense_direct_cost,False
+py_acc_chart_52010101,5.2.01.01.01,"Sueldos y jornales",expense,False
+py_acc_chart_52010201,5.2.01.02.01,"Aporte patronal",expense,False
+py_acc_chart_52010301,5.2.01.03.01,"Otros beneficions al personal",expense,False
+py_acc_chart_52990101,5.2.99.01.01,"Perdida por diferencia de efectivo",expense,False
+py_acc_chart_91010101,9.1.01.01.01,"Transferencia interna",asset_current,True
+py_acc_chart_91010102,9.1.01.01.02,"Base imponible",asset_current,True

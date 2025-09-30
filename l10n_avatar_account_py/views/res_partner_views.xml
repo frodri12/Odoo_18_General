@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="base_view_partner_form2" model="ir.ui.view">
+        <field name="name">res.partner.view.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="priority">5</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+
+            <xpath expr="//group/group/div[@class='o_address_format']" position="replace">
+                <div class="o_address_format">
+                    <field name="street" placeholder="Street..." class="o_address_street" />
+                    <field name="external_number" string="Número exterior del domicilio"
+                        placeholder="Número exterior" invisible="country_code != 'PY'" />
+                    <field name="street2" placeholder="Street 2..." class="o_address_street" />
+                    <field name="city" placeholder="City" class="o_address_city"
+                        invisible="country_code == 'PY'" />
+                    <field name="state_id" class="o_address_state" placeholder="State"
+                        options="{'no_open': True, 'no_quick_create': True}"
+                        context="{'default_country_id': country_id}" />
+                    <field name="zip" placeholder="ZIP" class="o_address_zip"
+                        invisible="country_code == 'PY'" />
+                    <div>
+                        <field name="municipality_id" string="Distrito"
+                            invisible="country_code != 'PY'" placeholder="Distrito"
+                            domain="[('state_id', '=', state_id)]"
+                            options="{'no_open': True, 'no_quick_create': True}"
+                            class="o_address_street" />
+                        <field name="city_id" string="Ciudad" invisible="country_code != 'PY'"
+                            placeholder="Ciudad" domain="[('state_id', '=', state_id)]"
+                            options="{'no_open': True, 'no_quick_create': True}"
+                            class="o_address_street" />
+                        <field name="country_id" placeholder="Country"
+                            options='{"no_open": True, "no_create": True}' class="o_address_street" />
+                    </div>
+                </div>
+            </xpath>
+
+
+            <!--
+            <field name="street" position="after">
+                <field name="external_number"
+                    string="Número exterior del domicilio"
+                    placeholder="Número exterior"
+                    invisible="country_code != 'PY'" />
+            </field>
+            <field name="city" position="attributes">
+                <attribute name="invisible">country_code == 'PY'</attribute>
+            </field>
+            <field name="zip" position="attributes">
+                <attribute name="invisible">country_code == 'PY'</attribute>
+            </field>
+            <field name="state_id" position="attributes">
+                <attribute name="class">o_address_street</attribute>
+            </field>
+            <field name="country_id" position="replace">
+                <div>
+                    <field name="municipality_id" string="Distrito"
+                        invisible="country_code != 'PY'" placeholder="Distrito"
+                        domain="[('state_id', '=', state_id)]"
+                        options="{'no_open': True, 'no_quick_create': True}"
+                        class="o_address_street" />
+                    <field name="city_id" string="Ciudad" invisible="country_code != 'PY'"
+                        placeholder="Ciudad" domain="[('state_id', '=', state_id)]"
+                        options="{'no_open': True, 'no_quick_create': True}"
+                        class="o_address_street" />
+                    <field name="country_id" placeholder="Country"
+                        options='{"no_open": True, "no_create": True}' class="o_address_street" />
+                </div>
+            </field>
+    -->
+
+            <xpath expr="//page[2]" position="after">
+                <page name="Datos SIFEN">
+                    <group>
+                        <group string="Datos del Timbrado">
+                            <field name="l10n_avatar_py_authorization_code" />
+                            <field name="l10n_avatar_py_authorization_startdate" />
+                            <field name="l10n_avatar_py_authorization_enddate" />
+                        </group>
+                        <group string="Constancia de no ser contribuyente">
+                            <field name="l10n_avatar_py_taxpayer_number" />
+                            <field name="l10n_avatar_py_taxpayer_control" />
+                            <field name="l10n_avatar_py_taxpayer_startdate" />
+                            <field name="l10n_avatar_py_taxpayer_enddate" />
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+
+            <group id="invoice_send_settings" position="after">
+                <group string="Purchase Withholding"
+                    invisible="'PY' not in fiscal_country_codes or not is_company">
+                    <field name="l10n_avatar_py_partner_tax_ids" nolabel="1" colspan="2"
+                        widget="auto_save_res_partner">
+                        <list editable="top">
+                            <field name="tax_id" options="{'no_create': True, 'no_open': True}"
+                                domain="[('l10n_avatar_py_withholding_payment_type', '=', 'supplier')]" />
+                            <field name="from_date" optional="hide" />
+                            <field name="to_date" optional="hide" />
+                            <field name="ref" optional="hide" />
+                        </list>
+                    </field>
+                </group>
+            </group>
+            <xpath expr="//div[@name='div_address']" position="replace">
+                <div class="o_address_format" name="div_address">
+                    <field name="street" placeholder="Street..." class="o_address_street" />
+                    <field name="external_number" string="Número exterior del domicilio"
+                        placeholder="Número exterior" invisible="country_code != 'PY'" />
+                    <field name="street2" placeholder="Street 2..." class="o_address_street" />
+                    <field name="city" placeholder="City" class="o_address_city"
+                        invisible="country_code == 'PY'" />
+                    <field name="state_id" class="o_address_street" placeholder="State"
+                        options="{'no_open': True, 'no_quick_create': True}"
+                        context="{'country_id': country_id, 'default_country_id': country_id, 'zip': zip}" />
+                    <field name="zip" placeholder="ZIP" class="o_address_zip"
+                        invisible="country_code == 'PY'" />
+                    <field name="municipality_id" string="Distrito"
+                        invisible="country_code != 'PY'" placeholder="Distrito"
+                        domain="[('state_id', '=', state_id)]"
+                        options="{'no_open': True, 'no_quick_create': True}"
+                        class="o_address_street" />
+                    <field name="city_id" string="Ciudad" invisible="country_code != 'PY'"
+                        placeholder="Ciudad" domain="[('state_id', '=', state_id)]"
+                        options="{'no_open': True, 'no_quick_create': True}"
+                        class="o_address_street" />
+                    <field name="country_id" placeholder="Country"
+                        options='{"no_open": True, "no_create": True}' class="o_address_street" />
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_py_partner_address_form_inherit" model="ir.ui.view">
+        <field name="name">res.partner.form.address.py.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_address_form" />
+        <field name="arch" type="xml">
+            <field name="street" position="after">
+                <field name="external_number"
+                    string="Número exterior del domicilio"
+                    placeholder="Número exterior"
+                    invisible="country_code != 'PY'" />
+            </field>
+            <field name="city" position="attributes">
+                <attribute name="invisible">country_code == 'PY'</attribute>
+            </field>
+            <field name="zip" position="attributes">
+                <attribute name="invisible">country_code == 'PY'</attribute>
+            </field>
+            <field name="state_id" position="attributes">
+                <attribute name="class">o_address_street</attribute>
+            </field>
+            <field name="country_id" position="replace">
+                <div>
+                    <field name="municipality_id" string="Distrito"
+                        invisible="country_code != 'PY'" placeholder="Distrito"
+                        domain="[('state_id', '=', state_id)]"
+                        options="{'no_open': True, 'no_quick_create': True}"
+                        class="o_address_street" />
+                    <field name="city_id" string="Ciudad" invisible="country_code != 'PY'"
+                        placeholder="Ciudad" domain="[('state_id', '=', state_id)]"
+                        options="{'no_open': True, 'no_quick_create': True}"
+                        class="o_address_street" />
+                    <field name="country_id" placeholder="Country"
+                        options='{"no_open": True, "no_create": True}' class="o_address_street" />
+                </div>
+            </field>
+        </field>
+    </record>
+
+</odoo>

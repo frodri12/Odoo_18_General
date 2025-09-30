@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_company_form">
+        <field name="name">res.company.form.py_inherit</field>
+        <field name="inherit_id" ref="base.view_company_form" />
+        <field name="model">res.company</field>
+        <field name="arch" type="xml">
+            <!-- ADDRESS-->
+            <field name="street" position="after">
+                <field name="external_number"
+                    string="Número exterior del domicilio"
+                    placeholder="Número exterior"
+                    invisible="country_code != 'PY'" />
+            </field>
+
+            <field name="city" position="attributes">
+                <attribute name="invisible">country_code == 'PY'</attribute>
+            </field>
+
+            <field name="zip" position="attributes">
+                <attribute name="invisible">country_code == 'PY'</attribute>
+            </field>
+            <field name="state_id" position="attributes">
+                <attribute name="class">o_address_street</attribute>
+            </field>
+            <field name="country_id" position="replace">
+                <div>
+                    <field name="municipality_id" string="Distrito"
+                        invisible="country_code != 'PY'" placeholder="Distrito"
+                        domain="[('state_id', '=', state_id)]"
+                        options="{'no_open': True, 'no_quick_create': True}"
+                        class="o_address_street" />
+                    <field name="city_id" string="Ciudad" invisible="country_code != 'PY'"
+                        placeholder="Ciudad" domain="[('state_id', '=', state_id)]"
+                        options="{'no_open': True, 'no_quick_create': True}"
+                        class="o_address_street" />
+                    <field name="country_id" placeholder="Country"
+                        options='{"no_open": True, "no_create": True}' class="o_address_street" />
+                </div>
+            </field>
+
+            <xpath expr="//page[1]" position="after">
+                <page string="actividades económicas">
+                    <field name="l10n_avatar_py_economic_activity_ids" editable="bottom" />
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_journal_form_inherit" model="ir.ui.view">
+        <field name="model">account.journal</field>
+        <field name="name">account.journal.form</field>
+        <field name="inherit_id" ref="l10n_latam_invoice_document.view_account_journal_form" />
+        <!--<field
+        name="inherit_id" ref="account.view_account_journal_form" />-->
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='l10n_latam_use_documents']" position="after">
+                <field name="l10n_avatar_py_poe_system" invisible="not l10n_latam_use_documents"
+                    required="l10n_latam_use_documents" />
+            </xpath>
+            <xpath expr="//group/field[@name='company_id']" position="after">
+                <field name="l10n_avatar_py_branch"
+                    invisible="country_code != 'PY' or not l10n_latam_use_documents or type in ['cash', 'bank', 'credit', 'general'] or (type == 'purchase' and l10n_avatar_py_poe_system not in ('AFP','AFE'))"
+                    required="l10n_latam_use_documents" />
+                <field name="l10n_avatar_py_dispatch_point"
+                    invisible="country_code != 'PY' or not l10n_latam_use_documents or type in ['cash', 'bank', 'credit', 'general'] or (type == 'purchase' and l10n_avatar_py_poe_system not in ('AFP','AFE'))"
+                    required="l10n_latam_use_documents" />
+                <field name="l10n_avatar_py_address_id" widget="res_partner_many2one"
+                    context="{'show_address': 1}"
+                    invisible="country_code != 'PY' or not l10n_latam_use_documents or type in ['cash', 'bank', 'credit', 'general'] or (type == 'purchase' and l10n_avatar_py_poe_system not in ('AFP','AFE'))"
+                    required="l10n_latam_use_documents"
+                />
+            </xpath>
+
+            <xpath expr="//page[2]" position="after">
+                <page name="Timbrado"
+                    invisible="not (type == 'sale' or (type == 'purchase' and l10n_avatar_py_poe_system in ('AFP','AFE')))">
+                    <group>
+                        <group string="Datos del Timbrado">
+                            <field name="l10n_avatar_py_authorization_code" />
+                            <field name="l10n_avatar_py_authorization_startdate" />
+                            <field name="l10n_avatar_py_authorization_enddate" />
+                            <field name="l10n_avatar_py_authorization_number" />
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

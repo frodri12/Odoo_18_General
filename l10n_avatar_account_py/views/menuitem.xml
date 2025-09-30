@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Contacts-->
+    <menuitem id="menu_py_localization_contact"
+        name="Localización Paraguaya"
+        parent="contacts.res_partner_menu_config"
+        sequence="100" />
+
+    <menuitem id="menu_l10n_avatar_py_municipality_partner"
+        action="action_l10n_avatar_py_municipality"
+        parent="menu_py_localization_contact"
+        sequence="100" />
+
+    <menuitem id="menu_l10n_avatar_py_city_partner"
+        action="action_l10n_avatar_py_city"
+        parent="menu_py_localization_contact"
+        sequence="110" />
+
+    <!-- Account -->
+    <menuitem id="menu_py_localization_config" name="Localización Paraguaya"
+        parent="account.menu_finance_configuration"
+        sequence="100" />
+
+    <menuitem id="menu_py_localization_report" name="Localización Paraguaya"
+        parent="account.menu_finance_reports"
+        sequence="100" />
+
+</odoo>

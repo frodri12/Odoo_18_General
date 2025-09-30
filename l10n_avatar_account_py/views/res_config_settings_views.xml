@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_tmbr" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='account']/block" position="after">
+                <div id="paraguay_localization_section">
+                    <block title="Paraguay Localization" id="paraguay_localization"
+                        invisible="country_code != 'PY'">
+                        <setting string="EDi en modo TEST?" company_dependent="1">
+                            <field name="l10n_avatar_py_is_edi_test" class="o_light_label" />
+                        </setting>
+                        <setting string="Timbrado de TEST" company_dependent="1">
+                            <div class="mt16">
+                                <div>
+                                    <label for="l10n_avatar_py_authorization_code"
+                                        class="col-lg-6 o_light_label" />
+                                    <field name="l10n_avatar_py_authorization_code" />
+                                </div>
+                                <div>
+                                    <label for="l10n_avatar_py_authorization_startdate"
+                                        class="col-lg-6 o_light_label" />
+                                    <field name="l10n_avatar_py_authorization_startdate" />
+                                </div>
+                                <div>
+                                    <label for="l10n_avatar_py_authorization_enddate"
+                                        class="col-lg-6 o_light_label" />
+                                    <field name="l10n_avatar_py_authorization_enddate" />
+                                </div>
+                            </div>
+                        </setting>
+                        <setting string="Regimen" company_dependent="1">
+                            <div>
+                                <label for="l10n_avatar_py_itipcont"
+                                    class="col-lg-6 o_light_label" />
+                                <field name="l10n_avatar_py_itipcont" />
+                                <label for="l10n_avatar_py_taxpayer_type"
+                                    class="col-lg-6 o_light_label" />
+                                <field name="l10n_avatar_py_taxpayer_type" />
+                            </div>
+                        </setting>
+                        <setting id="withholding_tax" string="Retenciones" company_dependent="1"
+                            title="Cuenta que se configurará en las líneas creadas para representar los montos de la base imponible.">
+                            <div class="content-group" invisible="country_code != 'PY'">
+                                <div class="row mt16">
+                                    <label for="l10n_avatar_py_tax_base_account_id"
+                                        class="col-lg-3 o_light_label" />
+                                    <field name="l10n_avatar_py_tax_base_account_id" />
+                                </div>
+                            </div>
+                        </setting>
+
+                    </block>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,41 @@
+# -*- coding: utf-8 -*-
+
+from odoo import api, models
+from odoo.addons.base.models.res_company import Company
+
+class PyAccountChartTemplate(models.AbstractModel):
+    _inherit = "account.chart.template"
+
+    @api.model
+    def _get_demo_data(self, company:Company):
+        demo_data = super()._get_demo_data(company)
+        if company in (
+            self.env.ref('base.py_demo_company', raise_if_not_found=False),
+        ):
+            # Do not load generic demo data on these companies
+            return {}
+        if company.account_fiscal_country_id.code == "PY":
+            demo_data = {
+                'res.partner': demo_data.pop('res.partner', {}),
+                **demo_data,
+            }
+            demo_data['res.partner'].setdefault('base.res_partner_2', {})
+            demo_data['res.partner'].setdefault('base.res_partner_12', {})
+        return demo_data
+
+    @api.model
+    def _get_demo_data_move(self, company:Company):
+        data = super()._get_demo_data_move(company)
+        if company.account_fiscal_country_id.code == "PY":
+            data['demo_invoice_5']['l10n_latam_document_number'] = '1-1-1'
+            data['demo_invoice_equipment_purchase']['l10n_latam_document_number'] = '1-1-2'
+            data['demo_move_auto_reconcile_3']['l10n_latam_document_number'] = '1-1-3'
+            data['demo_move_auto_reconcile_4']['l10n_latam_document_number'] = '1-1-4'
+        return data
+
+    def _post_load_demo_data(self, company:Company):
+        if company not in (
+            self.env.ref('base.py_demo_company', raise_if_not_found=False),
+        ):
+            # Do not load generic demo data on these companies
+            return super()._post_load_demo_data(company)

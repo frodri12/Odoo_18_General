@@ -3,9 +3,9 @@
 # from odoo import models, fields, api
 
 
-# class l10n_avatar_account_py(models.Model):
-#     _name = 'l10n_avatar_account_py.l10n_avatar_account_py'
-#     _description = 'l10n_avatar_account_py.l10n_avatar_account_py'
+# class custom_raices(models.Model):
+#     _name = 'custom_raices.custom_raices'
+#     _description = 'custom_raices.custom_raices'
 
 #     name = fields.Char()
 #     value = fields.Integer()

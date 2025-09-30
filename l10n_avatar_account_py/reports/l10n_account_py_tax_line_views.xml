@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_l10n_account_py_tax_line_search" model="ir.ui.view">
+        <field name="name">l10n_account_py_tax_line_search</field>
+        <field name="model">l10n_account_py_tax_line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="move_id" />
+                <field name="partner_id" />
+                <field name="journal_id" />
+                <field name="document_type_id" />
+                <field name="company_id" groups="base.group_multi_company" />
+                <field name="move_type" />
+                <separator />
+                <filter name="posted" string="Posted" domain="[('state','=','posted')]"
+                    help="Posted Journal Items" />
+                <separator />
+                <filter string="Sales VAT" name="sales_vat"
+                    domain="[('move_type', 'in', ['out_invoice', 'out_refund'])]" />
+                <filter string="Purchase VAT" name="purchase_vat"
+                    domain="[('move_type', 'in', ['in_invoice', 'in_refund'])]" />
+                <separator />
+                <filter string="With Document Type" name="with_document_type"
+                    domain="[('document_type_id','!=', False)]" />
+                <group expand="0" string="Group By...">
+                    <filter name="groupby_move_id" string="Entry" context="{'group_by': 'move_id'}" />
+                    <filter name="groupby_date" string="Date" context="{'group_by': 'date'}" />
+                    <filter name="groupby_partner_id" string="Partner"
+                        context="{'group_by': 'partner_id'}" />
+                    <filter name="groupby_type" string="Type" context="{'group_by': 'move_type'}" />
+                    <filter name="groupby_document_type_id" string="Document Type"
+                        context="{'group_by': 'document_type_id'}" />
+                    <filter name="groupby_company_id" string="Company"
+                        context="{'group_by': 'company_id'}" groups="base.group_multi_company" />
+                </group>
+                <filter name="filter_date_last_month" invisible="1" string="Date: Last month"
+                    domain="[('date', '&lt;', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d')), ('date', '&gt;=', (context_today() + relativedelta(months=-1, day=1)).strftime('%Y-%m-%d'))]" />
+            </search>
+        </field>
+    </record>
+
+    <record id="view_l10n_account_py_tax_line_form" model="ir.ui.view">
+        <field name="name">l10n_account_py_tax_line_form</field>
+        <field name="model">l10n_account_py_tax_line</field>
+        <field name="arch" type="xml">
+            <form string="TAX Summary">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date" />
+                            <field name="move_id" />
+                            <field name="partner_id" />
+                            <field name="invoice_date" />
+                            <field name="move_type" />
+                            <field name="state" />
+                            <field name="journal_id" />
+                            <field name="document_type_id" />
+                            <field name="company_id" groups="base.group_multi_company" />
+                        </group>
+                        <group>
+                            <field name="amount_total" />
+                            <field name="amount_base_exempt" />
+                            <field name="amount_base_5" />
+                            <field name="amount_tax_base_5" />
+                            <field name="amount_base_10" />
+                            <field name="amount_tax_base_10" />
+                            <field name="amount_total_tax" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_l10n_account_py_tax_line_tree" model="ir.ui.view">
+        <field name="name">10n_account_py_tax_line_list</field>
+        <field name="model">l10n_account_py_tax_line</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" limit="1000">
+                <field name="l10n_latam_identification_type_id" />
+                <field name="partner_vat" />
+                <field name="partner_name" />
+                <field name="document_type" />
+                <field name="timbrado" />
+                <field name="l10n_latam_document_number" />
+                <field name="date" />
+                <!--<field
+                name="partner_id" />-->
+                <field name="amount_total" />
+                <field name="amount_base_exempt" />
+                <field name="amount_base_5" />
+                <field name="amount_tax_base_5" />
+                <field name="amount_base_10" />
+                <field name="amount_tax_base_10" />
+                <field name="amount_total_tax" />
+                <button name="open_journal_entry" string="Open" type="object"
+                    icon="fa-external-link" help="Open journal entry" />
+            </list>
+        </field>
+    </record>
+
+    <record id="view_l10n_account_py_tax_line_pivot" model="ir.ui.view">
+        <field name="name">l10n_account_py_tax_line_pivot</field>
+        <field name="model">l10n_account_py_tax_line</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="move_type" type="row" />
+                <field name="amount_total" type="measure" />
+                <field name="amount_base_exempt" type="measure" />
+                <field name="amount_base_5" type="measure" />
+                <field name="amount_tax_base_5" type="measure" />
+                <field name="amount_base_10" type="measure" />
+                <field name="amount_tax_base_10" type="measure" />
+                <field name="amount_total_tax" type="measure" />
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_l10n_account_py_tax_line" model="ir.actions.act_window">
+        <field name="name">Resumen de IVA</field>
+        <field name="res_model">l10n_account_py_tax_line</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'search_default_posted': 1, 'search_default_filter_date_last_month':
+            1}</field>
+    </record>
+
+    <record id="action_l10n_account_py_tax_line_sale" model="ir.actions.act_window">
+        <field name="name">IVA Ventas</field>
+        <field name="res_model">l10n_account_py_tax_line</field>
+        <field name="view_mode">list</field>
+        <field name="domain">[('move_type', 'in', ['out_invoice', 'out_refund'])]</field>
+        <field name="context">{'search_default_posted': 1, 'search_default_filter_date_last_month':1, 'tax_types':'sale'}</field>
+    </record>
+
+    <record id="action_l10n_account_py_tax_line_purchase" model="ir.actions.act_window">
+        <field name="name">IVA Compras</field>
+        <field name="res_model">l10n_account_py_tax_line</field>
+        <field name="view_mode">list</field>
+        <field name="domain">[('move_type', 'in', ['in_invoice', 'in_refund'])]</field>
+        <field name="context">{'search_default_posted': 1, 'search_default_filter_date_last_month':1, 'tax_types':'purchase'}</field>
+    </record>
+
+    <menuitem id="menu_current_account" parent="menu_py_localization_report" sequence="200"
+        action="action_l10n_account_py_tax_line" />
+    <menuitem id="menu_current_account_sale" parent="menu_py_localization_report" sequence="201"
+        action="action_l10n_account_py_tax_line_sale" />
+    <menuitem id="menu_current_account_purchase" parent="menu_py_localization_report" sequence="202"
+        action="action_l10n_account_py_tax_line_purchase" />
+</odoo>

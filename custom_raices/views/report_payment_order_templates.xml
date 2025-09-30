@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_payment_order">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="lang" t-value="o.partner_id.lang or o.company_id.partner_id.lang" />
+                <t t-call="custom_raices.custom_report_payment_order_document" t-lang="lang" />
+            </t>
+        </t>
+    </template>
+
+    <template id="custom_report_payment_order_document">
+        <t t-call="web.external_layout">
+            <t t-set="values" t-value="o._get_payment_receipt_report_values()" />
+            <div class="page">
+                <div name="date" class="row">
+                    <div class="col-12" t-if="o.date">
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr>
+                                    <th class="text-center">
+                                        <h4><strong><![CDATA[Orden de Pago&nbsp;:&nbsp;]]><span t-field="o.name">INV0001</span></strong></h4>
+                                    </th>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-borderless" style="font-size: 0.9rem">
+                            <tbody>
+                                <tr>
+                                    <th colspan="3">
+                                        <span><![CDATA[A LA ORDEN DE&nbsp;:&nbsp;]]></span>
+                                        <span t-field="o.partner_id" />
+                                    </th>
+                                    <th>
+                                        <span><![CDATA[FECHA&nbsp;:&nbsp;]]></span>
+                                        <span t-field="o.date" />
+                                    </th>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-borderless" style="font-size: 0.8rem">
+                            <tbody>
+                                <tr>
+                                    <td><![CDATA[Número]]></td>
+                                    <td colspan="3"><![CDATA[Cheque/Transferencia]]></td>
+                                    <td class="text-end"><![CDATA[Importe]]></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.name">INV0001</span>
+                                    </td>
+                                    <td colspan="3">
+                                        <t t-out="o.journal_id.name if o.journal_id.type != 'cash' else 'Efectivo'" />
+                                    </td>
+                                    <td class="text-end">
+                                        <span t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}">100</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="oe_structure"></div>
+                <div class="row"><div class="col-10"><![CDATA[&nbsp;]]></div></div>
+                <div class="row">
+                    <div class="col-10" style="font-size: 0.9rem">
+                        <span><![CDATA[En concepto de&nbsp;:&nbsp;]]></span>
+                        <span t-field="o.memo">INV0001</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-10">
+                        <span><![CDATA[Son&nbsp;:&nbsp;]]></span>
+                        <span t-out="o.currency_id.amount_to_text(o.amount)" />
+                    </div>
+                </div>
+                <div class="row"><div class="col-10"><![CDATA[&nbsp;]]></div></div>
+                <div class="oe_structure"></div>
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10 text-center">
+                        <h6><![CDATA[DOCUMENTOS A PAGAR]]></h6>
+                    </div>
+                </div>
+                <t t-set="invoices" t-value="o.reconciled_invoice_ids or o.reconciled_bill_ids" />
+                <div style="height:450px">
+                    <table class="table table-borderless" style="font-size: 0.7rem">
+                        <tbody>
+                            <tr>
+                                <td><![CDATA[Fecha]]></td>
+                                <td colspan="3"><![CDATA[Nro de comprobante]]></td>
+                                <td class="text-end" colspan="2"><![CDATA[Importe]]></td>
+                            </tr>
+                            <t t-foreach="invoices" t-as="inv">
+                                <t t-if="inv.move_type != 'entry'">
+                                    <tr>
+                                        <td><span t-field="inv.invoice_date">2023-01-01</span></td>
+                                        <td colspan="3"><span t-field="inv.name">INV001</span></td>
+                                        <td class="text-end" colspan="2"><span t-field="inv.amount_total">100.00 USD</span></td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+
+                <table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            <td class="col-2" style="height:100px"><![CDATA[&nbsp;]]></td>
+                            <td class="col-2"><![CDATA[&nbsp;]]></td>
+                            <td class="col-2"><![CDATA[&nbsp;]]></td>
+                            <td class="col-2"><![CDATA[&nbsp;]]></td>
+                        </tr>
+                        <tr>
+                            <td><![CDATA[Auxiliar administrativo]]></td>
+                            <td><![CDATA[Encargado administrativo]]></td>
+                            <td><![CDATA[Autorización 1]]></td>
+                            <td><![CDATA[Autorización 2]]></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+</odoo>

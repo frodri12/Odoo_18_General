@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+    <record id="py_autofactura" model="l10n_latam.document.type">
+        <field name="code">101</field>
+        <field name="name">Autofactura</field>
+        <field name="sequence">20</field>
+        <field name="internal_type">invoice</field>
+        <field name="doc_code_prefix">AFA</field>
+        <field name="report_name">AUTOFACTURA</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">true</field>
+        <field name="l10n_avatar_py_edi_code">4</field>
+    </record>
+    <record id="py_boleta_trans_pub_pasaj" model="l10n_latam.document.type">
+        <field name="code">102</field>
+        <field name="name">BOLETA DE TRANSPORTE PUBLICO DE PASAJEROS</field>
+        <field name="sequence">100</field>
+        <field name="internal_type">invoice</field>
+        <field name="doc_code_prefix">BTPP</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">false</field>
+    </record>
+    <record id="py_boleta_venta" model="l10n_latam.document.type">
+        <field name="code">103</field>
+        <field name="name">BOLETA DE VENTA</field>
+        <field name="sequence">110</field>
+        <field name="internal_type">invoice</field>
+        <field name="doc_code_prefix">BV</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">false</field>
+    </record>
+    <record id="py_boleta_simple" model="l10n_latam.document.type">
+        <field name="code">104</field>
+        <field name="name">BOLETA RESIMPLE</field>
+        <field name="sequence">120</field>
+        <field name="internal_type">invoice</field>
+        <field name="doc_code_prefix">BRS</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">false</field>
+    </record>
+    <record id="py_boleto_loteria" model="l10n_latam.document.type">
+        <field name="code">105</field>
+        <field name="name">BOLETOS DE LOTERIAS, JUEGOS DE AZAR</field>
+        <field name="sequence">130</field>
+        <field name="internal_type">invoice</field>
+        <field name="doc_code_prefix">BL</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">false</field>
+    </record>
+    <record id="py_boleto_aereo" model="l10n_latam.document.type">
+        <field name="code">106</field>
+        <field name="name">BOLETO O TIQUET DE TRASNPORTE AEREO</field>
+        <field name="sequence">140</field>
+        <field name="internal_type">invoice</field>
+        <field name="doc_code_prefix">TQ</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">false</field>
+    </record>
+    <record id="py_despacho_importacion" model="l10n_latam.document.type">
+        <field name="code">107</field>
+        <field name="name">DESPACHO DE IMPORTACION</field>
+        <field name="sequence">150</field>
+        <field name="internal_type">invoice</field>
+        <field name="doc_code_prefix">DI</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">false</field>
+    </record>
+    <record id="py_espectaculos_publicos" model="l10n_latam.document.type">
+        <field name="code">108</field>
+        <field name="name">ENTRADA A ESPECTACULOS PUBLICOS</field>
+        <field name="sequence">160</field>
+        <field name="internal_type">invoice</field>
+        <field name="doc_code_prefix">EEP</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">false</field>
+    </record>
+    <record id="py_factura" model="l10n_latam.document.type">
+        <field name="code">109</field>
+        <field name="name">Factura</field>
+        <field name="sequence">10</field>
+        <field name="internal_type">invoice</field>
+        <field name="doc_code_prefix">FA</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">true</field>
+        <field name="report_name">FACTURA</field>
+        <field name="l10n_avatar_py_edi_code">1</field>
+    </record>
+    <record id="py_nota_credito" model="l10n_latam.document.type">
+        <field name="code">110</field>
+        <field name="name">Nota de Crédito</field>
+        <field name="sequence">30</field>
+        <field name="internal_type">credit_note</field>
+        <field name="doc_code_prefix">NC</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">true</field>
+        <field name="report_name">NOTA DE CREDITO</field>
+        <field name="l10n_avatar_py_edi_code">5</field>
+    </record>
+    <record id="py_nota_debito" model="l10n_latam.document.type">
+        <field name="code">111</field>
+        <field name="name">Nota de Débito</field>
+        <field name="sequence">40</field>
+        <field name="internal_type">debit_note</field>
+        <field name="doc_code_prefix">ND</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">true</field>
+        <field name="report_name">NOTA DE DEBITO</field>
+        <field name="l10n_avatar_py_edi_code">6</field>
+    </record>
+    <record id="py_tiquet" model="l10n_latam.document.type">
+        <field name="code">112</field>
+        <field name="name">Tiquet Maquina Registradora</field>
+        <field name="sequence">50</field>
+        <field name="internal_type">invoice</field>
+        <field name="doc_code_prefix">TF</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">true</field>
+        <field name="report_name">TIQUET</field>
+        <field name="l10n_avatar_py_edi_code">1</field>
+    </record>
+    <record id="py_egresos_compras_credito" model="l10n_latam.document.type">
+        <field name="code">201</field>
+        <field name="name">COMPROBANTE DE EGRESOS POR COMPRAS A CREDITO</field>
+        <field name="sequence">170</field>
+        <field name="internal_type"></field>
+        <field name="doc_code_prefix">ECC</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">false</field>
+    </record>
+    <record id="py_del_exterior_legalizado" model="l10n_latam.document.type">
+        <field name="code">202</field>
+        <field name="name">COMPROBANTE DEL EXTERIOR LEGALIAZADO</field>
+        <field name="sequence">180</field>
+        <field name="internal_type"></field>
+        <field name="doc_code_prefix">EL</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">false</field>
+    </record>
+    <record id="py_ingresos_ventas_credito" model="l10n_latam.document.type">
+        <field name="code">203</field>
+        <field name="name">COMPROBANTE DE INGRESO POR VENTAS A CREDITO</field>
+        <field name="sequence">190</field>
+        <field name="internal_type"></field>
+        <field name="doc_code_prefix">IVC</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">false</field>
+    </record>
+    <record id="py_ingresos_ent_publicas" model="l10n_latam.document.type">
+        <field name="code">204</field>
+        <field name="name">COMPROBANTE DE INGRESOS ENTIDADES PUBLICAS, RELIGIOSAS O DE BENEFICIO
+            PUBLICO</field>
+        <field name="sequence">200</field>
+        <field name="internal_type"></field>
+        <field name="doc_code_prefix">IEP</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">false</field>
+    </record>
+    <record id="py_exracto_cuenta_billetaje" model="l10n_latam.document.type">
+        <field name="code">205</field>
+        <field name="name">EXTRACTO DE CUENTA - BILLETAJE ELECTRONICO</field>
+        <field name="sequence">210</field>
+        <field name="internal_type"></field>
+        <field name="doc_code_prefix">BE</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">false</field>
+    </record>
+    <record id="py_extracto_cuenta_ips" model="l10n_latam.document.type">
+        <field name="code">206</field>
+        <field name="name">EXTRACTO DE CUENTA DE IPS</field>
+        <field name="sequence">220</field>
+        <field name="internal_type"></field>
+        <field name="doc_code_prefix">IPS</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">false</field>
+    </record>
+    <record id="py_extracto_cuenta_tctd" model="l10n_latam.document.type">
+        <field name="code">207</field>
+        <field name="name">EXTRACTO DE CUENTA TC/TD</field>
+        <field name="sequence">230</field>
+        <field name="internal_type"></field>
+        <field name="doc_code_prefix">TARJ</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">false</field>
+    </record>
+    <record id="py_liquidacion_salario" model="l10n_latam.document.type">
+        <field name="code">208</field>
+        <field name="name">LIQUIDACION DE SALARIO</field>
+        <field name="sequence">240</field>
+        <field name="internal_type"></field>
+        <field name="doc_code_prefix">SAL</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">false</field>
+    </record>
+    <record id="py_otros_egresos" model="l10n_latam.document.type">
+        <field name="code">209</field>
+        <field name="name">OTROS COMPROBANTES DE EGRESOS</field>
+        <field name="sequence">250</field>
+        <field name="internal_type"></field>
+        <field name="doc_code_prefix">OE</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">false</field>
+    </record>
+    <record id="py_otros_ingresos" model="l10n_latam.document.type">
+        <field name="code">210</field>
+        <field name="name">OTROS COMPROBANTES DE INGRESOS</field>
+        <field name="sequence">260</field>
+        <field name="internal_type"></field>
+        <field name="doc_code_prefix">OI</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">false</field>
+    </record>
+    <record id="py_boleta_deposito" model="l10n_latam.document.type">
+        <field name="code">211</field>
+        <field name="name">TRANSFERENCIAS O GIROS BANCARIOS/BOLETA DE DEPOSITO</field>
+        <field name="sequence">270</field>
+        <field name="internal_type"></field>
+        <field name="doc_code_prefix">BD</field>
+        <field name="country_id" ref="base.py" />
+        <field name="active">false</field>
+    </record>
+
+</odoo>

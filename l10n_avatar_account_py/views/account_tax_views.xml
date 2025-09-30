@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="inherit_view_id_inherit_account_tax" model="ir.ui.view">
+        <field name="name">account.tax.view.form.inherit</field>
+        <field name="model">account.tax</field>
+        <field name="inherit_id" ref="account.view_tax_form" />
+        <field name="arch" type="xml">
+            <field name="include_base_amount" position="after">
+                <field name="l10n_avatar_py_tax_assessment" invisible="country_code != 'PY'" />
+                <field name="l10n_avatar_py_base_tax" invisible="country_code != 'PY'" />
+            </field>
+            <!-- Retenciones -->
+            <field name="type_tax_use" position="attributes">
+                <attribute name="invisible" separator="or" add="country_code == 'PY'"/>
+            </field>
+            <field name="amount_type" position="attributes">
+                <attribute name="invisible" separator="or" add="l10n_avatar_py_tax_type == 'earnings_scale'"/>
+            </field>
+            <label for="amount" position="attributes">
+                <attribute name="invisible" separator="or" add="l10n_avatar_py_tax_type == 'earnings_scale'"/>
+            </label>
+            <xpath expr="//field[@name='amount']/.." position="attributes">
+                <attribute name="invisible" separator="or" add="l10n_avatar_py_tax_type == 'earnings_scale'"/>
+            </xpath>
+            <field name="name" position="after">
+                <field name="l10n_avatar_py_tax_type" invisible="l10n_avatar_py_type_tax_use not in ('customer', 'supplier')"/>
+                <field name="l10n_avatar_py_scale_id" invisible="l10n_avatar_py_tax_type != 'earnings_scale'" required="l10n_avatar_py_tax_type == 'earnings_scale'" options="{'no_create': True}"/>
+            </field>
+            <field name="type_tax_use" position="after">
+                <field name="l10n_avatar_py_type_tax_use" invisible="country_code != 'PY'" string="Tax Type" required="country_code == 'PY'"/>
+            </field>
+        </field>
+    </record>
+</odoo>
