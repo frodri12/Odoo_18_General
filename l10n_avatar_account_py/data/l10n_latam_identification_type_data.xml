@@ -12,8 +12,8 @@
         </record>
 
         <record model='l10n_latam.identification.type' id='py_ci'>
-            <field name='name'>Cédula paraguaya</field>
-            <field name='description'>Cédula paraguaya</field>
+            <field name='name'>Cédula de Identidad</field>
+            <field name='description'>Cédula de Identidad</field>
             <field name='country_id' ref='base.py' />
             <field name='l10n_avatar_py_code'>1</field>
             <field name='sequence'>20</field>

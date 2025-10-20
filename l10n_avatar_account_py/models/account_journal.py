@@ -38,16 +38,17 @@ class PyAccountJournal(models.Model):
 
     def _get_l10n_avatar_py_poe_types_selection(self):
         return [
-            ('FAP',_('Pre-printed Invoice')), # sale/purchase, Facturas, Notas de credito/debito preimpresas o autoimpresion
-            ('FAE',_('Electronic Invoice')), # sale/purchase, Facturas electronicas
-            ('AFP',_('Pre-printed SelfInvoice')), # purchase, Autofacturas
-            ('AFE',_('Electronic SelfInvoice')), # purchase, Autofacturas electronicas
-            ('REP',_('Pre-printed Delivery Notes')), # sale/purchase, Remitos
-            ('REE',_('Electronic Delivery Notes')), # sale/purchase, Remitos electronicos
-            ('FEP',_('Pre-printed Export Invoice')), # sale, Facturas de exportacion (a futuro)
-            ('FEE',_('Electronic Export Invoice')), # sale, Facturas de exportacion electronicas (a futuro)
-            ('FIP',_('Pre-printed Import Invoice')), # purchase, Facturas de importacion (a futuro)
-            ('FIE',_('Electronic Import Invoice')), # purchase, Facturas electronicas de importacion (a futuro)
+            ('FAP',_('Comprobantes preimpresos timbrados')), # sale/purchase, Facturas, Notas de credito/debito preimpresas o autoimpresion
+            ('FAE',_('Comprobantes electronicos')), # sale/purchase, Facturas electronicas
+            ('AFP',_('Autofactura preimpresa')), # purchase, Autofacturas
+            ('AFE',_('Autofactura electronica')), # purchase, Autofacturas electronicas
+            ('NTP',_('Otros comprobante preimpresos no timbrados')),
+            #('REP',_('Pre-printed Delivery Notes')), # sale/purchase, Remitos
+            #('REE',_('Electronic Delivery Notes')), # sale/purchase, Remitos electronicos
+            #('FEP',_('Pre-printed Export Invoice')), # sale, Facturas de exportacion (a futuro)
+            #('FEE',_('Electronic Export Invoice')), # sale, Facturas de exportacion electronicas (a futuro)
+            #('FIP',_('Pre-printed Import Invoice')), # purchase, Facturas de importacion (a futuro)
+            #('FIE',_('Electronic Import Invoice')), # purchase, Facturas electronicas de importacion (a futuro)
         ]
 
     @api.depends('l10n_latam_use_documents')
@@ -64,15 +65,39 @@ class PyAccountJournal(models.Model):
         codes = []
         usual_codes = ['109','110','111','112']
         autofactura = ['101']
+        ventas_codes = ['102','103','105','108','109','110','111','112']
+        compras_codes = ['102','103','105','108','109','110','111','112','104','107']
+        ingresos_codes = ['203','208','210']
+        egresos_codes = ['201','202','204','205','206','207','208','209','211']
+        ventas_elect_codes = ['109','110','111','112']
+        comoras_elect_coes = ['109','110','111','112']
+        autofacura_codes = ['101']
         #
         if self.type == 'sale':
             if latam_use_documents:
-                codes = usual_codes
+                #codes = usual_codes
+                if py_poe_system == 'FAP':
+                    codes = ventas_codes
+                elif py_poe_system == 'FAE':
+                    codes = ventas_elect_codes
+                elif py_poe_system == 'NTP':
+                    codes = ingresos_codes
+                elif py_poe_system in ('AFP','AFE'):
+                    codes = autofacura_codes
         elif self.type == 'purchase':
-            if latam_use_documents and py_poe_system in ('AFP','AFE'):
-                codes = autofactura
-            if latam_use_documents and (not py_poe_system or py_poe_system not in ('AFP','AFE')):
-                codes = usual_codes
+            #if latam_use_documents and py_poe_system in ('AFP','AFE'):
+            #    codes = autofactura
+            #if latam_use_documents and (not py_poe_system or py_poe_system not in ('AFP','AFE')):
+            #    codes = usual_codes
+            if latam_use_documents:
+                if py_poe_system == 'FAP':
+                    codes = compras_codes
+                elif py_poe_system == 'FAE':
+                    codes = comoras_elect_coes
+                elif py_poe_system == 'NTP':
+                    codes = egresos_codes
+                elif py_poe_system in ('AFP','AFE'):
+                    codes = autofacura_codes
         return [('code', 'in', codes)]
 
     @api.constrains('l10n_avatar_py_branch')

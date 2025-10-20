@@ -47,6 +47,14 @@
                         <group>
                         </group>
                     </group>
+
+                    <group>
+                        <group string="Lote">
+                            <field name="l10n_avatar_py_edi_lote_ids" />
+                        </group>
+                        <group>
+                        </group>
+                    </group>
                 </page>
             </xpath>
 
@@ -72,6 +80,17 @@
                 <attribute name="invisible">not ( state not in ('cancel','draft') and ( move_type in
                     ('out_invoice','out_refund') or ( move_type in ('in_invoice') and
                     l10n_latam_document_type_id.code in ('101') )))</attribute>
+            </xpath>
+
+            <xpath expr="//form/header" position="inside">
+                <button name="action_py_edi_timbrado"
+                    type="object"
+                    string="Timbrar"
+                    invisible="l10n_avatar_py_edi_state not in ('P','R')"
+                />
+                <button name="action_py_edi_read_lote" type="object"
+                    string="Consultar Factura"
+                    invisible="l10n_avatar_py_edi_state not in ('S')" />
             </xpath>
         </field>
     </record>

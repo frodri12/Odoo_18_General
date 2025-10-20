@@ -56,6 +56,27 @@ class PyAccountTaxLine(models.Model):
     amount_tax_base_10 = fields.Monetary(readonly=True, string='IVA 10%', currency_field='company_currency_id')
     amount_total_tax = fields.Monetary(readonly=True, string='Total importe sin IVA', currency_field='company_currency_id')
 
+    record_type_code = fields.Integer(string="Codigo tipo registro",readonly=True)
+    record_type_name = fields.Char(string="Tipo de registro",readonly=True)
+    identification_typecode = fields.Integer(string="Codigo tipo identificacion",readonly=True)
+    document_code = fields.Char(related='document_type_id.code',string='Codigo Tipo Comprobante', readonly=False)
+    moneda_extranjera = fields.Char(string="Moneda extranjera",readonly=True)
+    cond_venta = fields.Integer(string="Condicion de venta",readonly=True)
+
+    def _compute_record_type( self):
+        if self.journal_id.type == 'sale' and self.l10n_latam_identification_type_id.l10n_avatar_py_code not in ('203','208','210','201','202','204','205','206','207','208','209','211'):
+            self.record_type_code = 1
+            self.record_type_name = "VENTAS"
+        elif self.journal_id.type == 'sale':
+            self.record_type_code = 3
+            self.record_type_name = "INGRESOS"
+        elif self.journal_id.type == 'purchase' and self.l10n_latam_identification_type_id.l10n_avatar_py_code not in ('203','208','210','201','202','204','205','206','207','208','209','211'):
+            self.record_type_code = 2
+            self.record_type_name = "COMPRAS"
+        elif self.journal_id.type == 'purchase':
+            self.record_type_code = 3
+            self.record_type_name = "EGRESOS"
+
     def open_journal_entry(self):
         self.ensure_one()
         return self.move_id.get_formview_action()
@@ -71,10 +92,10 @@ class PyAccountTaxLine(models.Model):
     def _table_query(self):
         if self.env.context.get('tax_types'):
             if self.env.context.get('tax_types') == 'purchase':
-                _logger.error( self.env.context)
+                #_logger.error( self.env.context)
                 return self._py_tax_line_build_query(tax_types=('purchase','',''))
             elif self.env.context.get('tax_types') == 'sale':
-                _logger.error( self.env.context)
+                #_logger.error( self.env.context)
                 return self._py_tax_line_build_query(tax_types=('ventas','sale',''))
             
         return self._py_tax_line_build_query()
@@ -114,23 +135,34 @@ class PyAccountTaxLine(models.Model):
            aj.l10n_avatar_py_poe_system,
            rp.l10n_latam_identification_type_id, 
            lit.name as latam_identification_name,
+           CASE WHEN aj.type = 'sale' AND CAST(lit.l10n_avatar_py_code AS INTEGER) >= 200 THEN 3
+                WHEN aj.type = 'purchase' AND CAST(lit.l10n_avatar_py_code AS INTEGER) >= 200 THEN 4
+                WHEN aj.type = 'sale' THEN 1
+                WHEN aj.type = 'purchase' THEN 2
+                ELSE 0 END record_type_code,
+           CASE WHEN aj.type = 'sale' AND CAST(lit.l10n_avatar_py_code AS INTEGER) >= 200 THEN 'INGRESOS'
+                WHEN aj.type = 'purchase' AND CAST(lit.l10n_avatar_py_code AS INTEGER) >= 200 THEN 'EGRESOS'
+                WHEN aj.type = 'sale' THEN 'VENTAS'
+                WHEN aj.type = 'purchase' THEN 'COMPRAS'
+                ELSE '' END record_type_name,
+           CASE WHEN lit.l10n_avatar_py_code = 99 THEN 11
+                 WHEN lit.l10n_avatar_py_code = 1  THEN 12
+                 WHEN lit.l10n_avatar_py_code = 2  THEN 13
+                 WHEN lit.l10n_avatar_py_code = 3  THEN 14
+                 WHEN lit.l10n_avatar_py_code = 5  THEN 15
+                 WHEN lit.l10n_avatar_py_code = 6  THEN 16
+           ELSE 17 END as identification_typecode,
+           CASE WHEN account_move.invoice_currency_rate = 1 THEN 'N' ELSE 'S' END as moneda_extranjera,
+           CASE WHEN (account_move.invoice_date_due - account_move.invoice_date) >= 15 THEN 2 ELSE 1 END as cond_venta,
            --
            accline.balance,
-           (CASE WHEN accline.amount_total != 0.0 
-                THEN %(inv)s ELSE 1 END) * accline.amount_total as amount_total,
-           (CASE WHEN accline.l10n_avatar_py_amount_currency_base_exempt != 0.0 
-                THEN %(inv)s ELSE 1 END) * accline.l10n_avatar_py_amount_currency_base_exempt as amount_base_exempt,
-           (CASE WHEN accline.l10n_avatar_py_amount_currency_base_5 != 0.0 
-                THEN %(inv)s ELSE 1 END) * accline.l10n_avatar_py_amount_currency_base_5 as amount_base_5,
-           (CASE WHEN accline.l10n_avatar_py_tax_currency_base_5 != 0.0 
-                THEN %(inv)s ELSE 1 END) * accline.l10n_avatar_py_tax_currency_base_5 as amount_tax_base_5,
-           (CASE WHEN accline.l10n_avatar_py_amount_currency_base_10 != 0.0 
-                THEN %(inv)s ELSE 1 END) * accline.l10n_avatar_py_amount_currency_base_10 as amount_base_10,
-           (CASE WHEN accline.l10n_avatar_py_tax_currency_base_10 != 0.0 
-                THEN %(inv)s ELSE 1 END) * accline.l10n_avatar_py_tax_currency_base_10 as amount_tax_base_10,
-           (CASE WHEN accline.amount_total_tax != 0.0 
-                THEN %(inv)s ELSE 1 END) * accline.amount_total_tax as amount_total_tax
-
+           ABS(accline.amount_total) as amount_total,
+           ABS(accline.l10n_avatar_py_amount_currency_base_exempt) as amount_base_exempt,
+           ABS(accline.l10n_avatar_py_amount_currency_base_5) as amount_base_5,
+           ABS(accline.l10n_avatar_py_tax_currency_base_5) as amount_tax_base_5,
+           ABS(accline.l10n_avatar_py_amount_currency_base_10) as amount_base_10,
+           ABS(accline.l10n_avatar_py_tax_currency_base_10) as amount_tax_base_10,
+           ABS(accline.amount_total_tax) as amount_total_tax
       FROM (
             SELECT move_id, SUM(balance) as balance,
                    SUM( CASE WHEN balance < 0.0 THEN -1 ELSE 1 END * (l10n_avatar_py_amount_currency_base_exempt + 

@@ -18,8 +18,8 @@ class PyResCompany(models.Model):
 
     # Actividades Economicas
     l10n_avatar_py_economic_activity_ids = fields.Many2many(
-        'l10n_avatar_py_economic_activity',
-        'company_id'
+        'l10n_avatar_py_economic_activity', 'l10n_avatar_py_economic_activity_company_rel',
+        'company_id', 'economic_activity_id'
     )
 
     # Facturacion electronica

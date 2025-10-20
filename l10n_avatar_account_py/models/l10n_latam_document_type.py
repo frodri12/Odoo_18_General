@@ -20,6 +20,9 @@ class PyLatamDocument(models.Model):
         if not self.code:
             return document_number
 
+        if self.code in ('201','202','204','205','206','207','208','209','211','203','208','210'):
+            return document_number
+
         # Invoice Number Validator (For Eg: 123-123)
         failed = False
         args = document_number.split('-')

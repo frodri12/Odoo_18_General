@@ -23,3 +23,7 @@ from . import account_payment
 
 from . import template_py_base
 from . import account_chart_template
+
+from . import l10n_avatar_py_account_edi
+from . import l10n_avatar_py_edi_lote
+from . import l10n_avatar_py_edi_lote_logs

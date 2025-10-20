@@ -9,25 +9,30 @@ import logging
 _logger = logging.getLogger(__name__)
 
 import json
+from random import randint
 
 XMLGEN_MOVE_TYPES = {
     'entry': '0', 'out_invoice': '1', 'out_refund': '5', 
     'in_invoice': '4', 'in_refund': '0', 'out_receipt': '7', 'in_receipt': '0', 
 }
 
+"""
 DESC_TIDE_P = {
     '1': 'Factura', '2': 'Factura de exportación',
     '3': 'Factura de importación', '4': 'Autofactura',
     '5': 'Nota de crédito', '6': 'Nota de débito',
     '7': 'Nota de remisión', '8': 'Comprobante de retención',
 }
+"""
 
+"""
 DESC_TIDE_E = {
     '1': 'Factura electrónica', '2': 'Factura electrónica de exportación',
     '3': 'Factura electrónica de importación', '4': 'Autofactura electrónica',
     '5': 'Nota de crédito electrónica', '6': 'Nota de débito electrónica',
     '7': 'Nota de remisión electrónica', '8': 'Comprobante de retención electrónico',
 }
+"""
 
 def date2time( date):
     time = datetime.now().strftime("%H%M%S")
@@ -79,7 +84,7 @@ class PyAccountMove(models.Model):
     ], string="Tipo de operación", compute='_compute_py_itiope')
     l10n_avatar_py_icondope = fields.Selection([
         ('1','Contado'), ('2','Crédito'),
-    ], string="Condición de la operación", default='1')
+    ], string="Condición de la operación", default="1")
 
     # Constancia de No Contribuyente
     l10n_avatar_py_taxpayer_number = fields.Char(
@@ -90,6 +95,21 @@ class PyAccountMove(models.Model):
         string="Fecha de inicio de constancia", copy=False, store=True)
     l10n_avatar_py_taxpayer_enddate = fields.Date(
         string="Fecha fin de constancia", copy=False, store=True)
+
+    # Confirmar
+    l10n_avatar_py_date_post = fields.Datetime(string="Fecha de emisión", readonly=True, copy=False)
+
+    # EDI
+    l10n_avatar_py_edi_cdc = fields.Char(string="CDC", readonly=True)
+    l10n_avatar_py_edi_state = fields.Selection([ 
+        ('N', 'No aplica'), ('P', 'Pendiente de envio'),
+        ('S', 'Enviado'), ('A', 'Aprobado'), ('O', 'Aprobado con observacion'),
+        ('R', 'Rechazado'), ('E', 'Error')
+        ], string="Estado del envio a la SET", readonly=True
+    )
+    l10n_avatar_py_edi_lote_ids = fields.One2many(
+        'l10n_avatar_py_edi_lote', 'move_id', string="Numero de lote", copy=False
+    )
 
     @api.onchange('partner_id')
     def _onchange_py_taxpayer(self):
@@ -108,8 +128,7 @@ class PyAccountMove(models.Model):
             self.l10n_avatar_py_itiope = '1' if self.partner_id.is_company else '2'
 
 
-    # Confirmar
-    l10n_avatar_py_date_post = fields.Datetime(string="Fecha de emisión", readonly=True, copy=False)
+
 
     def _get_l10n_latam_documents_domain(self):
         self.ensure_one()
@@ -136,7 +155,7 @@ class PyAccountMove(models.Model):
 
     def _get_starting_sequence(self):
         if self.journal_id.l10n_latam_use_documents and self.company_id.account_fiscal_country_id.code == "PY":
-            if self.l10n_latam_document_type_id:
+            if self.l10n_latam_document_type_id and self.journal_id.l10n_avatar_py_poe_system not in ('NTP'):
                 return self._get_formatted_sequence()
         return super()._get_starting_sequence()
 
@@ -162,7 +181,7 @@ class PyAccountMove(models.Model):
             and (x.l10n_latam_manual_document_number or not x.highest_name)
             and x.l10n_latam_document_type_id.country_id.code == 'PY'
             and (
-                x.journal_id.type == 'sale' or (
+                ( x.journal_id.type == 'sale' and x.journal_id.l10n_avatar_py_poe_system not in ('NTP')) or (
                     x.journal_id.type == 'purchase'and x.journal_id.l10n_avatar_py_poe_system in ('AFP','AFE')
                 )
             )
@@ -206,9 +225,27 @@ class PyAccountMove(models.Model):
         if not posted.l10n_avatar_py_date_post:
             if posted.invoice_date:
                 posted.l10n_avatar_py_date_post = date2time( posted.invoice_date)
+        if posted.journal_id.l10n_avatar_py_poe_system in ('FAP', 'AFP'):
+            posted.l10n_avatar_py_edi_state = 'N'
+        if posted.journal_id.l10n_avatar_py_poe_system in ('FAE', 'AFE'):
+            posted.l10n_avatar_py_edi_state = 'P'
+            posted._generate_dCodSeg()
+            posted._compute_edi_lote()
 
         return posted
         
+    def button_draft(self):
+        super().button_draft()
+        if self.l10n_avatar_py_edi_state  in ( 'S','A','O'):
+            raise UserError("No se puede pasar a borrador un documento aprobado o en proceso de aprobacion")
+
+    def button_cancel(self):
+        super().button_cancel()
+        if self.journal_id.l10n_avatar_py_poe_system in ('FAE', 'AFE'):
+            if self.l10n_avatar_py_edi_state != 'E':
+                raise UserError(_("Only draft journal entries can be cancelled."))
+            # Falta enviar el evento de cancelacion
+
     # Retenciones
     @api.depends('line_ids')
     def _compute_l10n_avatar_py_withholding_ids(self):
@@ -317,267 +354,31 @@ class PyAccountMove(models.Model):
             'dSub10_F005': dSub10_F005,
         }
 
+
+    ### EDI
+    def _generate_dCodSeg(self):
+        pin_length = 9
+        number_max = (10**pin_length) - 1
+        number = randint( 0, number_max)
+        delta = (pin_length - len(str(number))) * '0'
+        random_code = '%s%s' % (delta,number)
+        condition = self._validate_dCodSeg( random_code)
+        if condition:
+            self._generate_dCodSeg()
+        self.l10n_avatar_py_dcodseg = random_code
+        return random_code
     
-    # JSON DE
-    # B. Campos inherentes a la operación de Documentos Electrónicos (B001-B099)
-    def _get_sifen_gOpeDE(self):
-        gOpeDE = {}
-        gOpeDE.update({ 'iTipEmi': int(self.l10n_avatar_py_itipemi) })
-        field_info = self.fields_get(allfields=['l10n_avatar_py_itipemi'])['l10n_avatar_py_itipemi']
-        selection_dict = dict(field_info['selection'])
-        gOpeDE.update({ 'dDesTipEmi': selection_dict.get(self.l10n_avatar_py_itipemi) })
-        if not self.l10n_avatar_py_dcodseg:
-            raise ValidationError("No se generó el Código de seguridad (dCodSeg)")
-        gOpeDE.update({ 'dCodSeg': self.l10n_avatar_py_dcodseg})
-        if self.l10n_avatar_py_dinfoemi:
-            gOpeDE.update({ 'dInfoEmi': self.l10n_avatar_py_dinfoemi})
-        if self.l10n_avatar_py_dinfoemi:
-            gOpeDE.update({ 'dInfoFisc': self.l10n_avatar_py_dinfofisc})
-        return gOpeDE
-
-    # C Campos de datos del Timbrado (C001-C099)
-    def _get_sifen_gTimb(self, forReport=False):
-        gTimb = {}
-        if self.move_type == 'in_invoice':
-            gTimb.update({ 'iTiDE': 1})
-        elif self.move_type == 'out_invoice' and self.journal_id.l10n_avatar_py_poe_system in ('AFP','AFE'):
-            gTimb.update({ 'iTiDE': 4})
-        elif self.move_type == 'out_invoice':
-            gTimb.update({ 'iTiDE': 1})
-        elif self.move_type in ('in_refund','out_refund'):
-            gTimb.update({ 'iTiDE': 5})
-        dDesTiDE= DESC_TIDE_E[str(gTimb.get('iTiDE'))] if self.journal_id.l10n_avatar_py_poe_system in ('FAE','AFE') else DESC_TIDE_P[str(gTimb.get('iTiDE'))]
-        gTimb.update({ 'dDesTiDE': dDesTiDE.upper() if forReport else dDesTiDE })
-        dNumTim = self.l10n_avatar_py_authorization_code
-        if dNumTim.split('-').__len__() == 2:
-            gTimb.update({ 'dNumTim': dNumTim.split('-')[1]})
-            gTimb.update({ 'dSerieNum': dNumTim.split('-')[0]})
+    def _validate_dCodSeg( self, code):
+        acc = self.env['account.move'].search([('l10n_avatar_py_dcodseg', '=', code)])
+        if len(acc) > 0:
+            return True
         else:
-            gTimb.update({ 'dNumTim': dNumTim})
-        gTimb.update({ 'dEst': "%03d" % self.journal_id.l10n_avatar_py_branch})
-        gTimb.update({ 'dPunExp': "%03d" % self.journal_id.l10n_avatar_py_dispatch_point})
-        gTimb.update({ 'dNumDoc': "%07d" % self.sequence_number})
-        gTimb.update({ 'dFeIniT': self.l10n_avatar_py_authorization_startdate})
-        if self.journal_id.l10n_avatar_py_poe_system in ('FAP','AFP'):
-            gTimb.update({ 'dFeFinT': self.l10n_avatar_py_authorization_enddate})
-        return gTimb
+            return False
 
-    # D1 Campos inherentes a la operación comercial (D010-D099)
-    def _get_sifen_gOpeCom(self):
-        gOpeCom = {}
-        if self._get_sifen_gTimb().get('') in (1,4):
-            if not self.l10n_avatar_py_itiptra:
-                raise ValidationError("No se determinó el Tipo de Transacción (iTipTra)")
-            gOpeCom.update({ 'iTipTra': int(self.l10n_avatar_py_itiptra)})
-        field_info = self.fields_get(allfields=['l10n_avatar_py_itiptra'])['l10n_avatar_py_itiptra']
-        selection_dict = dict(field_info['selection'])
-        gOpeCom.update({ 'dDesTipTra': selection_dict.get(self.l10n_avatar_py_itiptra)})
-        gOpeCom.update({ 'iTImp': int(self.l10n_avatar_py_itimp)})
-        field_info = self.fields_get(allfields=['l10n_avatar_py_itimp'])['l10n_avatar_py_itimp']
-        selection_dict = dict(field_info['selection'])
-        gOpeCom.update({ 'dDesTImp': selection_dict.get(self.l10n_avatar_py_itimp)})
-        gOpeCom.update({ 'cMoneOpe': self.currency_id.name})
-        gOpeCom.update({ 'dDesMoneOpe': self.currency_id.full_name})
-        if self.currency_id.name != 'PYG':
-            gOpeCom.update({ 'dCondTiCam': 1})
-            gOpeCom.update({ 'dTiCam': round(1/self.invoice_currency_rate,2)})  
-        if int(self.l10n_avatar_py_itiptra) == 9:
-            gOpeCom.update({ 'iCondAnt': 1})
-            gOpeCom.update({ 'dDesCondAnt': 'Anticipo Global'})
-        return gOpeCom
+    def _get_account_edi(self):
+        return self.env['l10n_avatar_py_account_edi']
 
-    # D2 Campos que identifican al emisor del Documento Electrónico DE (D100-D129)
-    def _get_sifen_gEmis(self):
-        gEmis = {}
-        Partner = self.company_id.partner_id
-        Company = self.company_id
-        gEmis.update({ 'dRucEmi': Partner.vat.split('-')[0]})
-        gEmis.update({ 'dDVEmi': Partner.vat.split('-')[1]})
-        gEmis.update({ 'iTipCont': Company.l10n_avatar_py_itipcont})
-        gEmis.update({ 'cTipReg': Partner.l10n_avatar_py_taxpayer_type})
-        if Company.l10n_avatar_py_is_edi_test and self.journal_id.l10n_avatar_py_poe_system in ('FAE','AFE'):
-            gEmis.update({ 'dNomFanEmi': Partner.name })
-            gEmis.update({ 'dNomEmi': 'DE generado en ambiente de prueba - sin valor comercial ni fiscal' })
-        else:
-            gEmis.update({ 'dNomEmi': Partner.name })
-        gEmis.update({ 'dDirEmi': Partner.street })
-        gEmis.update({ 'dNumCas': Partner.external_number or 0 })
-        if Partner.street2:
-            gEmis.update({ 'dCompDir1': Partner.street2 })
-        gEmis.update({ 'cDepEmi': int(Partner.state_id.code) })
-        gEmis.update({ 'dDesDepEmi': Partner.state_id.name })
-        if Partner.municipality_id:
-            gEmis.update({ 'cDisEmi': int(Partner.municipality_id.code) })
-            gEmis.update({ 'dDesDisEmi': int(Partner.municipality_id.name) })
-        gEmis.update({ 'cCiuEmi': int(Partner.city_id.code) })
-        gEmis.update({ 'dDesCiuEmi': int(Partner.city_id.name) })
-        gEmis.update( { "dTelEmi": Partner.phone or Partner.mobile})
-        gEmis.update( { "dEmailE": Partner.email})
-        return gEmis
-
-    # D2.1 Campos que describen la actividad económica del emisor (D130-D139) -- Company
-    def _get_sifen_gActEco( self):
-        gActEco = []
-        for rec in self.company_id.l10n_avatar_py_economic_activity_ids:
-            actEco = {}
-            actEco.update({ 'cActEco': rec.code})
-            actEco.update({ 'dDesActEco': rec.name})
-            gActEco.append(actEco)
-        return gActEco
-
-    # D2.2 Campos que identifican al responsable de la generación del DE (D140-D160) -- PENDIENTE
-
-    # D3 Campos que identifican al receptor del Documento Electrónico DE (D200-D299)
-    def _get_sifen_gDatRec(self):
-        gDatRec = {}
-        if self.journal_id.l10n_avatar_py_poe_system in ('AFP', 'AFE'):
-            gDatRec = self._get_sifen_gDatRec_afa()
-        else: 
-            gDatRec = self._get_sifen_gDatRec_fa()
-        return gDatRec
-
-    def _get_sifen_gDatRec_fa(self):
-        gDatRec = {}
-        gDatRec.update(
-            { 'iNatRec': 1 if self.partner_id.l10n_latam_identification_type_id.l10n_avatar_py_code == '99' else 2})
-        if not self.l10n_avatar_py_itiope:
-            raise ValidationError("Falta definir el Tipo de Operación (B2B/B2C/B2G/B2F)")
-        gDatRec.update({ 'iTiOpe': int(self.l10n_avatar_py_itiope)})
-        gDatRec.update({ 'cPaisRec': self.partner_id.country_id.alpha_code})
-        gDatRec.update({ 'dDesPaisRe': self.partner_id.country_id.name})
-        if self.partner_id.l10n_latam_identification_type_id.l10n_avatar_py_code == '99':
-            gDatRec.update({ 'iTiContRec': 1 if not self.partner_id.is_company else 2})
-            gDatRec.update({ 'dRucRec': self.partner_id.vat.split('-')[0]})
-            gDatRec.update({ 'dDVRec': self.partner_id.vat.split('-')[1]})
-        if self.partner_id.l10n_latam_identification_type_id.l10n_avatar_py_code != '99' and int(self.l10n_avatar_py_itiope) != 4:
-            if not self.partner_id.l10n_latam_identification_type_id.l10n_avatar_py_code:
-                raise ValidationError("Falta definir el tipo de identificación del contacto %s" % self.partner_id.name)
-            gDatRec.update({ 'iTipIDRec': int(self.partner_id.l10n_latam_identification_type_id.l10n_avatar_py_code)})
-            gDatRec.update({ 'dDTipIDRec': self.partner_id.l10n_latam_identification_type_id.name})
-            if not self.partner_id.vat:
-                raise ValidationError("Falta definir el número de identificación del contacto %s" % self.partner_id.name)
-            gDatRec.update({ 'dNumIDRec': self.partner_id.vat})
-        return gDatRec
-
-    def _get_sifen_gDatRec_afa(self):
-        gDatRec = {}
-        if self.partner_id.l10n_latam_identification_type_id.l10n_avatar_py_code == '99':
-            raise ValidationError("El contacto %s no puede ser contribuyente para una Autofactura" % self.partner_id.name)
-        gDatRec.update({ 'iNatRec': 2})
-        if self.l10n_avatar_py_itiope not in ('2','4'):
-            raise ValidationError("Tipo de Operación inválida para una Autofactura (%s)" % self.l10n_avatar_py_itiope)
-        gDatRec.update({ 'iTiOpe': int(self.l10n_avatar_py_itiope)})
-        if not self.partner_id.country_id:
-            raise ValidationError("No se declaró país para el contacto %s" % self.partner_id.country_id)
-        gDatRec.update({ 'cPaisRec': self.partner_id.country_id.alpha_code})
-        gDatRec.update({ 'dDesPaisRe': self.partner_id.country_id.name})
-        if not self.partner_id.l10n_latam_identification_type_id:
-            raise ValidationError("No se declaró el tipo de documento del contacto %s" % self.partner_id.name)
-        gDatRec.update({ 'iTipIDRec': self.partner_id.l10n_latam_identification_type_id.l10n_avatar_py_code})
-        field_info = self.partner_id.l10n_latam_identification_type_id.fields_get(allfields=['l10n_avatar_py_code'])['l10n_avatar_py_code']
-        selection_dict = dict(field_info['selection'])
-        gDatRec.update({ 'dDTipIDRec': selection_dict.get(self.partner_id.l10n_latam_identification_type_id.l10n_avatar_py_code)})
-        if self.partner_id.l10n_latam_identification_type_id.l10n_avatar_py_code == '5':
-            gDatRec.update({ 'dNumIDRec': '0'})
-            gDatRec.update({ 'dNomRec': 'Sin Nombre'})
-        else:
-            if not self.partner_id.vat:
-                raise ValidationError("No se declaró el número de documento del contacto %s" % self.partner_id.name)
-            gDatRec.update({ 'dNumIDRec': self.partner_id.vat})
-            gDatRec.update({ 'dNomRec': self.partner_id.name})
-        return gDatRec
-
-    # E7 Campos que describen la condición de la operación (E600-E699)
-    def _get_sifen_gCamCond(self):
-        gCamCond = {}
-        if self.invoice_date_due and (self.invoice_date_due - (self.invoice_date or datetime.now())).days > 5:
-            gCamCond.update({ 'iCondOpe': 2})
-            gCamCond.update({ 'dDCondOpe': 'Crédito'})
-            gCamCond.update({ 'gPagCred': self._get_sifen_gPagCred()})
-        else:
-            gCamCond.update({ 'iCondOpe': 1})
-            gCamCond.update({ 'dDCondOpe': 'Contado'})
-            gCamCond.update({ 'gPaConEIni': self._get_sifen_gPaConEIni()})
-        return gCamCond
-
-    # E7.1 Campos que describen la forma de pago de la operación al contado o del monto de la entrega inicial (E605-E619)
-    def _get_sifen_gPaConEIni(self):
-        gPaConEIni = {}
-        gPaConEIni.update({ 'iTiPago': 1}) # Forzamos a pago efectivo
-        gPaConEIni.update({ 'dDesTiPag': 'Efectivo'})
-        gPaConEIni.update({ 'dMonTiPag': self.amount_total})
-        gPaConEIni.update({ 'cMoneTiPag': self.currency_id.name})
-        gPaConEIni.update({ 'dDMoneTiPag': self.currency_id.full_name})
-        if self.currency_id.name != 'PYG':
-            gPaConEIni.update({ 'dTiCamTiPag': round(1 / self.invoice_currency_rate, 2)})
-        return gPaConEIni
-
-    # E7.2 Campos que describen la operación a crédito (E640-E649)
-    def _get_sifen_gPagCred(self):
-        gPagCred = {}
-        if self.invoice_payment_term_id:
-            gPagCred.update({ 'iCondCred': 2}) #Cuotas
-            gPagCred.update({ 'dDCondCred': 'Cuota'})
-            gCuotas = self._get_sifen_gCuotas()
-            gPagCred.update({ 'dCuotas': len(gCuotas)})
-            gPagCred.update({ 'gCuotas': gCuotas})
-        else: # Plazo
-            gPagCred.update({ 'iCondCred': 1}) #Plazo
-            gPagCred.update({ 'dDCondCred': 'Plazo'})
-            gPagCred.update({ 'dPlazoCre': str(round((self.invoice_date_due - (self.invoice_date or datetime.now())).days,0)) + " días" })
-        return gPagCred
-
-    # E7.2.1 Campos que describen las cuotas (E650-E659)
-    def _get_sifen_gCuotas(self):
-        gCuotas = []
-        sign = 1 if self.is_inbound(include_receipts=True) else -1
-        invoice_payment_terms = self.invoice_payment_term_id._compute_terms(
-                        date_ref=self.invoice_date or self.date or fields.Date.context_today(self),
-                        currency=self.currency_id,
-                        tax_amount_currency=self.amount_tax * sign,
-                        tax_amount=self.amount_tax_signed,
-                        untaxed_amount_currency=self.amount_untaxed * sign,
-                        untaxed_amount=self.amount_untaxed_signed,
-                        company=self.company_id,
-                        cash_rounding=self.invoice_cash_rounding_id,
-                        sign=sign
-                    )
-        for line in invoice_payment_terms['line_ids']:
-            gCuota = {}
-            gCuota.update({ 'cMoneCuo': self.currency_id.name})
-            gCuota.update({ 'dDMoneCuo': self.currency_id.full_name})
-            gCuota.update({ 'dMonCuota': line.get('foreign_amount')})
-            gCuota.update({ 'dVencCuo': line.get('date').strftime("%Y-%m-%d")})
-            gCuotas.append( gCuota)
-        return gCuotas
-
-    # H Campos que identifican al documento asociado (H001-H049)
-    def _get_sifen_gCamDEAsoc(self):
-        gCamDEAsoc = {}
-        if self.move_type == 'out_refund' and self.reversed_entry_id.journal_id.l10n_avatar_py_poe_system == 'FAE':
-            iTipDocAso = 1
-            gCamDEAsoc.update({ 'iTipDocAso': iTipDocAso})
-            gCamDEAsoc.update({ 'dDesTipDocAso': 'Electrónico'})
-            gCamDEAsoc.update({ 'dCdCDERef': 'VALOR DEL CDC - PENDIENTE'})
-        elif self.move_type == 'out_refund' and self.reversed_entry_id.journal_id.l10n_avatar_py_poe_system == 'FAP':
-            iTipDocAso = 2
-            gCamDEAsoc.update({ 'iTipDocAso': iTipDocAso})
-            gCamDEAsoc.update({ 'dDesTipDocAso': 'Impreso'})
-            gCamDEAsoc.update({ 'dNTimDI': self.reversed_entry_id.l10n_avatar_py_authorization_code})
-            gCamDEAsoc.update({ 'dEstDocAso': ("%03d" % self.reversed_entry_id.journal_id.l10n_avatar_py_branch)})
-            gCamDEAsoc.update({ 'dPExpDocAso': ("%03d" % self.reversed_entry_id.journal_id.l10n_avatar_py_dispatch_point)})
-            gCamDEAsoc.update({ 'dNumDocAso': ("%07d" % self.reversed_entry_id.sequence_number)})
-            gCamDEAsoc.update({ 'iTipoDocAso': 1 if self.reversed_entry_id.move_type == 'out_invoice' else 2})
-            gCamDEAsoc.update({ 'dDTipoDocAso': 'Factura' if self.reversed_entry_id.move_type == 'out_invoice' else 'Nota de crédito'})
-            gCamDEAsoc.update({ 'dFecEmiDI': self.reversed_entry_id.invoice_date.strftime("%Y-%m-%d")})
-        elif self.move_type == 'in_invoice' and self.journal_id.l10n_avatar_py_poe_system in ('AFP','AFE'):
-            iTipDocAso = 3
-            gCamDEAsoc.update({ 'iTipDocAso': iTipDocAso})
-            gCamDEAsoc.update({ 'dDesTipDocAso': 'Constancia Electrónica'})
-        else:
-            raise ValidationError("Tipo de documento asociado no contemplado")
-        return gCamDEAsoc
-
+    """
     ###############
     def _get_xmlgen_ActividadesEconomicas(self):
         act = []
@@ -589,7 +390,9 @@ class PyAccountMove(models.Model):
         if len(act) == 0:
             raise ValidationError("No se definieron las actividades económicas")
         return act
+    """
 
+    """
     ###########################################
     def _get_xmlgen_json(self):
         params = { }
@@ -619,8 +422,10 @@ class PyAccountMove(models.Model):
         all_json = {}
         return all_json
 
+    """
     ############################################################
 
+    """
 
     # E4 Campos que componen la Autofactura Electrónica AFE (E300-E399)
     def _get_sifen_gCamAE(self):
@@ -655,3 +460,51 @@ class PyAccountMove(models.Model):
         gCamAE.update({ 'cCiuProv': self.journal_id.l10n_avatar_py_address_id.city_id.code})
         gCamAE.update({ 'dDesCiuProv': self.journal_id.l10n_avatar_py_address_id.city_id.name})
         return gCamAE
+    """
+
+    def _compute_edi_lote(self):
+        if not self.l10n_avatar_py_edi_lote_ids:
+            self.env['l10n_avatar_py_edi_lote'].create({
+                'move_id': self.id,
+            })
+        self.l10n_avatar_py_edi_lote_ids = self.env['l10n_avatar_py_edi_lote'].search([('move_id', '=',self.id)])
+
+    def action_py_edi_timbrado(self):
+        edi = self._get_account_edi()
+        # Generar el json
+        all_json = edi._get_sifen_xmlgen( move=self)
+        self.l10n_avatar_py_edi_lote_ids.request_json = all_json
+        # Enviar el lote
+        edi._process_sifen_ResEnviLoteDe(move=self, data=all_json)
+        if self.l10n_avatar_py_edi_lote_ids.resenvilotede_dcodres == '0300':
+            # Lote generado con exito
+            self.message_post(body="Lote %s generado con exito" % self.l10n_avatar_py_edi_lote_ids.resenvilotede_dprotconslote)
+            self.l10n_avatar_py_edi_state = 'S'
+        else:
+            # Error en la generacion del lote
+            self.message_post(body="Error en la generacion del lote [%s]" % self.l10n_avatar_py_edi_lote_ids.resenvilotede_dcodres + ' - ' + self.l10n_avatar_py_edi_lote_ids.resenvilotede_dmsgres)
+        return
+
+    def action_py_edi_read_lote(self):
+        edi = self._get_account_edi()
+        all_json = {}
+        all_json.update({ 'empresa': self.company_id.partner_id.vat.split('-')[0]})
+        all_json.update({ 'servicio': 'lote'})
+        all_json.update({ 'lote': self.l10n_avatar_py_edi_lote_ids.lote_number})
+        edi._get_sifen_ResEnviConsLoteDe( all_json, self.l10n_avatar_py_edi_lote_ids, self.company_id.l10n_avatar_py_is_edi_test)
+        if self.l10n_avatar_py_edi_lote_ids.resenviconslotede_dcodreslot == '0362':
+            # Lote procesado
+            resenviconslotede_destrec = self.l10n_avatar_py_edi_lote_ids.resenviconslotede_destrec
+            if resenviconslotede_destrec != None and 'bserv' in resenviconslotede_destrec:
+                self.l10n_avatar_py_edi_state = 'O'
+            elif resenviconslotede_destrec != None and resenviconslotede_destrec[:1] == 'R':
+                self.l10n_avatar_py_edi_state = 'R'
+            elif resenviconslotede_destrec != None and resenviconslotede_destrec[:1] == 'A':
+                self.l10n_avatar_py_edi_state = 'A'
+        elif self.l10n_avatar_py_edi_lote_ids.resenviconslotede_dcodreslot == '0361':
+            # Todavia no termino.  No hacer nada
+            a = 1
+        else:
+            # Algo parece que salio mal. Rechazar
+            self.l10n_avatar_py_edi_state = 'R'
+        return

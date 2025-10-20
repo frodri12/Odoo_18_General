@@ -78,22 +78,28 @@
         <field name="model">l10n_account_py_tax_line</field>
         <field name="arch" type="xml">
             <list editable="bottom" limit="1000">
+                <field name="record_type_code" />
+                <field name="record_type_name" />
+                <field name="identification_typecode" />
                 <field name="l10n_latam_identification_type_id" />
                 <field name="partner_vat" />
                 <field name="partner_name" />
+                <field name="document_code" />
                 <field name="document_type" />
+                <field name="date" />
                 <field name="timbrado" />
                 <field name="l10n_latam_document_number" />
-                <field name="date" />
-                <!--<field
-                name="partner_id" />-->
-                <field name="amount_total" />
-                <field name="amount_base_exempt" />
-                <field name="amount_base_5" />
-                <field name="amount_tax_base_5" />
+                
                 <field name="amount_base_10" />
+                <field name="amount_base_5" />
+                <field name="amount_base_exempt" />
+                <field name="amount_total" />
+                <field name="cond_venta" />
+                <field name="moneda_extranjera" />
                 <field name="amount_tax_base_10" />
+                <field name="amount_tax_base_5" />
                 <field name="amount_total_tax" />
+
                 <button name="open_journal_entry" string="Open" type="object"
                     icon="fa-external-link" help="Open journal entry" />
             </list>

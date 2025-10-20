@@ -293,7 +293,7 @@
     </template>
 
     <template id="kude_datos_generales">
-        <t t-set="gCamCond" t-value="o._get_sifen_gCamCond()" />
+        <t t-set="gCamCond" t-value="o._get_account_edi()._get_sifen_gCamCond(o)" />
         <div class="row">
             <div class="col">
                 <strong t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Fecha de Emisión:&nbsp;]]></strong>
@@ -517,7 +517,7 @@
                     <span t-if="header_address.phone" style="white-space: nowrap;"
                         t-out="'Tel: ' + header_address.phone" />
                     <br/>
-                    <t t-set="actecos" t-value="o._get_sifen_gActEco()" />
+                    <t t-set="actecos" t-value="o._get_account_edi()._get_sifen_gActEco(o.company_id)" />
                     <t t-foreach="actecos" t-as="acteco">
                         <span><![CDATA[-&nbsp;]]></span>
                         <span t-out="acteco.get('dDesActEco')"/>
