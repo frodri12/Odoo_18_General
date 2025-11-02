@@ -124,13 +124,14 @@
     </record>
 
     <record id="action_l10n_account_py_tax_line" model="ir.actions.act_window">
-        <field name="name">Resumen de IVA</field>
+        <field name="name">Formulario 120</field>
         <field name="res_model">l10n_account_py_tax_line</field>
         <field name="view_mode">list</field>
         <field name="context">{'search_default_posted': 1, 'search_default_filter_date_last_month':
             1}</field>
     </record>
 
+    <!--
     <record id="action_l10n_account_py_tax_line_sale" model="ir.actions.act_window">
         <field name="name">IVA Ventas</field>
         <field name="res_model">l10n_account_py_tax_line</field>
@@ -146,11 +147,14 @@
         <field name="domain">[('move_type', 'in', ['in_invoice', 'in_refund'])]</field>
         <field name="context">{'search_default_posted': 1, 'search_default_filter_date_last_month':1, 'tax_types':'purchase'}</field>
     </record>
+    -->
 
     <menuitem id="menu_current_account" parent="menu_py_localization_report" sequence="200"
         action="action_l10n_account_py_tax_line" />
+    <!--
     <menuitem id="menu_current_account_sale" parent="menu_py_localization_report" sequence="201"
         action="action_l10n_account_py_tax_line_sale" />
     <menuitem id="menu_current_account_purchase" parent="menu_py_localization_report" sequence="202"
         action="action_l10n_account_py_tax_line_purchase" />
+    -->
 </odoo>

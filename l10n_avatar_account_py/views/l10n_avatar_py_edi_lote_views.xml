@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_l10n_avatar_py_edi_lote_form" model="ir.ui.view">
+        <field name="name">l10n_avatar_py_edi_lote.form</field>
+        <field name="model">l10n_avatar_py_edi_lote</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0">
+                <group string="Envio de Lote">
+                    <group>
+                        <field name="request_date" />
+                        <field name="envilote_dcodres" />
+                        <field name="envilote_dmsgres" />
+                        <field name="lote_number" />
+                        <field name="envilote_res_cdc" />
+                    </group>
+                    <group>
+                        <field name="envilote_res_qr" />
+                    </group>
+                </group>
+
+                <group string="Respuesta del Lote">
+                    <group string="Lote">
+                        <field name="response_date" />
+                        <field name="enviconslote_dcodreslot" />
+                        <field name="enviconslote_dmsgreslot" />
+                        <field name="enviconslote_destrec" />
+                    </group>
+                    <group string="Documento">
+                        <field name="enviconslote_dcodres" />
+                        <field name="enviconslote_dmsgres" />
+                    </group>
+                </group>
+
+                <group string="Cancelacion">
+                    <group>
+                        <field name="cancel_date" />
+                        <field name="cancel_destres" />
+                        <!--
+                        <field name="cancel_dprotaut" />
+                        <field name="cancel_id" />
+                        -->
+                    </group>
+                    <group>
+                        <field name="cancel_dcodres" />
+                        <field name="cancel_dmsgres" />
+                    </group>
+                </group>
+                <group stirng="Logs">
+                    <field name="log_ids" />
+                </group>
+            </form>
+        </field>
+    </record>
+
+</odoo>
+      

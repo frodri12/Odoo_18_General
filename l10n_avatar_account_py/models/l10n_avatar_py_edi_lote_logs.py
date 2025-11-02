@@ -12,3 +12,7 @@ class PyEdiLoteLogs(models.Model):
         required=True, readonly=True, index=True
     )
     
+    move_name = fields.Char()
+    move_date = fields.Datetime()
+    json_file = fields.Text()
+    

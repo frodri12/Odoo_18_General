@@ -66,24 +66,13 @@
         <!-- -->
         <xpath expr="//div[@id='informations']" position="replace">
             <div id="informations" class="row mb-4">
-                <div class="col-6" style="padding-left:1rem;">
-                    <t t-if="o.journal_id.l10n_avatar_py_poe_system in ('AFP','AFE')">
-                        <t t-call="l10n_avatar_account_py.kude_datos_generales_autofactura"
-                            t-lang="lang" />
-                    </t>
-                    <t t-else="">
-                        <t t-call="l10n_avatar_account_py.kude_datos_generales" t-lang="lang" />
-                    </t>
-                </div>
-                <div class="col-6" style="padding-left:1rem;">
-                    <t t-if="o.journal_id.l10n_avatar_py_poe_system in ('AFP','AFE')">
-                        <t t-call="l10n_avatar_account_py.kude_datos_generales_autofactura2"
-                            t-lang="lang" />
-                    </t>
-                    <t t-else="">
-                        <t t-call="l10n_avatar_account_py.kude_datos_generales2" t-lang="lang" />
-                    </t>
-                </div>
+                <t t-if="o.journal_id.l10n_avatar_py_poe_system in ('AFP','AFE')">
+                    <t t-call="l10n_avatar_account_py.kude_datos_generales_autofactura"
+                        t-lang="lang" />
+                </t>
+                <t t-else="">
+                    <t t-call="l10n_avatar_account_py.kude_datos_generales" t-lang="lang" />
+                </t>
             </div>
         </xpath>
         <xpath expr="//table[@name='invoice_line_table']" position="attributes">
@@ -173,12 +162,12 @@
                 <tr>
                     <t t-if="display_discount">
                         <td colspan="4">
-                            <strong>SUBTOTAL IN GUARANIES</strong>
+                            <strong><![CDATA[SUBTOTAL EN GUARANIES]]></strong>
                         </td>
                     </t>
                     <t t-else="">
                         <td colspan="3">
-                            <strong>SUBTOTAL IN GUARANIES</strong>
+                            <strong><![CDATA[SUBTOTAL EN GUARANIES]]></strong>
                         </td>
                     </t>
                     <td class="text-end o_price_total">
@@ -196,9 +185,30 @@
                 </tr>
             </t>
         </xpath>
+        <!-- Linea del subtotal -->
+        <xpath expr="//div[@id='total']" position="replace" />
+        <!-- Recuadro de los totales de IVA -->
+        <xpath expr="//table[hasclass('o_has_total_table')]/tbody" position="inside" />
+        <!-- Linea con el monto expresado en palabras-->
+        <xpath expr="//p[hasclass('lh-sm')]" position="replace" />
+        <!-- Recuadro del IVA con la moneda local-->
+        <xpath expr="//t[@t-call='account.document_tax_totals_company_currency_template']"
+            position="replace">
+            <div class="oe_structure" />
+        </xpath>
+        <!-- Condiciones de pago-->
+        <xpath expr="//div[@id='payment_term']" position="replace" />
+
+        <xpath expr="//div[hasclass('invoice_main')]" position="after">
+            <xpath expr="//div[@id='right-elements']" position="before">
+                <t t-call="l10n_avatar_account_py.kude_subtotal_taxes" t-lang="lang" />
+            </xpath>
+        </xpath>
+        <!--
         <xpath expr="//div[hasclass('overflow-hidden')]" position="replace">
             <t t-call="l10n_avatar_account_py.kude_subtotal_taxes" t-lang="lang" />
         </xpath>
+        -->
     </template>
 
     <template id="kude_subtotal_taxes">
@@ -222,7 +232,7 @@
                     </td>
                     <td class="text-end" colspan="6">
                         <small class="text-muted lh-sm">
-                            <span t-field="o.amount_total_words">Thirty one dollar and Five cents</span>
+                            <span t-out="o.amount_total_words.capitalize()">Thirty one dollar and Five cents</span>
                         </small>
                     </td>
                 </tr>
@@ -284,126 +294,255 @@
         </table>
         <div class="row">
             <div class="col">
-                <span t-if="o.journal_id.l10n_avatar_py_authorization_number" style="font-size:0.6rem"><![CDATA[Autorización como autoimpresor y timbrado de documento]]></span>
-                <span t-if="o.journal_id.l10n_avatar_py_authorization_number" t-att-style="'font-size:0.6rem'">
+                <span t-if="o.journal_id.l10n_avatar_py_authorization_number"
+                    style="font-size:0.6rem"><![CDATA[Autorización como autoimpresor y timbrado de documento]]></span>
+                <span t-if="o.journal_id.l10n_avatar_py_authorization_number"
+                    t-att-style="'font-size:0.6rem'">
                     <t t-out="o.journal_id.l10n_avatar_py_authorization_number" />
                 </span>
             </div>
         </div>
     </template>
 
-    <template id="kude_datos_generales">
-        <t t-set="gCamCond" t-value="o._get_account_edi()._get_sifen_gCamCond(o)" />
-        <div class="row">
-            <div class="col">
-                <strong t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Fecha de Emisión:&nbsp;]]></strong>
-                <strong style="font-size:0.7rem" t-field="o.l10n_avatar_py_date_post"
-                    t-options="{'widget':'datetime'}" />
+    <template id="custom_header">
+        <div class="mb-3">
+            <!-- Linea con el logo y los datos del Timbrado-->
+            <div class="row">
+                <div name="left-upper-side" class="col-3 text-center">
+                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"
+                        style="max-height: 150px;" alt="Logo" />
+                </div>
+                <div name="center-upper" class="col-5 text-center"
+                    t-att-style="'color: %s;' % o.company_id.primary_color">
+                    <!--<span
+                    style="display: inline-block; text-align: center; line-height: 8px;"> </span>-->
+                    <span t-field="o.company_id.partner_id.name"
+                        t-att-style="'font-size:1.2rem;color: %s;' % o.company_id.primary_color" />
+                    <br />
+                    <t
+                        t-out="' - '.join([item for item in [
+                            ', '.join([item for item in [header_address.street, header_address.street2] if item]),
+                            header_address.city,
+                            header_address.state_id and header_address.state_id.name,
+                            header_address.zip,
+                            header_address.country_id and header_address.country_id.name] if item])" />
+                    <span t-if="header_address.phone"> - </span>
+                    <span t-if="header_address.phone" style="white-space: nowrap;"
+                        t-out="'Tel: ' + header_address.phone" />
+                    <br />
+                    <t t-set="actecos"
+                        t-value="o._get_account_edi()._get_sifen_gActEco(o.company_id)" />
+                    <t t-foreach="actecos" t-as="acteco">
+                        <span><![CDATA[-&nbsp;]]></span>
+                        <span t-out="acteco.get('dDesActEco')" />
+                        <span><![CDATA[&nbsp;]]></span>
+                    </t>
+
+                </div>
+                <div name="right-upper-side" class="col-4" style="padding-left: 0px;">
+                    <span t-att-style="'color: %s;' % o.company_id.secondary_color"><![CDATA[RUC:&nbsp;]]></span>
+                    <span t-out="ruc_number" />
+                    <br />
+                    <span t-att-style="'color: %s;' % o.company_id.secondary_color"><![CDATA[Timbrado N°:&nbsp;]]></span>
+                    <span t-out="ruc_auth" />
+                    <t t-if="ruc_serie">
+                        <span t-att-style="'color: %s;' % o.company_id.secondary_color"><![CDATA[&nbsp;Serie:&nbsp;]]></span>
+                        <span t-out="ruc_serie" />
+                    </t>
+                    <br />
+                    <span t-att-style="'color: %s;' % o.company_id.secondary_color"><![CDATA[Fecha inicio de vigencia:&nbsp;]]></span>
+                    <span t-out="ruc_auth_startdate" t-options="{'widget':'date'}" />
+                    <br />
+                    <t t-if="ruc_auth_enddate">
+                        <span t-att-style="'color: %s;' % o.company_id.secondary_color"><![CDATA[Fecha fin de vigencia:&nbsp;]]></span>
+                        <span t-out="ruc_auth_enddate" t-options="{'widget':'date'}" />
+                    </t>
+                    <br />
+                    <h5 class="text-center" t-att-style="'color: %s;' % o.company_id.primary_color">
+                        <strong>
+                            <span t-att-style="'font-size:1rem'" t-out="report_name" />
+                            <br />
+                            <span t-out="report_number" />
+                        </strong>
+                    </h5>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col">
-                <strong t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Condición de venta:&nbsp;]]></strong>
-                <t t-if="gCamCond.get('iCondOpe') == 1">
-                    <strong style="font-size:0.7rem"><![CDATA[CONTADO]]></strong>
-                </t>
-                <t t-else="">
-                    <strong style="font-size:0.7rem"><![CDATA[CREDITO]]></strong>
-                </t>
-            </div>
-        </div>
-        <t t-if="gCamCond.get('iCondOpe') == 2">
-            <t t-set="gPagCred" t-value="gCamCond.get('gPagCred')" />
-            <t t-set="dPlazoCre" t-value="gCamCond.get('dPlazoCre')" />
+    </template>
+
+
+    <template id="kude_datos_generales_autofactura">
+
+        <div class="col-6" style="padding-left:1rem;">
+
             <div class="row">
                 <div class="col">
                     <strong
-                        t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Cuotas:&nbsp;]]></strong>
-                    <t t-if="gPagCred">
-                        <strong style="font-size:0.7rem" t-out="gPagCred.get('dCuotas')" />
+                        t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Fecha de Emisión:&nbsp;]]></strong>
+                    <strong style="font-size:0.7rem" t-field="o.l10n_avatar_py_date_post"
+                        t-options="{'widget':'datetime'}" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <strong
+                        t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Descripción de la naturaleza del vendedor:&nbsp;]]></strong>
+                    <strong style="font-size:0.7rem"><![CDATA[No contribuyente]]></strong>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <strong
+                        t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Nº de documento del vendedor:&nbsp;]]></strong>
+                    <strong style="font-size:0.7rem" t-field="o.partner_id.vat" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <strong
+                        t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Nombre y Apellido del vendedor:&nbsp;]]></strong>
+                    <strong style="font-size:0.7rem" t-field="o.partner_id.name" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <strong
+                        t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Dirección del vendedor:&nbsp;]]></strong>
+                    <strong style="font-size:0.7rem" t-field="o.partner_id.street" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <strong
+                        t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Numero de casa del Vendedor:&nbsp;]]></strong>
+                    <strong style="font-size:0.7rem" t-field="o.partner_id.external_number" />
+                </div>
+            </div>
+        </div>
+        <div class="col-6" style="padding-left:1rem;">
+            <div class="row">
+                <div class="col">
+                    <strong
+                        t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Descripción del departamento del vendedor:&nbsp;]]></strong>
+                    <strong style="font-size:0.7rem" t-field="o.partner_id.state_id.name" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <strong
+                        t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Descripción del distrito del vendedor:&nbsp;]]></strong>
+                    <strong style="font-size:0.7rem" t-field="o.partner_id.municipality_id.name" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <strong
+                        t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Descripción de la ciudad del Vendedor:&nbsp;]]></strong>
+                    <strong style="font-size:0.7rem" t-field="o.partner_id.city_id.name" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <strong
+                        t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Tipo de constancia:&nbsp;]]></strong>
+                    <strong style="font-size:0.7rem"><![CDATA[Constancia de no ser contribuyente]]></strong>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <strong
+                        t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Nº Constancia:&nbsp;]]></strong>
+                    <strong style="font-size:0.7rem" t-out="o.l10n_avatar_py_taxpayer_number" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <strong
+                        t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Nº de Control:&nbsp;]]></strong>
+                    <strong style="font-size:0.7rem" t-out="o.l10n_avatar_py_taxpayer_control" />
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="kude_datos_generales">
+        <t t-set="gCamCond" t-value="o._get_account_edi()._get_sifen_gCamCond(o)" />
+
+        <div class="col-6" style="padding-left:1rem;">
+
+            <div class="row">
+                <div class="col">
+                    <strong
+                        t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Fecha de Emisión:&nbsp;]]></strong>
+                    <strong style="font-size:0.7rem" t-field="o.l10n_avatar_py_date_post"
+                        t-options="{'widget':'datetime'}" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <strong
+                        t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Condición de venta:&nbsp;]]></strong>
+                    <t t-if="gCamCond.get('iCondOpe') == 1">
+                        <strong style="font-size:0.7rem"><![CDATA[CONTADO]]></strong>
                     </t>
                     <t t-else="">
-                        <strong style="font-size:0.7rem"><![CDATA[&nbsp;&nbsp;]]></strong>
+                        <strong style="font-size:0.7rem"><![CDATA[CREDITO]]></strong>
                     </t>
+                </div>
+            </div>
+            <t t-if="gCamCond.get('iCondOpe') == 2">
+                <t t-set="gPagCred" t-value="gCamCond.get('gPagCred')" />
+                <t t-set="dPlazoCre" t-value="gCamCond.get('dPlazoCre')" />
+                <div class="row">
+                    <div class="col">
+                        <strong
+                            t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Cuotas:&nbsp;]]></strong>
+                        <t t-if="gPagCred">
+                            <strong style="font-size:0.7rem" t-out="gPagCred.get('dCuotas')" />
+                        </t>
+                        <t t-else="">
+                            <strong style="font-size:0.7rem"><![CDATA[&nbsp;&nbsp;]]></strong>
+                        </t>
+                    </div>
+                    <div class="col">
+                        <strong
+                            t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Plazo del crédito:&nbsp;]]></strong>
+                        <strong t-if="dPlazoCre" style="font-size:0.7rem" t-out="dPlazoCre" />
+                    </div>
+                </div>
+            </t>
+            <div class="row">
+                <div class="col">
+                    <strong
+                        t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Moneda:&nbsp;]]></strong>
+                    <strong style="font-size:0.7rem" t-field="o.currency_id.name" />
                 </div>
                 <div class="col">
                     <strong
-                        t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Plazo del crédito:&nbsp;]]></strong>
-                    <strong t-if="dPlazoCre" style="font-size:0.7rem" t-out="dPlazoCre" />
+                        t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Tipo de cambio:&nbsp;]]></strong>
+                    <t t-if="o.currency_id != o.company_currency_id">
+                        <strong style="font-size:0.7rem"
+                            t-field="o.l10n_avatar_py_inverse_currency_rate" />
+                    </t>
                 </div>
             </div>
-        </t>
-        <div class="row">
-            <div class="col">
-                <strong t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Moneda:&nbsp;]]></strong>
-                <strong style="font-size:0.7rem" t-field="o.currency_id.name" />
-            </div>
-            <div class="col">
-                <strong t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Tipo de cambio:&nbsp;]]></strong>
-                <t t-if="o.currency_id != o.company_currency_id">
-                    <strong style="font-size:0.7rem"
-                        t-field="o.l10n_avatar_py_inverse_currency_rate" />
-                </t>
+            <div class="row">
+                <div class="col">
+                    <strong
+                        t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Tipo de cambio global o por item: GLOBAL]]></strong>
+                    <t t-set="gPagCred" t-value="gCamCond.get('gPagCred')" />
+                </div>
             </div>
         </div>
-        <div
-            class="row">
-            <div class="col">
-                <strong t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Tipo de cambio global o por item: GLOBAL]]></strong>
-                <t t-set="gPagCred" t-value="gCamCond.get('gPagCred')" />
-            </div>
-        </div>
-    </template>
 
-    <template id="kude_datos_generales_autofactura">
-        <div class="row">
-            <div class="col">
-                <strong t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Fecha de Emisión:&nbsp;]]></strong>
-                <strong style="font-size:0.7rem" t-field="o.l10n_avatar_py_date_post"
-                    t-options="{'widget':'datetime'}" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <strong t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Descripción de la naturaleza del vendedor:&nbsp;]]></strong>
-                <strong style="font-size:0.7rem"><![CDATA[No contribuyente]]></strong>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <strong t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Nº de documento del vendedor:&nbsp;]]></strong>
-                <strong style="font-size:0.7rem" t-field="o.partner_id.vat" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <strong t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Nombre y Apellido del vendedor:&nbsp;]]></strong>
-                <strong style="font-size:0.7rem" t-field="o.partner_id.name" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <strong t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Dirección del vendedor:&nbsp;]]></strong>
-                <strong style="font-size:0.7rem" t-field="o.partner_id.street" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <strong t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Numero de casa del Vendedor:&nbsp;]]></strong>
-                <strong style="font-size:0.7rem" t-field="o.partner_id.external_number" />
-            </div>
-        </div>
-    </template>
+        <div class="col-6" style="padding-left:1rem;">
 
-    <template id="kude_datos_generales2">
-        <div class="col-6">
             <div class="row">
                 <div class="col">
                     <strong
                         t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[RUC/Documento de Identidad:&nbsp;]]></strong>
                     <strong style="font-size:0.7rem" t-field="o.partner_id.vat" />
                 </div>
-
             </div>
             <div class="row">
                 <div class="col">
@@ -443,116 +582,4 @@
         </div>
     </template>
 
-    <template id="kude_datos_generales_autofactura2">
-        <div class="row">
-            <div class="col">
-                <strong t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Descripción del departamento del vendedor:&nbsp;]]></strong>
-                <strong style="font-size:0.7rem" t-field="o.partner_id.state_id.name" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <strong t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Descripción del distrito del vendedor:&nbsp;]]></strong>
-                <strong style="font-size:0.7rem" t-field="o.partner_id.municipality_id.name" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <strong t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Descripción de la ciudad del Vendedor:&nbsp;]]></strong>
-                <strong style="font-size:0.7rem" t-field="o.partner_id.city_id.name" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <strong t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Tipo de constancia:&nbsp;]]></strong>
-                <strong style="font-size:0.7rem"><![CDATA[Constancia de no ser contribuyente]]></strong>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <strong t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Nº Constancia:&nbsp;]]></strong>
-                <strong style="font-size:0.7rem" t-out="o.l10n_avatar_py_taxpayer_number" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <strong t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Nº de Control:&nbsp;]]></strong>
-                <strong style="font-size:0.7rem" t-out="o.l10n_avatar_py_taxpayer_control" />
-            </div>
-        </div>
-        <!--
-        <div class="row">
-            <div class="col">
-                <strong t-att-style="'font-size:0.7rem;color: %s;' % o.company_id.secondary_color"><![CDATA[Nº de
-        Comprobante de retención:&nbsp;]]></strong>
-                <strong style="font-size:0.7rem"><![CDATA[PENDIENTE]]></strong>
-            </div>
-        </div>
-        -->
-    </template>
-
-    <template id="custom_header">
-        <div class="mb-3">
-            <!-- Linea con el logo y los datos del Timbrado-->
-            <div class="row">
-                <div name="left-upper-side" class="col-3 text-center">
-                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"
-                        style="max-height: 120px;" alt="Logo" />
-                </div>
-                <div name="center-upper" class="col-5 text-center"
-                    t-att-style="'color: %s;' % o.company_id.primary_color">
-                    <!--<span
-                    style="display: inline-block; text-align: center; line-height: 8px;"> </span>-->
-                    <span t-field="o.company_id.partner_id.name"
-                        t-att-style="'font-size:1.2rem;color: %s;' % o.company_id.primary_color" />
-                    <br />
-                    <t
-                        t-out="' - '.join([item for item in [
-                            ', '.join([item for item in [header_address.street, header_address.street2] if item]),
-                            header_address.city,
-                            header_address.state_id and header_address.state_id.name,
-                            header_address.zip,
-                            header_address.country_id and header_address.country_id.name] if item])" />
-                    <span t-if="header_address.phone"> - </span>
-                    <span t-if="header_address.phone" style="white-space: nowrap;"
-                        t-out="'Tel: ' + header_address.phone" />
-                    <br/>
-                    <t t-set="actecos" t-value="o._get_account_edi()._get_sifen_gActEco(o.company_id)" />
-                    <t t-foreach="actecos" t-as="acteco">
-                        <span><![CDATA[-&nbsp;]]></span>
-                        <span t-out="acteco.get('dDesActEco')"/>
-                        <span><![CDATA[&nbsp;]]></span>
-                    </t>
-
-                </div>
-                <div name="right-upper-side" class="col-4" style="padding-left: 0px;">
-                    <span t-att-style="'color: %s;' % o.company_id.secondary_color"><![CDATA[RUC:&nbsp;]]></span>
-                    <span t-out="ruc_number" />
-                    <br />
-                    <span t-att-style="'color: %s;' % o.company_id.secondary_color"><![CDATA[Timbrado N°:&nbsp;]]></span>
-                    <span t-out="ruc_auth" />
-                    <t t-if="ruc_serie">
-                        <span t-att-style="'color: %s;' % o.company_id.secondary_color"><![CDATA[&nbsp;Serie:&nbsp;]]></span>
-                        <span t-out="ruc_serie" />
-                    </t>
-                    <br />
-                    <span t-att-style="'color: %s;' % o.company_id.secondary_color"><![CDATA[Fecha inicio de vigencia:&nbsp;]]></span>
-                    <span t-out="ruc_auth_startdate" t-options="{'widget':'date'}" />
-                    <br />
-                    <t t-if="ruc_auth_enddate">
-                        <span t-att-style="'color: %s;' % o.company_id.secondary_color"><![CDATA[Fecha fin de vigencia:&nbsp;]]></span>
-                        <span t-out="ruc_auth_enddate" t-options="{'widget':'date'}" />
-                    </t>
-                    <br />
-                    <h5 class="text-center" t-att-style="'color: %s;' % o.company_id.primary_color">
-                        <strong>
-                            <span t-att-style="'font-size:1rem'" t-out="report_name" />
-                            <br />
-                            <span t-out="report_number" />
-                        </strong>
-                    </h5>
-                </div>
-            </div>
-        </div>
-    </template>
 </odoo>

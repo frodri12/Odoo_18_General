@@ -50,7 +50,7 @@
 
                     <group>
                         <group string="Lote">
-                            <field name="l10n_avatar_py_edi_lote_ids" />
+                            <field name="l10n_avatar_py_edi_lote_ids" options="{'no_create':True, 'no_quick_create': True}"/>
                         </group>
                         <group>
                         </group>
@@ -94,4 +94,21 @@
             </xpath>
         </field>
     </record>
+
+        <record id="view_account_invoice_filter_inherit" model="ir.ui.view">
+            <field name="name">account.move.select</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter" />
+            <field name="arch" type="xml">
+
+                    <filter name="invoice_date" position="before">
+                        <filter string="Pendiente de Timbrar" name="to_timbrar" domain="[('l10n_avatar_py_edi_state', '=', 'P'), ('state', '!=', 'draft')]"/>
+                        <filter string="Pendiente de la consulta" name="to_edi_check" domain="[('l10n_avatar_py_edi_state', '=', 'S'), ('state', '!=', 'draft')]"/>
+                        <filter string="Rechazados" name="edi_error" domain="[('l10n_avatar_py_edi_state', '=', 'R')]"/>
+                        <filter string="Aprobadas" name="edi_ok" domain="['|',('l10n_avatar_py_edi_state', '=', 'A'), ('l10n_avatar_py_edi_state', '=', 'O')]"/>
+                        <separator/>
+                    </filter>
+            </field>
+        </record>
+
 </odoo>

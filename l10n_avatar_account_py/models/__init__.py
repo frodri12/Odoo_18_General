@@ -20,6 +20,7 @@ from . import res_config_settings
 from . import l10n_avatar_py_partner_tax
 from . import l10n_avatar_py_earnings_scale
 from . import account_payment
+from . import account_move_send
 
 from . import template_py_base
 from . import account_chart_template

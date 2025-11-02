@@ -41,6 +41,8 @@ que se requieren para llevar acabo la facturación electrónica en Paraguay
         'data/l10n_avatar_py_economic_activity_data.xml',
         'data/uom_data.xml',
         'data/l10n_latam_document_type_data.xml',
+        'data/mail_template_data.xml',
+        'data/ir_cron_data.xml',
 
         'views/res_country_views.xml',
         'views/res_partner_views.xml',
@@ -58,6 +60,8 @@ que se requieren para llevar acabo la facturación electrónica en Paraguay
         'views/res_config_settings_views.xml',
         'views/account_payment_view.xml',
         'views/report_invoice.xml',
+        'views/l10n_avatar_py_edi_lote_views.xml',
+        'views/l10n_avatar_py_edi_lote_logs_views.xml',
 
         'views/menuitem.xml',
 
@@ -71,5 +75,16 @@ que se requieren para llevar acabo la facturación electrónica en Paraguay
     'license': 'LGPL-3',
     'pre_init_hook': '_pre_init_hook',
     'post_init_hook': '_post_init_hook',
+    'assets': {
+        'web._assets_core': [
+            ('replace', 'web/static/src/core/notifications/notification.xml', 'l10n_avatar_account_py/static/src/core/notifications/notification.xml'),
+            ('replace', 'web/static/src/core/notifications/notification.scss', 'l10n_avatar_account_py/static/src/core/notifications/notification.scss'),
+            ('replace', 'web/static/src/core/notifications/notification.variables.scss', 'l10n_avatar_account_py/static/src/core/notifications/notification.variables.scss'),
+        ],
+    },
+    "cloc_exclude": [
+        "data/*.xml", # exclude all XML files in a specific folder
+        "**/*.scss", # exclude all scss file from the module
+    ],
 }
 

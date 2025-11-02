@@ -1,0 +1,61 @@
+<?xml version="1.0" ?>
+<odoo>
+    <record id="avatar_email_template_edi_invoice" model="mail.template">
+        <field name="name">Invoice: Sending</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="email_from">{{ (object.invoice_user_id.email_formatted or object.company_id.email_formatted or user.email_formatted) }}</field>
+        <field name="partner_to">{{ object.partner_id.id }}</field>
+        <field name="subject">{{ object.company_id.name }} Invoice (Ref {{ object.name or 'n/a' }})</field>
+        <field name="description">Sent to customers with their invoices in attachment</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+        Apreciable
+        <t t-if="object.partner_id.parent_id">
+            <t t-out="object.partner_id.name or ''">Brandon Freeman</t> (<t t-out="object.partner_id.parent_id.name or ''">Azure Interior</t>),
+        </t>
+        <t t-else="">
+            <t t-out="object.partner_id.name or ''">Brandon Freeman</t>,
+        </t>
+        <br /><br />
+        Esta es su
+        <t t-if="object.name">
+            factura <span style="font-weight:bold;" t-out="object.name or ''">INV/2021/05/0005</span>
+        </t>
+        <t t-else="">
+            factura
+        </t>
+        <t t-if="object.invoice_origin">
+            (con referencia: <t t-out="object.invoice_origin or ''">SUB003</t>)
+        </t>
+        por un importe total de <span style="font-weight:bold;" t-out="format_amount(object.amount_total, object.currency_id) or ''">$ 143,750.00</span>
+        de <t t-out="object.company_id.name or ''">SuEmpresa</t>.
+        <t t-if="object.payment_state in ('paid', 'in_payment')">
+            Esta factura ya está pagada.
+        </t>
+        <t t-else="">
+            Realice su pago lo más pronto posible.
+            <t t-if="object.payment_reference">
+                <br /><br />
+               Utilice la siguiente referencia para realizar su pago: <strong t-out="object.payment_reference or ''">INV/2021/05/0005</strong>
+                <t t-if="object.partner_bank_id">
+                    en la cuenta <strong t-out="object.partner_bank_id.acc_number"/>
+                </t>
+                .
+            </t>
+        </t>
+        <t t-if="hasattr(object, 'timesheet_count') and object.timesheet_count">
+            <br /><br />
+            Recuerde que puede consultar sus hojas de horas <a t-att-href="'/my/timesheets?search_in=invoice&amp;search=%s' % object.name">from the portal.</a>
+        </t>
+        <br /><br />
+        No dude en contactarnos si tiene alguna pregunta.
+        <t t-if="not is_html_empty(object.invoice_user_id.signature)">
+            <br /><br />
+            <t t-out="object.invoice_user_id.signature or ''">--<br/>Mitchell Admin</t>
+        </t>
+    </p>
+</div>
+        </field>
+    </record>
+</odoo>

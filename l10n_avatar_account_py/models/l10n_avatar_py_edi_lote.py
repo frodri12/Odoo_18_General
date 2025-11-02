@@ -15,8 +15,8 @@ class PyEdiLote(models.Model):
     name = fields.Char( related="move_id.l10n_latam_document_number", readonly=True)
     lote_number = fields.Char(string="Numero de lote")
 
-    log_id = fields.One2many(
-        'l10n_avatar_py_edi_lote_logs', 'lote_id', string="Documento",
+    log_ids = fields.One2many(
+        'l10n_avatar_py_edi_lote_logs', 'lote_id', string="Logs",
         copy=False
     )
 
@@ -25,21 +25,29 @@ class PyEdiLote(models.Model):
 
     request_date = fields.Datetime(readonly=True)
     response_date = fields.Datetime(readonly=True)
-    resenvilotede_dcodres = fields.Char(readonly=True)
-    resenvilotede_dmsgres = fields.Char(readonly=True)
-    resenvilotede_dprotconslote = fields.Char(readonly=True)
-    resenvilotede_dtpoproces = fields.Char(readonly=True)
-    resenvilotede_res_id = fields.Integer(readonly=True)
-    resenvilotede_res_qr = fields.Char(readonly=True)
-    resenvilotede_res_cdc = fields.Char(readonly=True)
+    cancel_date = fields.Datetime(readonly=True)
 
-    resenviconslotede_dcodreslot = fields.Char(readonly=True)
-    resenviconslotede_dmsgreslot = fields.Char(readonly=True)
-    resenviconslotede_id = fields.Char(readonly=True)
-    resenviconslotede_destrec = fields.Char(readonly=True)
-    resenviconslotede_dprotaut = fields.Char(readonly=True)
-    resenviconslotede_dcodres = fields.Char(readonly=True)
-    resenviconslotede_dmsgres = fields.Char(readonly=True)
+    envilote_dcodres = fields.Char(readonly=True)
+    envilote_dmsgres = fields.Char(readonly=True)
+    envilote_dprotconslote = fields.Char(readonly=True)
+    envilote_dtpoproces = fields.Char(readonly=True)
+    envilote_res_id = fields.Integer(readonly=True)
+    envilote_res_qr = fields.Char(readonly=True)
+    envilote_res_cdc = fields.Char(readonly=True)
+
+    enviconslote_dcodreslot = fields.Char(readonly=True)
+    enviconslote_dmsgreslot = fields.Char(readonly=True)
+    enviconslote_id = fields.Char(readonly=True)
+    enviconslote_destrec = fields.Char(readonly=True)
+    enviconslote_dprotaut = fields.Char(readonly=True)
+    enviconslote_dcodres = fields.Char(readonly=True)
+    enviconslote_dmsgres = fields.Char(readonly=True)
+
+    cancel_destres = fields.Char(readonly=True)
+    #cancel_dprotaut = fields.Char(readonly=True)
+    #cancel_idcancel_id = fields.Char(readonly=True)
+    cancel_dcodres = fields.Char(readonly=True)
+    cancel_dmsgres = fields.Char(readonly=True)
     
 
 

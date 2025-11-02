@@ -16,24 +16,6 @@ XMLGEN_MOVE_TYPES = {
     'in_invoice': '4', 'in_refund': '0', 'out_receipt': '7', 'in_receipt': '0', 
 }
 
-"""
-DESC_TIDE_P = {
-    '1': 'Factura', '2': 'Factura de exportación',
-    '3': 'Factura de importación', '4': 'Autofactura',
-    '5': 'Nota de crédito', '6': 'Nota de débito',
-    '7': 'Nota de remisión', '8': 'Comprobante de retención',
-}
-"""
-
-"""
-DESC_TIDE_E = {
-    '1': 'Factura electrónica', '2': 'Factura electrónica de exportación',
-    '3': 'Factura electrónica de importación', '4': 'Autofactura electrónica',
-    '5': 'Nota de crédito electrónica', '6': 'Nota de débito electrónica',
-    '7': 'Nota de remisión electrónica', '8': 'Comprobante de retención electrónico',
-}
-"""
-
 def date2time( date):
     time = datetime.now().strftime("%H%M%S")
     if date:
@@ -60,31 +42,31 @@ class PyAccountMove(models.Model):
         readonly=True
     )
 
-    #
+    # EDI
     l10n_avatar_py_itipemi = fields.Selection(
         [
             ('1','Normal'),('2','Contingencia')
-        ], string="Tipo de emisión", default='1'
+        ], string="Tipo de emisión", default='1', copy=False
     )
-    l10n_avatar_py_dcodseg = fields.Char(string="Código de seguridad", readonly=True)
-    l10n_avatar_py_dinfoemi = fields.Text(string="Información de interés del emisor respecto al DE")
-    l10n_avatar_py_dinfofisc = fields.Text(string="Información de interés del Fisco respecto al DE")
+    l10n_avatar_py_dcodseg = fields.Char(string="Código de seguridad", readonly=True, copy=False)
+    l10n_avatar_py_dinfoemi = fields.Text(string="Información de interés del emisor respecto al DE", copy=False)
+    l10n_avatar_py_dinfofisc = fields.Text(string="Información de interés del Fisco respecto al DE", copy=True)
     l10n_avatar_py_itiptra = fields.Selection([
         ('1','Venta de mercadería'),('2','Prestación de servicios'),('3','Mixto (Venta de mercadería y servicios)'),
         ('4','Venta de activo fijo'),('5','Venta de divisas'),('6','Compra de divisas'),
         ('7','Promoción o entrega de muestras'),('8','Donación'),('9','Anticipo'),
         ('10','Compra de productos'),('11','Compra de servicios'),('12','Venta de crédito fiscal'),
         ('13','Muestras médicas (Art. 3 RG 24/2014)')
-    ], string="Tipo de Transacción")
+    ], string="Tipo de Transacción", copy=False, default="1")
     l10n_avatar_py_itimp = fields.Selection([
         ('1','IVA'),('2','ISC'),('3','Ninguno'),('4','IVA - Renta'),
-    ], string="Tipo de impuesto afectado", default="1")
+    ], string="Tipo de impuesto afectado", default="1", copy=False)
     l10n_avatar_py_itiope = fields.Selection([
         ('1','B2B'),('2','B2C'),('3','B2G'),('4','B2G')
-    ], string="Tipo de operación", compute='_compute_py_itiope')
+    ], string="Tipo de operación", default='1', copy=False, store=True)
     l10n_avatar_py_icondope = fields.Selection([
         ('1','Contado'), ('2','Crédito'),
-    ], string="Condición de la operación", default="1")
+    ], string="Condición de la operación", default="1", copy=False)
 
     # Constancia de No Contribuyente
     l10n_avatar_py_taxpayer_number = fields.Char(
@@ -105,10 +87,22 @@ class PyAccountMove(models.Model):
         ('N', 'No aplica'), ('P', 'Pendiente de envio'),
         ('S', 'Enviado'), ('A', 'Aprobado'), ('O', 'Aprobado con observacion'),
         ('R', 'Rechazado'), ('E', 'Error')
-        ], string="Estado del envio a la SET", readonly=True
+        ], string="Estado del envio a la SET", readonly=True, copy=False
     )
     l10n_avatar_py_edi_lote_ids = fields.One2many(
         'l10n_avatar_py_edi_lote', 'move_id', string="Numero de lote", copy=False
+    )
+
+    invoice_xml_report_id = fields.Many2one(
+        comodel_name='ir.attachment',
+        string="XML Attachment",
+        compute=lambda self: self._compute_linked_attachment_id('invoice_xml_report_id', 'invoice_xml_report_file'),
+        depends=['invoice_xml_report_file']
+    )
+    invoice_xml_report_file = fields.Binary(
+        attachment=True,
+        string="XML File",
+        copy=False,
     )
 
     @api.onchange('partner_id')
@@ -126,9 +120,6 @@ class PyAccountMove(models.Model):
     def _compute_py_itiope(self):
         if not self.l10n_avatar_py_itiope:
             self.l10n_avatar_py_itiope = '1' if self.partner_id.is_company else '2'
-
-
-
 
     def _get_l10n_latam_documents_domain(self):
         self.ensure_one()
@@ -210,18 +201,27 @@ class PyAccountMove(models.Model):
                 if len(vat_taxes) != 1:
                     raise UserError("Debería haber un solo impuesto del grupo IVA por línea")
 
+    def _check_pre_post( self):
+        # Numero de telefono del partner
+        if self.partner_id.phone and (len(self.partner_id.phone) < 6 or len(self.partner_id.phone) > 15):
+            raise ValidationError( _("El numero de telefono (%s) del cliente %s debe tener una longitud de 6 a 15 caracteres", self.partner_id.phone, self.partner_id.name))
+        if not self.l10n_avatar_py_itiptra:
+            raise ValidationError("Falta definir el Tipo de Transaccion")
+        if not self.partner_id.external_number or self.partner_id.external_number == 0:
+            self.partner_id.external_number = 1
+
     # Confirmar
     def _post(self, soft=True):
         py_invoices = self.filtered(lambda x: x.company_id.account_fiscal_country_id.code == "PY" and x.l10n_latam_use_documents)
         py_invoices._check_py_invoice_taxes()
+        if py_invoices.journal_id.l10n_avatar_py_poe_system in ('FAE','AFE'):
+            py_invoices._check_pre_post()
+
         posted = super()._post(soft=soft)
         ## Logueo para ver que datos tenemos
         #_logger.error( "\n\n" + json.dumps(str(py_invoices.needed_terms), indent=2) + "\n\n")
         #_logger.error(py_invoices.needed_terms)
-
         #####_logger.error( "\n\n" + json.dumps(self._get_sifen_gCamCond(), indent=2) + "\n\n" )
-
-        
         if not posted.l10n_avatar_py_date_post:
             if posted.invoice_date:
                 posted.l10n_avatar_py_date_post = date2time( posted.invoice_date)
@@ -235,16 +235,17 @@ class PyAccountMove(models.Model):
         return posted
         
     def button_draft(self):
-        super().button_draft()
         if self.l10n_avatar_py_edi_state  in ( 'S','A','O'):
             raise UserError("No se puede pasar a borrador un documento aprobado o en proceso de aprobacion")
+        super().button_draft()
 
     def button_cancel(self):
         super().button_cancel()
         if self.journal_id.l10n_avatar_py_poe_system in ('FAE', 'AFE'):
-            if self.l10n_avatar_py_edi_state != 'E':
+            if self.l10n_avatar_py_edi_state not in  ('E','R'):
                 raise UserError(_("Only draft journal entries can be cancelled."))
-            # Falta enviar el evento de cancelacion
+            self.action_py_edi_cancel()
+            self.l10n_avatar_py_edi_state = 'N'
 
     # Retenciones
     @api.depends('line_ids')
@@ -252,6 +253,7 @@ class PyAccountMove(models.Model):
         for move in self:
             move.l10n_avatar_py_withholding_ids = move.line_ids.filtered(lambda l: l.tax_line_id.l10n_avatar_py_withholding_payment_type)        
 
+    # Timbrado
     def _onchange_py_authorization_code_from_company( self):
         self.l10n_avatar_py_authorization_code = self.company_id.partner_id.l10n_avatar_py_authorization_code
         self.l10n_avatar_py_authorization_startdate = self.company_id.partner_id.l10n_avatar_py_authorization_startdate
@@ -267,7 +269,7 @@ class PyAccountMove(models.Model):
         self.l10n_avatar_py_authorization_startdate = self.journal_id.l10n_avatar_py_authorization_startdate
         self.l10n_avatar_py_authorization_enddate = self.journal_id.l10n_avatar_py_authorization_enddate
 
-   # Timbrado
+    # Timbrado
     @api.onchange('partner_id','journal_id','l10n_latam_document_type_id')
     def _onchange_py_authorization_code( self):
 
@@ -378,89 +380,7 @@ class PyAccountMove(models.Model):
     def _get_account_edi(self):
         return self.env['l10n_avatar_py_account_edi']
 
-    """
-    ###############
-    def _get_xmlgen_ActividadesEconomicas(self):
-        act = []
-        for rec in self.company_id.l10n_avatar_py_economic_activity_ids:
-            v = {}
-            v.update( { 'codigo': rec.code}) #D131
-            v.update( { 'descripcion': rec.name}) #D132
-            act.append( v)
-        if len(act) == 0:
-            raise ValidationError("No se definieron las actividades económicas")
-        return act
-    """
-
-    """
-    ###########################################
-    def _get_xmlgen_json(self):
-        params = { }
-        params.update( { "version": 150 })
-        params.update( { "ruc": self.company_id.partner_id.vat }) #D101
-        if self.company_id.l10n_avatar_py_is_edi_test:
-            params.update( { "nombreFantasia": self.company_id.partner_id.name }) #D106
-            params.update( { "razonSocial": "DE generado en ambiente de prueba - sin valor comercial ni fiscal" })
-        else:
-            params.update( { "razonSocial": self.company_id.partner_id.name }) #D105
-        params.update( { "actividadesEconomicas": self._get_xmlgen_ActividadesEconomicas() })
-        if not self.l10n_avatar_py_authorization_code or not self.l10n_avatar_py_authorization_startdate:
-            raise ValidationError("No se especificaron los valores del Timbrado")
-        params.update( { "timbradoNumero": self.l10n_avatar_py_authorization_code })
-        params.update( { "timbradoFecha": self.l10n_avatar_py_authorization_startdate }) #D103
-        params.update( { "tipoContribuyente": 2 if self.company_id.partner_id.is_company else 1 })
-        tipoRegimen = self.company_id.partner_id.l10n_avatar_py_taxpayer_type
-        if tipoRegimen and int(tipoRegimen) > 0:
-            params.update( { "tipoRegimen": int(tipoRegimen) }) #D104
-        establecimientos = []
-        establecimientos.append( self.journal_id._get_xmlgen_Establecimiento())
-        params.update( { "establecimientos": establecimientos})
-        data = {}
-        tipoDocumento = int(XMLGEN_MOVE_TYPES[self.move_type])
-        data.update( { 'tipoDocumento': tipoDocumento}) #C002
-        options = {}
-        all_json = {}
-        return all_json
-
-    """
     ############################################################
-
-    """
-
-    # E4 Campos que componen la Autofactura Electrónica AFE (E300-E399)
-    def _get_sifen_gCamAE(self):
-        gCamAE = {}
-        if self.partner_id.country_id.code == 'PY':
-            gCamAE.update({ 'iNatVen': 1})
-            gCamAE.update({ 'dDesNatVen': 'No contribuyente'})
-        else:
-            gCamAE.update({ 'iNatVen': 2})
-            gCamAE.update({ 'dDesNatVen': 'Extranjero'})
-        gCamAE.update({ 'iTipIDVen': self.partner_id.l10n_latam_identification_type_id.l10n_avatar_py_code})
-        gCamAE.update({ 'dDTipIDVen': self.partner_id.l10n_latam_identification_type_id.name})
-        gCamAE.update({ 'dNumIDVen': self.partner_id.vat})
-        gCamAE.update({ 'dNomVen': self.partner_id.name})
-        partner = self.partner_id
-        if self.partner_id.country_id.code != 'PY':
-            partner = self.journal_id.l10n_avatar_py_address_id
-        gCamAE.update({ 'dDirVen': partner.street})
-        gCamAE.update({ 'dNumCasVen': partner.external_number if partner.external_number else 0})
-        gCamAE.update({ 'cDepVen': partner.state_id.code})
-        gCamAE.update({ 'dDesDepVen': partner.state_id.name})
-        gCamAE.update({ 'cDisVen': partner.municipality_id.code})
-        gCamAE.update({ 'dDesDisVen': partner.municipality_id.name})
-        gCamAE.update({ 'cCiuVen': partner.city_id.code})
-        gCamAE.update({ 'dDesCiuVen': partner.city_id.name})
-        #
-        gCamAE.update({ 'dDirProv': self.journal_id.l10n_avatar_py_address_id.street})
-        gCamAE.update({ 'cDepProv': self.journal_id.l10n_avatar_py_address_id.state_id.code})
-        gCamAE.update({ 'dDesDepProv': self.journal_id.l10n_avatar_py_address_id.state_id.name})
-        gCamAE.update({ 'cDisProv': self.journal_id.l10n_avatar_py_address_id.municipality_id.code})
-        gCamAE.update({ 'dDesDisProv': self.journal_id.l10n_avatar_py_address_id.municipality_id.name})
-        gCamAE.update({ 'cCiuProv': self.journal_id.l10n_avatar_py_address_id.city_id.code})
-        gCamAE.update({ 'dDesCiuProv': self.journal_id.l10n_avatar_py_address_id.city_id.name})
-        return gCamAE
-    """
 
     def _compute_edi_lote(self):
         if not self.l10n_avatar_py_edi_lote_ids:
@@ -469,42 +389,210 @@ class PyAccountMove(models.Model):
             })
         self.l10n_avatar_py_edi_lote_ids = self.env['l10n_avatar_py_edi_lote'].search([('move_id', '=',self.id)])
 
-    def action_py_edi_timbrado(self):
+    def action_py_edi_timbrado(self, from_cron=False):
         edi = self._get_account_edi()
         # Generar el json
         all_json = edi._get_sifen_xmlgen( move=self)
         self.l10n_avatar_py_edi_lote_ids.request_json = all_json
+        self.env['l10n_avatar_py_edi_lote_logs'].create({
+            'lote_id': self.l10n_avatar_py_edi_lote_ids.id,
+            'move_date': datetime.now(),
+            'move_name': 'rEnvioLote',
+            'json_file': all_json,
+        })
         # Enviar el lote
         edi._process_sifen_ResEnviLoteDe(move=self, data=all_json)
-        if self.l10n_avatar_py_edi_lote_ids.resenvilotede_dcodres == '0300':
+        if self.l10n_avatar_py_edi_lote_ids.envilote_dcodres == '0300':
             # Lote generado con exito
-            self.message_post(body="Lote %s generado con exito" % self.l10n_avatar_py_edi_lote_ids.resenvilotede_dprotconslote)
+            self.message_post(body="Lote %s generado con exito" % self.l10n_avatar_py_edi_lote_ids.lote_number)
             self.l10n_avatar_py_edi_state = 'S'
+            edi._generate_pdf_documents(self)
+            edi._generate_xml_documents(self)
+            self.message_post(body=_("%s [%s]", self.l10n_avatar_py_edi_lote_ids.envilote_dmsgres, self.l10n_avatar_py_edi_lote_ids.lote_number))
+            if from_cron:
+                return
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'message': _("%s [%s]", self.l10n_avatar_py_edi_lote_ids.envilote_dmsgres, self.l10n_avatar_py_edi_lote_ids.lote_number),
+                    'type': 'success',
+                    'sticky': False,
+                    'next': {
+                        'type': 'ir.actions.client',
+                        'tag': 'reload',
+                    },
+                }
+            }
+        elif self.l10n_avatar_py_edi_lote_ids.envilote_dcodres == '0301':
+            if from_cron:
+                return
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'message': _("%s", self.l10n_avatar_py_edi_lote_ids.envilote_dmsgres),
+                    'type': 'warning',
+                    'sticky': False,
+                    'next': {
+                        'type': 'ir.actions.client',
+                        'tag': 'reload',
+                    },
+                }
+            }
         else:
             # Error en la generacion del lote
-            self.message_post(body="Error en la generacion del lote [%s]" % self.l10n_avatar_py_edi_lote_ids.resenvilotede_dcodres + ' - ' + self.l10n_avatar_py_edi_lote_ids.resenvilotede_dmsgres)
-        return
+            self.message_post(body="Error en la generacion del lote [%s]" % self.l10n_avatar_py_edi_lote_ids.envilote_dcodres + ' - ' + self.l10n_avatar_py_edi_lote_ids.envilote_dmsgres)
+            if from_cron:
+                return
+        return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'message': _("%s", self.l10n_avatar_py_edi_lote_ids.enviconslote_dmsgres),
+                    'type': 'info',
+                    'sticky': False,
+                    'next': {
+                        'type': 'ir.actions.client',
+                        'tag': 'reload',
+                    },
+                }
+            }
 
-    def action_py_edi_read_lote(self):
+    def action_py_edi_read_lote(self, from_cron=False):
         edi = self._get_account_edi()
         all_json = {}
         all_json.update({ 'empresa': self.company_id.partner_id.vat.split('-')[0]})
         all_json.update({ 'servicio': 'lote'})
         all_json.update({ 'lote': self.l10n_avatar_py_edi_lote_ids.lote_number})
+        #_logger.error( "\n\n" + json.dumps(all_json, indent=2) + "\n\n" )
         edi._get_sifen_ResEnviConsLoteDe( all_json, self.l10n_avatar_py_edi_lote_ids, self.company_id.l10n_avatar_py_is_edi_test)
-        if self.l10n_avatar_py_edi_lote_ids.resenviconslotede_dcodreslot == '0362':
-            # Lote procesado
-            resenviconslotede_destrec = self.l10n_avatar_py_edi_lote_ids.resenviconslotede_destrec
-            if resenviconslotede_destrec != None and 'bserv' in resenviconslotede_destrec:
-                self.l10n_avatar_py_edi_state = 'O'
-            elif resenviconslotede_destrec != None and resenviconslotede_destrec[:1] == 'R':
-                self.l10n_avatar_py_edi_state = 'R'
-            elif resenviconslotede_destrec != None and resenviconslotede_destrec[:1] == 'A':
-                self.l10n_avatar_py_edi_state = 'A'
-        elif self.l10n_avatar_py_edi_lote_ids.resenviconslotede_dcodreslot == '0361':
-            # Todavia no termino.  No hacer nada
-            a = 1
-        else:
-            # Algo parece que salio mal. Rechazar
+        dcodreslot = self.l10n_avatar_py_edi_lote_ids.enviconslote_dcodreslot
+        if dcodreslot in ('0320','0340','0360','0363'):
             self.l10n_avatar_py_edi_state = 'R'
-        return
+            if from_cron:
+                return
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'message': _("%s", self.l10n_avatar_py_edi_lote_ids.enviconslote_dmsgreslot),
+                    'type': 'warning',
+                    'sticky': True,
+                    'next': {
+                        'type': 'ir.actions.client',
+                        'tag': 'reload',
+                    },
+                }
+            }
+        elif dcodreslot == '0361':
+            if from_cron:
+                return
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'message': _("%s", self.l10n_avatar_py_edi_lote_ids.enviconslote_dmsgreslot),
+                    'type': 'info',
+                    'sticky': False,
+                    'next': {
+                        'type': 'ir.actions.client',
+                        'tag': 'reload',
+                    },
+                }
+            }
+        elif dcodreslot == '0362':
+            destrec = self.l10n_avatar_py_edi_lote_ids.enviconslote_destrec
+            if destrec != None and 'bserv' in destrec:
+                self.l10n_avatar_py_edi_state = 'O'
+                if from_cron:
+                    return
+                return {
+                    'type': 'ir.actions.client',
+                    'tag': 'display_notification',
+                    'params': {
+                        'message': _("%s", self.l10n_avatar_py_edi_lote_ids.enviconslote_dmsgres),
+                        'type': 'info',
+                        'sticky': False,
+                        'next': {
+                            'type': 'ir.actions.client',
+                            'tag': 'reload',
+                        },
+                    }
+                }
+            elif destrec != None and destrec[:1] == 'R':
+                self.l10n_avatar_py_edi_state = 'R'
+                super().button_draft()
+                if from_cron:
+                    return
+                return {
+                    'type': 'ir.actions.client',
+                    'tag': 'display_notification',
+                    'params': {
+                        'message': _("%s", self.l10n_avatar_py_edi_lote_ids.enviconslote_dmsgres),
+                        'type': 'warning',
+                        'sticky': True,
+                        'next': {
+                            'type': 'ir.actions.client',
+                            'tag': 'reload',
+                        },
+                    }
+                }
+            elif destrec != None and destrec[:1] == 'A':
+                self.l10n_avatar_py_edi_state = 'A'
+                if from_cron:
+                    return
+                return {
+                    'type': 'ir.actions.client',
+                    'tag': 'display_notification',
+                    'params': {
+                        'message': _("%s", self.l10n_avatar_py_edi_lote_ids.enviconslote_dmsgres),
+                        'type': 'success',
+                        'sticky': False,
+                        'next': {
+                            'type': 'ir.actions.client',
+                            'tag': 'reload',
+                        },
+                    }
+                }
+
+    def action_py_edi_cancel(self):
+        edi = self._get_account_edi()
+        all_json = edi._get_sifen_xmlgen_cancel( self)
+        _logger.error( "\n\n" + json.dumps(all_json, indent=2) + "\n\n" )
+        edi._process_sifen_RetEnviEventoCancel(self, all_json)
+
+    def action_print_pdf(self):
+        if self.journal_id.l10n_avatar_py_poe_system in ('FAE','AFE'):
+            return self.action_invoice_download_pdf()
+        return super().action_print_pdf()
+
+    """
+    def action_print_pdf( self):
+        if self.journal_id.l10n_avatar_py_poe_system in ('FAE','AFE'):
+            edi = self._get_account_edi()
+            edi._get_documents( self)
+        return super().action_print_pdf()
+
+    def action_invoice_sent( self):
+        if self.journal_id.l10n_avatar_py_poe_system in ('FAE','AFE'):
+            edi = self._get_account_edi()
+            
+            template = self.env.ref("l10n_avatar_account_py.avatar_email_template_edi_invoice")
+            email_values = {
+                'email_from': self.env.user.email,
+                #'partner_to': self.partner_id.id,
+                'attachment_ids': edi._get_documents( self),
+            }
+            template.send_mail(self.id, force_send=True, email_values=email_values)
+        else:
+            return super().action_invoice_sent()
+    """
+  
+    def _get_fields_to_detach(self):
+        # EXTENDS account
+        fields_list = super()._get_fields_to_detach()
+        if self.journal_id.l10n_avatar_py_poe_system in ('FAE','AFE'):
+            fields_list.append('invoice_xml_report_file')
+        return fields_list
+

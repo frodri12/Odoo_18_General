@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 from odoo.addons.account.models.account_move import AccountMove
 from odoo.addons.account.models.account_move_line import AccountMoveLine
@@ -32,6 +32,12 @@ DESC_TIDE_P = {
     '5': 'Nota de crédito', '6': 'Nota de débito',
     '7': 'Nota de remisión', '8': 'Comprobante de retención',
 }
+
+def _time_tz2utc( date):
+    fecha = dt.datetime.strptime(date[:19], "%Y-%m-%dT%H:%M:%S")
+    TZ_HS = int(date[19:22])
+    TZ_MM = int(date[23:])
+    return fecha - dt.timedelta(hours=TZ_HS,minutes=TZ_MM)
 
 class PyAccountEdi(models.AbstractModel):
 
@@ -619,7 +625,7 @@ class PyAccountEdi(models.AbstractModel):
         """
         gCamCond = {}
         rec_xmlgen = {}
-        if move.invoice_date_due and (move.invoice_date_due - (move.invoice_date or datetime.now())).days > 15:
+        if move.l10n_avatar_py_icondope == '2':
             gCamCond.update({ 'iCondOpe': 2})
             gCamCond.update({ 'dDCondOpe': 'Crédito'})
             if xmlgen:
@@ -1412,6 +1418,39 @@ class PyAccountEdi(models.AbstractModel):
         all_json.update({'options':options})
         return all_json
 
+    def _get_sifen_xmlgen_cancel( self, move:AccountMove):
+        data = {}
+        params = {}
+        options = {}
+        
+        data.update(self._get_sifen_gTimb(move, xmlgen=True))
+        if data.get('timbradoNumero') != None:
+            params.update({ 'timbradoNumero': data.get('timbradoNumero')})
+        if data.get('serie') != None:
+            params.update({ 'serie': data.get('serie')})
+        if data.get('timbradoFecha') != None:
+            params.update({ 'timbradoFecha': data.get('timbradoFecha')})
+        data = {}
+        params.update(self._get_sifen_gEmis(move.company_id, xmlgen=True, is_edi=True, establecimiento=move.journal_id.l10n_avatar_py_branch))
+        params.update({ 'actividadesEconomicas': self._get_sifen_gActEco(move.company_id,xmlgen=True)})
+        lote = move.l10n_avatar_py_edi_lote_ids
+        if lote and lote.envilote_res_cdc:
+            data.update({ 'cdc': lote.envilote_res_cdc})
+        else:
+            data.update({ 'cdc': move.l10n_avatar_py_edi_cdc})
+        if lote and (lote.enviconslote_dmsgres or lote.enviconslote_dmsgreslot):
+            data.update({ 'motivo': lote.enviconslote_dmsgres if lote.enviconslote_dmsgres else lote.enviconslote_dmsgreslot})
+        else:
+            data.update({ 'motivo': 'Error de facturacion'})
+
+        all_json = {}
+        all_json.update({'empresa':move.company_id.partner_id.vat.split('-')[0]})
+        all_json.update({'servicio':'cancelacion'})
+        all_json.update({'params':params})
+        all_json.update({'data':data})
+        all_json.update({'options':options})
+        return all_json
+
     def _call_sifen( self, url, data):
         response = requests.post(url, json=json.loads(json.dumps(data)), allow_redirects=False)
         if response.status_code == 301:
@@ -1430,54 +1469,291 @@ class PyAccountEdi(models.AbstractModel):
         payload = self._call_sifen( url, data)
         lote = move.l10n_avatar_py_edi_lote_ids
         lote.response_json = payload
+        self._add_log( lote, 'rResEnviLoteDe', payload)
         if payload.get('ns2:rResEnviLoteDe') == None:
             raise UserError( str(payload))
         if payload['ns2:rResEnviLoteDe'].get('ns2:dFecProc') != None:
-            fecha = dt.datetime.strptime(payload['ns2:rResEnviLoteDe'].get('ns2:dFecProc')[:19], "%Y-%m-%dT%H:%M:%S")
-            TZ_HS = int(payload['ns2:rResEnviLoteDe'].get('ns2:dFecProc')[19:22])
-            Tz_MM = int(payload['ns2:rResEnviLoteDe'].get('ns2:dFecProc')[23:])
-            
-            lote.request_date = fecha - dt.timedelta(hours=TZ_HS,minutes=Tz_MM)
-        lote.resenvilotede_dcodres = payload['ns2:rResEnviLoteDe'].get('ns2:dCodRes')
-        lote.resenvilotede_dmsgres = payload['ns2:rResEnviLoteDe'].get('ns2:dMsgRes')
+            #fecha = dt.datetime.strptime(payload['ns2:rResEnviLoteDe'].get('ns2:dFecProc')[:19], "%Y-%m-%dT%H:%M:%S")
+            #TZ_HS = int(payload['ns2:rResEnviLoteDe'].get('ns2:dFecProc')[19:22])
+            #Tz_MM = int(payload['ns2:rResEnviLoteDe'].get('ns2:dFecProc')[23:])
+            #lote.request_date = fecha - dt.timedelta(hours=TZ_HS,minutes=Tz_MM)
+            lote.request_date = _time_tz2utc(payload['ns2:rResEnviLoteDe'].get('ns2:dFecProc') )
+        lote.envilote_dcodres = payload['ns2:rResEnviLoteDe'].get('ns2:dCodRes')
+        lote.envilote_dmsgres = payload['ns2:rResEnviLoteDe'].get('ns2:dMsgRes')
         lote.lote_number = payload['ns2:rResEnviLoteDe'].get('ns2:dProtConsLote')
-        lote.resenvilotede_dtpoproces = payload['ns2:rResEnviLoteDe'].get('ns2:dTpoProces')
-        lote.resenvilotede_res_id = payload['id']
-        lote.resenvilotede_res_qr = payload['qr']
-        lote.resenvilotede_res_cdc = payload['cdc']
+        lote.envilote_dtpoproces = payload['ns2:rResEnviLoteDe'].get('ns2:dTpoProces')
+        lote.envilote_res_id = payload['id']
+        lote.envilote_res_qr = payload['qr']
+        lote.envilote_res_cdc = payload['cdc']
+        move.l10n_avatar_py_edi_cdc = lote.envilote_res_cdc
+        lote.enviconslote_dcodreslot = None
+        lote.enviconslote_dmsgreslot = None
+        lote.enviconslote_id = None
+        lote.enviconslote_destrec = None
+        lote.enviconslote_dprotaut = None
+        lote.enviconslote_dcodres = None
+        lote.enviconslote_dmsgres = None
 
     def _get_sifen_ResEnviConsLoteDe( self, data, lote:PyEdiLote, is_edi_test=True):
         url = 'https://3df.com.ar/pyrite' if is_edi_test else 'http://global.avatar.com.py/pyrite'
+        self._add_log( lote, 'rEnviConsLoteDe', data)
         payload = self._call_sifen( url, data)
+        self._add_log( lote, 'rResEnviConsLoteDe', payload)
         if payload.get('ns2:rResEnviConsLoteDe') == None:
             raise UserError( str(payload))
         if payload['ns2:rResEnviConsLoteDe'].get('ns2:dFecProc') != None:
-            fecha = dt.datetime.strptime(payload['ns2:rResEnviConsLoteDe'].get('ns2:dFecProc')[:19], "%Y-%m-%dT%H:%M:%S")
-            TZ_HS = int(payload['ns2:rResEnviConsLoteDe'].get('ns2:dFecProc')[19:22])
-            Tz_MM = int(payload['ns2:rResEnviConsLoteDe'].get('ns2:dFecProc')[23:])
-            lote.response_date = fecha - dt.timedelta(hours=TZ_HS,minutes=Tz_MM)
-        lote.resenviconslotede_dcodreslot = payload['ns2:rResEnviConsLoteDe'].get('ns2:dCodResLot')
-        lote.resenviconslotede_dmsgreslot = payload['ns2:rResEnviConsLoteDe'].get('ns2:dMsgResLot')
+            #fecha = dt.datetime.strptime(payload['ns2:rResEnviConsLoteDe'].get('ns2:dFecProc')[:19], "%Y-%m-%dT%H:%M:%S")
+            #TZ_HS = int(payload['ns2:rResEnviConsLoteDe'].get('ns2:dFecProc')[19:22])
+            #Tz_MM = int(payload['ns2:rResEnviConsLoteDe'].get('ns2:dFecProc')[23:])
+            #lote.response_date = fecha - dt.timedelta(hours=TZ_HS,minutes=Tz_MM)
+            lote.response_date = _time_tz2utc(payload['ns2:rResEnviConsLoteDe'].get('ns2:dFecProc'))
+        lote.enviconslote_dcodreslot = payload['ns2:rResEnviConsLoteDe'].get('ns2:dCodResLot')
+        lote.enviconslote_dmsgreslot = payload['ns2:rResEnviConsLoteDe'].get('ns2:dMsgResLot')
         gResProcLote = payload['ns2:rResEnviConsLoteDe'].get('ns2:gResProcLote')
         gResProc = None
         if gResProcLote != None and str(type(gResProcLote)) == "<class 'list'>":
             for rec in gResProcLote:
-                lote.resenviconslotede_id = rec.get('ns2:id')
-                lote.resenviconslotede_destrec = rec.get('ns2:dEstRes')
-                lote.resenviconslotede_dprotaut = rec.get('ns2:dProtAut')
+                lote.enviconslote_id = rec.get('ns2:id')
+                lote.enviconslote_destrec = rec.get('ns2:dEstRes')
+                lote.enviconslote_dprotaut = rec.get('ns2:dProtAut')
                 gResProc = rec.get('ns2:gResProc')
         elif gResProcLote != None and str(type(gResProcLote)) == "<class 'dict'>":
-            lote.resenviconslotede_id = gResProcLote.get('ns2:id')
-            lote.resenviconslotede_destrec = gResProcLote.get('ns2:dEstRes')
-            lote.resenviconslotede_dprotaut = gResProcLote.get('ns2:dProtAut')
+            lote.enviconslote_id = gResProcLote.get('ns2:id')
+            lote.enviconslote_destrec = gResProcLote.get('ns2:dEstRes')
+            lote.enviconslote_dprotaut = gResProcLote.get('ns2:dProtAut')
             gResProc = gResProcLote.get('ns2:gResProc')
         if gResProc != None and str(type(gResProcLote)) == "<class 'list'>":
             for rec in gResProc:
-                lote.resenviconslotede_dcodres = rec.get('ns2:dCodRes')
-                lote.resenviconslotede_dmsgres = rec.get('ns2:dMsgRes')
+                lote.enviconslote_dcodres = rec.get('ns2:dCodRes')
+                lote.enviconslote_dmsgres = rec.get('ns2:dMsgRes')
         elif gResProc != None and str(type(gResProcLote)) == "<class 'dict'>":
-            lote.resenviconslotede_dcodres = gResProc.get('ns2:dCodRes')
-            lote.resenviconslotede_dmsgres = gResProc.get('ns2:dMsgRes')
+            lote.enviconslote_dcodres = gResProc.get('ns2:dCodRes')
+            lote.enviconslote_dmsgres = gResProc.get('ns2:dMsgRes')
 
-
+    def _process_sifen_RetEnviEventoCancel( self, move:AccountMove, data):
+        url = 'https://3df.com.ar/pyrite' if move.company_id.l10n_avatar_py_is_edi_test else 'http://global.avatar.com.py/pyrite'
+        lote = move.l10n_avatar_py_edi_lote_ids
+        self._add_log( lote, 'rEnviEventoDe', data)
+        payload = self._call_sifen( url, data)
+        self._add_log( lote, 'rRetEnviEventoDe', payload)
+        #_logger.error( "\n\n" + json.dumps(payload, indent=2) + "\n\n" )
         
+        if payload.get('ns2:rRetEnviEventoDe') == None:
+            raise UserError( str(payload))
+
+        if payload['ns2:rRetEnviEventoDe'].get('ns2:dFecProc') != None:
+            #fecha = dt.datetime.strptime(payload['ns2:rRetEnviEventoDe'].get('ns2:dFecProc')[:19], "%Y-%m-%dT%H:%M:%S")
+            #TZ_HS = int(payload['ns2:rRetEnviEventoDe'].get('ns2:dFecProc')[19:22])
+            #Tz_MM = int(payload['ns2:rRetEnviEventoDe'].get('ns2:dFecProc')[23:])
+            #lote.cancel_date = fecha - dt.timedelta(hours=TZ_HS,minutes=Tz_MM)
+            lote.cancel_date = _time_tz2utc( payload['ns2:rRetEnviEventoDe'].get('ns2:dFecProc'))
+        if payload['ns2:rRetEnviEventoDe'].get('ns2:gResProcEVe') != None:
+            gResProcEVe = payload['ns2:rRetEnviEventoDe'].get('ns2:gResProcEVe')
+            lote.cancel_destres = gResProcEVe.get('ns2:dEstRes')
+            #lote.cancel_dprotaut = gResProcEVe.get('ns2:dProtAut')
+            #lote.cancel_id = gResProcEVe.get('ns2:id')
+            gResProc = gResProcEVe.get('ns2:gResProc')
+            if gResProc != None:
+                lote.cancel_dcodres = gResProc.get('ns2:dCodRes')
+                lote.cancel_dmsgres = gResProc.get('ns2:dMsgRes')
+
+    def _add_log( self, lote, name, json_file):
+        self.env['l10n_avatar_py_edi_lote_logs'].create({
+            'lote_id': lote.id,
+            'move_date': datetime.now(),
+            'move_name': name,
+            'json_file': json_file,
+        })
+        
+    def _get_pdf_document( self, move:AccountMove):
+        pdf = self.env['ir.attachment'].search([
+            ('res_model','=', move._name),
+            ('res_id','=', move.id),
+            ('name','=', move.display_name.replace(" ","-") +'.pdf'),
+        ])
+        if pdf:
+            pdf.unlink()
+        url = _(
+            "%s/pyrite/kude.php?empresa=%s&id=%s",
+            "https://3df.com.ar" if move.company_id.l10n_avatar_py_is_edi_test else "http://global.avatar.com.py",
+            move.company_id.vat.split('-')[0], 
+            move.l10n_avatar_py_edi_cdc
+        )
+        response = requests.get(url)
+        if response.status_code == 200 and 'application/pdf' in response.headers.get('Content-Type', ''):
+            self.env['ir.attachment'].create({
+                'name': move.display_name.replace(" ","-") + ".pdf",
+                'raw': response.content,
+                'mimetype': 'application/pdf',
+                'res_model': move._name,
+                'res_id': move.id,
+                'public': True,
+            })
+        else:
+            raise ValidationError("Error al obtener el archivo pdf \n %s" % str(response))
+        return move.display_name.replace(" ","-")+'.pdf'
+
+
+    def _get_xml_document( self, move:AccountMove):
+        xml = self.env['ir.attachment'].search([
+            ('res_model','=', move._name),
+            ('res_id','=', move.id),
+            ('name','=', move.display_name.replace(" ","-") +'.xml'),
+        ])
+        if xml:
+            xml.unlink()
+        url = _(
+            "%s/pyrite/kude.php?empresa=%s&id=%s&formato=xml",
+            "https://3df.com.ar" if move.company_id.l10n_avatar_py_is_edi_test else "http://global.avatar.com.py",
+            move.company_id.vat.split('-')[0], 
+            move.l10n_avatar_py_edi_cdc
+        )
+        response = requests.get(url)
+        if response.status_code == 200 and 'application/xml' in response.headers.get('Content-Type', ''):
+            self.env['ir.attachment'].create({
+                'name': move.display_name.replace(" ","-") + ".xml",
+                'raw': response.content,
+                'mimetype': 'application/xml',
+                'res_model': move._name,
+                'res_id': move.id,
+                'public': True,
+            })
+        else:
+            raise ValidationError("Error al obtener el archivo pdf \n %s" % str(response))
+        return move.display_name.replace(" ","-")+'.xml'
+
+    def _get_documents( self, move:AccountMove):
+        # Borrar los documentos anteriores
+        pdf = self.env['ir.attachment'].search([
+            ('res_model','=', move._name),
+            ('res_id','=', move.id), 
+            ('name','=', move.display_name.replace(" ","-") +'.pdf'),
+        ])
+        xml = self.env['ir.attachment'].search([
+            ('res_model','=', move._name),
+            ('res_id','=', move.id), 
+            ('name','=', move.display_name.replace(" ","-") +'.xml'),
+        ])
+        for file in pdf + xml:
+            file.unlink()
+        # Traer pdf
+        url = _("%s/pyrite/kude.php?empresa=%s&id=%s",
+                 "https://3df.com.ar" if move.company_id.l10n_avatar_py_is_edi_test else "http://global.avatar.com.py",
+                 move.company_id.vat.split('-')[0], move.l10n_avatar_py_edi_cdc
+        )
+        response = requests.get(url)
+        if response.status_code == 200 and 'application/pdf' in response.headers.get('Content-Type', ''):
+            self.env['ir.attachment'].create({
+                'name': move.display_name.replace(" ","-") + ".pdf",
+                'raw': response.content,
+                'mimetype': 'application/pdf',
+                'res_model': move._name,
+                'res_id': move.id,
+                'public': True,
+            })
+        else:
+            raise ValidationError("Error al obtener el archivo pdf \n %s" % str(response))
+        # XML
+        url = _("%s&formato=xml", url)
+        response = requests.get(url)
+        if response.status_code == 200 and 'application/xml' in response.headers.get('Content-Type', ''):
+            self.env['ir.attachment'].create({
+                'name': move.display_name.replace(" ","-") + ".xml",
+                'raw': response.content,
+                'mimetype': 'application/xml',
+                'res_model': move._name,
+                'res_id': move.id,
+                'public': True,
+            })
+        else:
+            raise ValidationError("Error al obtener el archivo xml \n %s" % str(response))
+        attachments = []
+        for fileId in self.env['ir.attachment'].search([
+            ('res_model','=', move._name),
+            ('res_id','=', move.id), '|',
+            ('name','=', move.display_name.replace(" ","-")+'.pdf'),
+            ('name','=', move.display_name.replace(" ","-")+'.xml')
+        ]):
+            attachments.append(fileId.id)
+        #move.message_post(body="Archivos de factura", attachment_ids=attachments)
+        return attachments
+
+
+    def _generate_pdf_documents( self, move:AccountMove):
+        pdf = self.env['ir.attachment'].search([
+            ('res_model','=', move._name),
+            ('res_id','=', move.id),
+            ('name','=', move.display_name +'.pdf'),
+            ('res_field', '=', 'invoice_pdf_report_file'),
+        ])
+        if pdf:
+            pdf.unlink()
+        url = _("%s/pyrite/kude.php?empresa=%s&id=%s",
+                "https://3df.com.ar" if move.company_id.l10n_avatar_py_is_edi_test else "http://global.avatar.com.py",
+                move.company_id.vat.split('-')[0], 
+                move.l10n_avatar_py_edi_cdc
+        )
+        response = requests.get(url)
+        if response.status_code == 200 and 'application/pdf' in response.headers.get('Content-Type', ''):
+            pdf = self.env['ir.attachment'].create({
+                'name': move.display_name + ".pdf",
+                'raw': response.content,
+                'mimetype': 'application/pdf',
+                'res_model': move._name,
+                'res_id': move.id,
+                'public': True,
+                'res_field': 'invoice_pdf_report_file',
+            })
+            move.invoice_pdf_report_id = pdf
+        else:
+            raise ValidationError("Error al obtener el archivo pdf \n %s" % str(response))
+
+
+
+    def _generate_xml_documents( self, move:AccountMove):
+        xml = self.env['ir.attachment'].search([
+            ('res_model','=', move._name),
+            ('res_id','=', move.id),
+            ('name','=', move.display_name +'.xml'),
+            ('res_field', '=', 'invoice_xml_report_file'),
+        ])
+        if xml:
+            xml.unlink()
+        url = _("%s/pyrite/kude.php?empresa=%s&id=%s&formato=xml",
+                "https://3df.com.ar" if move.company_id.l10n_avatar_py_is_edi_test else "http://global.avatar.com.py",
+                move.company_id.vat.split('-')[0], 
+                move.l10n_avatar_py_edi_cdc
+        )
+        response = requests.get(url)
+        if response.status_code == 200 and 'application/xml' in response.headers.get('Content-Type', ''):
+            xml = self.env['ir.attachment'].create({
+                'name': move.display_name + ".xml",
+                'raw': response.content,
+                'mimetype': 'application/xml',
+                'res_model': move._name,
+                'res_id': move.id,
+                'public': True,
+                'res_field': 'invoice_xml_report_file',
+            })
+            move.invoice_xml_report_id = xml
+        else:
+            raise ValidationError("Error al obtener el archivo pdf \n %s" % str(response))
+
+    def fetch_and_update_dnit_status( self):
+
+        invoices:AccountMove = self.env['account.move'].search([
+            ('move_type','!=','entry'),
+            ('state','=','posted'),
+            ('l10n_avatar_py_edi_state','in',('P','S'))
+        ])
+        _logger.info("Documentos a procesar = %d" % len(invoices))
+        for rec in invoices:
+            rec.ensure_one()
+            if rec.l10n_avatar_py_edi_state == 'P':
+                _logger.info("Timbrando el documento %s" % rec.name)
+                rec.action_py_edi_timbrado( from_cron=True)
+            elif rec.l10n_avatar_py_edi_state == 'S':
+                _logger.info("Consultando el documento %s" % rec.name)
+                rec.action_py_edi_read_lote( from_cron=True)
+            rec.env.cr.commit()
+                
