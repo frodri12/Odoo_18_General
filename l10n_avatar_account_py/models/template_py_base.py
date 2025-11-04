@@ -32,7 +32,7 @@ class PyAccountChartTemplate(models.AbstractModel):
                 'expense_currency_exchange_account_id': 'py_acc_chart_42050101',
                 'account_sale_tax_id': 'tax_sale_10',
                 'account_purchase_tax_id': 'tax_purchase_10',
-                'account_price_include': 'tax_included',
+                #'account_price_include': 'tax_included',
                 'account_journal_early_pay_discount_loss_account_id': 'py_acc_chart_52990101',
                 'account_journal_early_pay_discount_gain_account_id': 'py_acc_chart_42030101',
                 'deferred_expense_account_id': 'py_acc_chart_11010204',
