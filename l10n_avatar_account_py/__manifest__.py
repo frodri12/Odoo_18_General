@@ -46,7 +46,7 @@ que se requieren para llevar acabo la facturación electrónica en Paraguay
 
         'views/res_country_views.xml',
         'views/res_partner_views.xml',
-        'views/res_company:views.xml',
+        'views/res_company_views.xml',
         'views/l10n_avatar_py_municipality_views.xml',
         'views/l10n_avatar_py_city_views.xml',
         'views/l10n_avatar_py_economic_activity_views.xml',
