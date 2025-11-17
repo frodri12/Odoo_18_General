@@ -266,7 +266,8 @@ class PyAccountEdi(models.AbstractModel):
         gEmis.update({ 'cCiuEmi': int(partnerId.city_id.code) })
         gEmis.update({ 'dDesCiuEmi': partnerId.city_id.name })
         rec_est.update({ 'ciudad': gEmis['cCiuEmi']})
-        gEmis.update( { "dTelEmi": partnerId.phone or partnerId.mobile})
+        phone = partnerId.phone.replace(' ','').replace('+','')
+        gEmis.update( { "dTelEmi": phone or partnerId.mobile})
         gEmis.update( { "dEmailE": partnerId.email})
         rec_est.update({ 'telefono': gEmis['dTelEmi']})
         rec_est.update({ 'email': gEmis['dEmailE']})
@@ -399,7 +400,8 @@ class PyAccountEdi(models.AbstractModel):
             gDatRec.update({ 'cDisRec': partnerId.municipality_id.code})
             gDatRec.update({ 'dDesDisRec': partnerId.municipality_id.name})
         if partnerId.phone:
-            gDatRec.update({ 'dTelRec': partnerId.phone})
+            phone = partnerId.phone.replace(' ','').replace('+','')
+            gDatRec.update({ 'dTelRec': phone})
         if partnerId.mobile:
             gDatRec.update({ 'dCelRec': partnerId.mobile})
         if partnerId.email:
