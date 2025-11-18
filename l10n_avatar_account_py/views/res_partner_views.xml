@@ -31,8 +31,11 @@
                             placeholder="Ciudad" domain="[('state_id', '=', state_id)]"
                             options="{'no_open': True, 'no_quick_create': True}"
                             class="o_address_street" />
-                        <field name="country_id" placeholder="Country"
-                            options='{"no_open": True, "no_create": True}' class="o_address_street" />
+                        <div name="partner_address_country" class="d-flex justify-content-between">
+                            <field name="country_id" placeholder="Country"
+                                options='{"no_open": True, "no_create": True}'
+                                class="o_address_street" />
+                        </div>
                     </div>
                 </div>
             </xpath>
