@@ -266,8 +266,14 @@ class PyAccountEdi(models.AbstractModel):
         gEmis.update({ 'cCiuEmi': int(partnerId.city_id.code) })
         gEmis.update({ 'dDesCiuEmi': partnerId.city_id.name })
         rec_est.update({ 'ciudad': gEmis['cCiuEmi']})
-        phone = partnerId.phone.replace(' ','').replace('+','')
-        gEmis.update( { "dTelEmi": phone or partnerId.mobile})
+        phone = partnerId.phone
+        mobile = partnerId.mobile
+        if phone:
+            phone = partnerId.phone.replace(' ','').replace('+','').replace('-','')
+        if mobile:
+            mobile = partnerId.mobile.replace(' ','').replace('+','').replace('-','')
+        if phone or mobile:
+            gEmis.update( { "dTelEmi": phone or mobile})
         gEmis.update( { "dEmailE": partnerId.email})
         rec_est.update({ 'telefono': gEmis['dTelEmi']})
         rec_est.update({ 'email': gEmis['dEmailE']})
@@ -400,10 +406,11 @@ class PyAccountEdi(models.AbstractModel):
             gDatRec.update({ 'cDisRec': partnerId.municipality_id.code})
             gDatRec.update({ 'dDesDisRec': partnerId.municipality_id.name})
         if partnerId.phone:
-            phone = partnerId.phone.replace(' ','').replace('+','')
+            phone = partnerId.phone.replace(' ','').replace('+','').replace('-','')
             gDatRec.update({ 'dTelRec': phone})
         if partnerId.mobile:
-            gDatRec.update({ 'dCelRec': partnerId.mobile})
+            mobile = partnerId.mobile.replace(' ','').replace('+','').replace('-','')
+            gDatRec.update({ 'dCelRec': mobile})
         if partnerId.email:
             gDatRec.update({ 'dEmailRec': partnerId.email})
 

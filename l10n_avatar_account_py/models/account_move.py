@@ -203,8 +203,15 @@ class PyAccountMove(models.Model):
 
     def _check_pre_post( self):
         # Numero de telefono del partner
-        phone = self.partner_id.phone.replace(' ','').replace('+','')
+        phone = self.partner_id.phone
+        mobile = self.partner_id.mobile
+        if phone:
+            phone = self.partner_id.phone.replace(' ','').replace('+','').replace('-','')
+        if mobile:
+            mobile = self.partner_id.mobile.replace(' ','').replace('+','').replace('-','')
         if phone and (len(phone) < 6 or len(phone) > 15):
+            raise ValidationError( _("El numero de telefono (%s) del cliente %s debe tener una longitud de 6 a 15 caracteres", self.partner_id.phone, self.partner_id.name))
+        if mobile and (len(mobile) < 6 or len(mobile) > 15):
             raise ValidationError( _("El numero de telefono (%s) del cliente %s debe tener una longitud de 6 a 15 caracteres", self.partner_id.phone, self.partner_id.name))
         if not self.l10n_avatar_py_itiptra:
             raise ValidationError("Falta definir el Tipo de Transaccion")
